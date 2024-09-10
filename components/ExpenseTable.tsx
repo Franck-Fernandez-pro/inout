@@ -9,6 +9,8 @@ import {
 } from './ui/table';
 import { HTMLProps } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Plus } from 'lucide-react';
+import { Button } from './ui/button';
 
 export default function ExpenseTable({
   className,
@@ -20,7 +22,12 @@ export default function ExpenseTable({
   return (
     <Card x-chunk="dashboard-05-chunk-3">
       <CardHeader className="px-7">
-        <CardTitle>Expenses</CardTitle>
+        <CardTitle className="flex items-center gap-3">
+          Expenses
+          <Button size="sm" variant="default">
+            <Plus className="size-3" />
+          </Button>
+        </CardTitle>
       </CardHeader>
 
       <CardContent>
