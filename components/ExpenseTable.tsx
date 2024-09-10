@@ -9,8 +9,7 @@ import {
 } from './ui/table';
 import { HTMLProps } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Plus } from 'lucide-react';
-import { Button } from './ui/button';
+import { ExpenseModal } from './ExpenseModal';
 
 export default function ExpenseTable({
   className,
@@ -24,9 +23,7 @@ export default function ExpenseTable({
       <CardHeader className="px-7">
         <CardTitle className="flex items-center gap-3">
           Expenses
-          <Button size="sm" variant="default">
-            <Plus className="size-3" />
-          </Button>
+          <ExpenseModal />
         </CardTitle>
       </CardHeader>
 
