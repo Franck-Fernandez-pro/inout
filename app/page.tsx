@@ -5,9 +5,12 @@ import { fetchQuery } from 'convex/nextjs';
 export default async function Home() {
   const expenses = await fetchQuery(api.expenses.get);
   return (
-    <main className="max-w-5xl mx-auto mt-5">
+    <main className="container mx-auto gap-10 mt-10 grid grid-cols-2">
       {expenses ? (
-        <ExpenseTable className="" expenses={expenses} />
+        <>
+          <ExpenseTable className="" expenses={expenses} />
+          <ExpenseTable className="" expenses={expenses} />
+        </>
       ) : (
         'No expenses'
       )}

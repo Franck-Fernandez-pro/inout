@@ -38,7 +38,7 @@ export async function addExpenseAction(formData: FormData) {
   const { data, success, error } = schema.safeParse({
     title: formData.get('title'),
     tags: formData.get('tags'),
-    amount: formData.get('tags'),
+    amount: formData.get('amount'),
   });
 
   if (!success)
