@@ -1,6 +1,5 @@
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogHeader,
@@ -18,8 +17,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
+import { addExpenseAction } from '@/actions/addExpense';
 
-const TAGS = ['insurance', 'rent', 'bank'];
+const TAGS = ['insurance', 'rent', 'bank', 'other'];
 
 export function ExpenseModal() {
   return (
@@ -35,17 +35,23 @@ export function ExpenseModal() {
           <AlertDialogTitle>Add expense</AlertDialogTitle>
         </AlertDialogHeader>
 
-        <form action="" className="grid gap-4">
+        <form action={addExpenseAction} className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="title">Title</Label>
-            <Input id="title" type="text" placeholder="Netflix" required />
+            <Input
+              id="title"
+              name="title"
+              type="text"
+              placeholder="Netflix"
+              required
+            />
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="title">Tags</Label>
-            <Select required>
-              <SelectTrigger className="">
-                <SelectValue placeholder="-" />
+            <Label htmlFor="tags">Tags</Label>
+            <Select name="tags" required>
+              <SelectTrigger>
+                <SelectValue className="capitalize" placeholder="-" />
               </SelectTrigger>
               <SelectContent>
                 {TAGS.map((tag) => (
@@ -59,12 +65,18 @@ export function ExpenseModal() {
 
           <div className="grid gap-2">
             <Label htmlFor="amount">Amount</Label>
-            <Input id="amount" type="number" placeholder="19.99" required />
+            <Input
+              id="amount"
+              name="amount"
+              type="text"
+              placeholder="19.99"
+              required
+            />
           </div>
 
           <div className="flex gap-3 justify-end mt-3">
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction type="submit">Add</AlertDialogAction>
+            <Button type="submit">Add</Button>
           </div>
         </form>
       </AlertDialogContent>

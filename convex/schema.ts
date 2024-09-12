@@ -4,7 +4,7 @@ import { v } from 'convex/values';
 export default defineSchema({
   expenses: defineTable({
     title: v.string(),
-    tags: v.array(v.string()),
-    amount: v.number(),
+    tags: v.string(),
+    amount: v.string(),
   }),
 });
