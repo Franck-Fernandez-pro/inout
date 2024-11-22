@@ -11,18 +11,20 @@ import { HTMLProps } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { ExpenseModal } from './ExpenseModal';
 
-export default function ExpenseTable({
+export default function TransactionsTable({
   className,
-  expenses,
+  transactions,
+  title
 }: {
   className?: HTMLProps<HTMLElement>['className'];
-  expenses: Doc<'expenses'>[];
+  transactions: Doc<'transactions'>[];
+  title: string;
 }) {
   return (
     <Card x-chunk="dashboard-05-chunk-3">
       <CardHeader className="px-7">
         <CardTitle className="flex items-center gap-3">
-          Expenses
+        {title}
           <ExpenseModal />
         </CardTitle>
       </CardHeader>
@@ -38,7 +40,7 @@ export default function ExpenseTable({
           </TableHeader>
 
           <TableBody>
-            {expenses.map(({ _id, title, tags, amount }) => (
+            {transactions.map(({ _id, title, tags, amount }) => (
               <TableRow key={_id}>
                 <TableCell className="font-bold">{title}</TableCell>
                 <TableCell>{tags.length ? tags : '-'}</TableCell>
