@@ -1,4 +1,4 @@
-import ExpenseTable from '@/components/ExpenseTable';
+import TransactionsTable from '@/components/TransactionsTable';
 import { api } from '@/convex/_generated/api';
 import { fetchQuery } from 'convex/nextjs';
 
@@ -8,8 +8,8 @@ export default async function Home() {
     <main className="container mx-auto gap-10 mt-10 grid grid-cols-2">
       {expenses ? (
         <>
-          <ExpenseTable className="" expenses={expenses} />
-          <ExpenseTable className="" expenses={expenses} />
+          <TransactionsTable title="Outcome" transactions={expenses} />
+          <TransactionsTable title="Income" transactions={expenses} />
         </>
       ) : (
         'No expenses'

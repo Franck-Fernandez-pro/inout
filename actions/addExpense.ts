@@ -32,6 +32,7 @@ const schema = z.object({
     .max(32, {
       message: 'Must be 32 or fewer characters long',
     }),
+  type: z.enum(['IN', 'OUT']),
 });
 
 export async function addExpenseAction(formData: FormData) {
@@ -39,6 +40,7 @@ export async function addExpenseAction(formData: FormData) {
     title: formData.get('title'),
     tags: formData.get('tags'),
     amount: formData.get('amount'),
+    type: formData.get('type'),
   });
 
   if (!success)
