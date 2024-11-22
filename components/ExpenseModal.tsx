@@ -18,10 +18,11 @@ import {
   SelectValue,
 } from './ui/select';
 import { addExpenseAction } from '@/actions/addExpense';
+import { Doc } from '@/convex/_generated/dataModel';
 
 const TAGS = ['insurance', 'rent', 'bank', 'other'];
 
-export function ExpenseModal() {
+export function ExpenseModal({ type }: { type: Doc<'transactions'>['type'] }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -73,6 +74,8 @@ export function ExpenseModal() {
               required
             />
           </div>
+
+          <input name="type" type="hidden" value={type} />
 
           <div className="flex gap-3 justify-end mt-3">
             <AlertDialogCancel>Cancel</AlertDialogCancel>
