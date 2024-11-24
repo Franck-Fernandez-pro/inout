@@ -17,4 +17,4 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          config: baseUrl=inout-git-${{ github.head_ref }}-franck-fernandezs-projects.vercel.app
+          config: baseUrl=https://inout-git-${{ github.head_ref }}-franck-fernandezs-projects.vercel.app
