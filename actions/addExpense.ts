@@ -48,6 +48,6 @@ export async function addExpenseAction(formData: FormData) {
       errors: error.flatten().fieldErrors,
     };
 
-  await fetchMutation(api.expenses.add, data);
+  await fetchMutation(api.transactions.add, data);
   revalidatePath('/');
 }

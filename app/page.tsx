@@ -3,16 +3,16 @@ import { api } from '@/convex/_generated/api';
 import { fetchQuery } from 'convex/nextjs';
 
 export default async function Home() {
-  const expenses = await fetchQuery(api.expenses.get);
+  const transactions = await fetchQuery(api.transactions.get);
   return (
     <main className="container mx-auto gap-10 mt-10 grid grid-cols-2">
-      {expenses ? (
+      {transactions ? (
         <>
-          <TransactionsTable title="Outcome" transactions={expenses} />
-          <TransactionsTable title="Income" transactions={expenses} />
+          <TransactionsTable title="Outcome" transactions={transactions} />
+          <TransactionsTable title="Income" transactions={transactions} />
         </>
       ) : (
-        'No expenses'
+        'No transactions'
       )}
     </main>
   );
