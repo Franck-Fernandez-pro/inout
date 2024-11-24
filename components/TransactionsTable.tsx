@@ -9,23 +9,23 @@ import {
 } from './ui/table';
 import { HTMLProps } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { ExpenseModal } from './ExpenseModal';
+import { ExpenseModal } from './TransactionModal';
 
 export default function TransactionsTable({
   className,
   transactions,
-  title
+  type,
 }: {
   className?: HTMLProps<HTMLElement>['className'];
   transactions: Doc<'transactions'>[];
-  title: string;
+  type: Doc<'transactions'>['type'];
 }) {
   return (
     <Card x-chunk="dashboard-05-chunk-3">
       <CardHeader className="px-7">
         <CardTitle className="flex items-center gap-3">
-        {title}
-          <ExpenseModal />
+          {type === 'IN' ? 'Income' : 'Outcome'}
+          <ExpenseModal type={type} />
         </CardTitle>
       </CardHeader>
 

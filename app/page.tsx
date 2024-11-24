@@ -8,8 +8,8 @@ export default async function Home() {
     <main className="container mx-auto gap-10 mt-10 grid grid-cols-2">
       {transactions ? (
         <>
-          <TransactionsTable title="Outcome" transactions={transactions} />
-          <TransactionsTable title="Income" transactions={transactions} />
+          <TransactionsTable type="IN" transactions={transactions} />
+          <TransactionsTable type="OUT" transactions={transactions} />
         </>
       ) : (
         'No transactions'
