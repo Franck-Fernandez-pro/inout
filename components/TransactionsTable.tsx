@@ -11,6 +11,12 @@ import { HTMLProps } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import TransactionModal from './TransactionModal';
 
+const formatCurrency = (amount: number | bigint | Intl.StringNumericLiteral) =>
+  new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency: 'EUR',
+  }).format(amount);
+
 export default function TransactionsTable({
   className,
   transactions,
@@ -20,12 +26,23 @@ export default function TransactionsTable({
   transactions: Doc<'transactions'>[];
   type: Doc<'transactions'>['type'];
 }) {
+  const total = transactions.reduce(
+    (acc, { amount }) => acc + Number(amount),
+    0
+  );
+
   return (
     <Card x-chunk="dashboard-05-chunk-3">
       <CardHeader className="px-7">
         <CardTitle className="flex items-center gap-2">
           {type === 'IN' ? 'Income' : 'Outcome'}
           <TransactionModal type={type} />
+
+          <span className="ml-auto text-gray-500 text-sm">
+            {type === 'IN'
+              ? `+${formatCurrency(total)}`
+              : `-${formatCurrency(total)}`}
+          </span>
         </CardTitle>
       </CardHeader>
 
@@ -44,7 +61,9 @@ export default function TransactionsTable({
               <TableRow key={_id}>
                 <TableCell className="font-bold">{title}</TableCell>
                 <TableCell>{tags.length ? tags : '-'}</TableCell>
-                <TableCell className="text-right">{amount} €</TableCell>
+                <TableCell className="text-right">
+                  {formatCurrency(Number(amount))}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
