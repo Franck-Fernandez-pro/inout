@@ -9,5 +9,5 @@ export const transactions = {
 };
 
 export default defineSchema({
-  transactions: defineTable(transactions),
+  transactions: defineTable(transactions).index('by_type', ['type']),
 });
