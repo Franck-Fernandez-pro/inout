@@ -18,5 +18,3 @@ jobs:
         uses: cypress-io/github-action@v6
         env:
           config: baseUrl=inout-git-${{ github.head_ref }}-franck-fernandezs-projects.vercel.app
-        with:
-          wait-on: 'http://localhost:3000'
