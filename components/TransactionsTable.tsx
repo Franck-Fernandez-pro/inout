@@ -39,7 +39,7 @@ export default function TransactionsTable({
             </TableRow>
           </TableHeader>
 
-          <TableBody>
+          <TableBody className="capitalize">
             {transactions.map(({ _id, title, tags, amount }) => (
               <TableRow key={_id}>
                 <TableCell className="font-bold">{title}</TableCell>
