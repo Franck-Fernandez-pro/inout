@@ -7,7 +7,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
 import {
@@ -22,12 +22,16 @@ import { Doc } from '@/convex/_generated/dataModel';
 
 const TAGS = ['insurance', 'rent', 'bank', 'other'];
 
-export function ExpenseModal({ type }: { type: Doc<'transactions'>['type'] }) {
+export default function TransactionModal({
+  type,
+}: {
+  type: Doc<'transactions'>['type'];
+}) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button size="sm" variant="default">
-          <Plus className="size-3" />
+        <Button size="sm" variant="ghost">
+          <PlusCircle className="size-3" />
         </Button>
       </AlertDialogTrigger>
 

@@ -9,7 +9,7 @@ import {
 } from './ui/table';
 import { HTMLProps } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { ExpenseModal } from './TransactionModal';
+import TransactionModal from './TransactionModal';
 
 export default function TransactionsTable({
   className,
@@ -23,9 +23,9 @@ export default function TransactionsTable({
   return (
     <Card x-chunk="dashboard-05-chunk-3">
       <CardHeader className="px-7">
-        <CardTitle className="flex items-center gap-3">
+        <CardTitle className="flex items-center gap-2">
           {type === 'IN' ? 'Income' : 'Outcome'}
-          <ExpenseModal type={type} />
+          <TransactionModal type={type} />
         </CardTitle>
       </CardHeader>
 
