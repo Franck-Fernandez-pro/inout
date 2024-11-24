@@ -47,7 +47,7 @@ export default function TransactionsTable({
       </CardHeader>
 
       <CardContent>
-        <Table className={className}>
+        <Table className={className} data-testid={`transactions_table_${type}`}>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[200px]">Title</TableHead>
