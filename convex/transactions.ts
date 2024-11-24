@@ -1,5 +1,5 @@
-import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
+import { transactions } from './schema';
 
 export const get = query({
   args: {},
@@ -7,6 +7,6 @@ export const get = query({
 });
 
 export const add = mutation({
-  args: { title: v.string(), tags: v.string(), amount: v.string() },
+  args: transactions,
   handler: async (ctx, data) => await ctx.db.insert('transactions', data),
 });
