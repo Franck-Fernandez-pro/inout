@@ -6,10 +6,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from './ui/table';
+} from '../ui/table';
 import { HTMLProps } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import TransactionModal from './TransactionModal';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import TransactionModal from '../TransactionModal';
+import DeleteButton from './DeleteButton';
 
 const formatCurrency = (amount: number | bigint | Intl.StringNumericLiteral) =>
   new Intl.NumberFormat('fr-FR', {
@@ -59,7 +60,10 @@ export default function TransactionsTable({
           <TableBody className="capitalize">
             {transactions.map(({ _id, title, tags, amount }) => (
               <TableRow key={_id}>
-                <TableCell className="font-bold">{title}</TableCell>
+                <TableCell className="font-bold flex gap-2">
+                  {title}
+                  <DeleteButton id={_id} />
+                </TableCell>
                 <TableCell>{tags.length ? tags : '-'}</TableCell>
                 <TableCell className="text-right">
                   {formatCurrency(Number(amount))}
