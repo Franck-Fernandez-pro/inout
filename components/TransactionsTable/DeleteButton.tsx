@@ -1,5 +1,6 @@
 'use client';
 
+import { removeTransaction } from '@/actions/removeTransaction';
 import { Trash } from 'lucide-react';
 import { ButtonHTMLAttributes } from 'react';
 
@@ -8,7 +9,9 @@ export default function DeleteButton(
 ) {
   function onClick(e: React.MouseEvent<HTMLButtonElement>) {
     const id = e.currentTarget.id;
-    console.log('id:', id);
+    if (!id) return;
+
+    removeTransaction(id);
   }
 
   return (
