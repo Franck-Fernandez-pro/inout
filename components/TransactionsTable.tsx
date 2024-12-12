@@ -10,6 +10,7 @@ import {
 import { HTMLProps } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import TransactionModal from './TransactionModal';
+import { Trash } from 'lucide-react';
 
 const formatCurrency = (amount: number | bigint | Intl.StringNumericLiteral) =>
   new Intl.NumberFormat('fr-FR', {
@@ -59,7 +60,12 @@ export default function TransactionsTable({
           <TableBody className="capitalize">
             {transactions.map(({ _id, title, tags, amount }) => (
               <TableRow key={_id}>
-                <TableCell className="font-bold">{title}</TableCell>
+                <TableCell className="font-bold flex gap-2">
+                  {title}
+                  <button>
+                    <Trash color="red" size={16} />
+                  </button>
+                </TableCell>
                 <TableCell>{tags.length ? tags : '-'}</TableCell>
                 <TableCell className="text-right">
                   {formatCurrency(Number(amount))}
