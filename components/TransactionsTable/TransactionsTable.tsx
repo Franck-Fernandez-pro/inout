@@ -6,11 +6,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from './ui/table';
+} from '../ui/table';
 import { HTMLProps } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import TransactionModal from './TransactionModal';
-import { Trash } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import TransactionModal from '../TransactionModal';
+import DeleteButton from './DeleteButton';
 
 const formatCurrency = (amount: number | bigint | Intl.StringNumericLiteral) =>
   new Intl.NumberFormat('fr-FR', {
@@ -62,9 +62,7 @@ export default function TransactionsTable({
               <TableRow key={_id}>
                 <TableCell className="font-bold flex gap-2">
                   {title}
-                  <button>
-                    <Trash color="red" size={16} />
-                  </button>
+                  <DeleteButton id={_id} />
                 </TableCell>
                 <TableCell>{tags.length ? tags : '-'}</TableCell>
                 <TableCell className="text-right">
