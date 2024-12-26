@@ -5,6 +5,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
+  AlertDialogDescription,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
@@ -40,6 +41,9 @@ export default function TransactionModal({
         <AlertDialogHeader>
           <AlertDialogTitle>Add expense</AlertDialogTitle>
         </AlertDialogHeader>
+        <AlertDialogDescription className="hidden">
+          Add a new expense to your transactions
+        </AlertDialogDescription>
 
         <form action={addExpenseAction} className="grid gap-4">
           <div className="grid gap-2">

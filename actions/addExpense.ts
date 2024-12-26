@@ -1,6 +1,7 @@
 'use server';
 
 import { api } from '@/convex/_generated/api';
+import { Id } from '@/convex/_generated/dataModel';
 import { fetchMutation } from 'convex/nextjs';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
@@ -33,6 +34,10 @@ const schema = z.object({
       message: 'Must be 32 or fewer characters long',
     }),
   type: z.enum(['IN', 'OUT']),
+  userId: z
+    .string()
+    .min(32, { message: 'Must be 32 characters long' })
+    .max(32, { message: 'Must be 32 characters long' }),
 });
 
 export async function addExpenseAction(formData: FormData) {
@@ -41,13 +46,16 @@ export async function addExpenseAction(formData: FormData) {
     tags: formData.get('tags'),
     amount: formData.get('amount'),
     type: formData.get('type'),
+    userId: formData.get('userId'),
   });
+
+  const userId = data?.userId as Id<'users'>;
 
   if (!success)
     return {
       errors: error.flatten().fieldErrors,
     };
 
-  await fetchMutation(api.transactions.add, data);
+  await fetchMutation(api.transactions.add, { ...data, userId });
   revalidatePath('/');
 }
