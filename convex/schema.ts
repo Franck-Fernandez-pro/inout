@@ -1,4 +1,5 @@
 import { defineSchema, defineTable } from 'convex/server';
+import { authTables } from '@convex-dev/auth/server';
 import { v } from 'convex/values';
 
 export const transactions = {
@@ -10,4 +11,5 @@ export const transactions = {
 
 export default defineSchema({
   transactions: defineTable(transactions).index('by_type', ['type']),
+  ...authTables,
 });
