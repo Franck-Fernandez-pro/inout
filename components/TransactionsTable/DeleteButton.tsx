@@ -5,7 +5,7 @@ import { Trash } from 'lucide-react';
 import { ButtonHTMLAttributes } from 'react';
 
 export default function DeleteButton(
-  props: ButtonHTMLAttributes<HTMLButtonElement>
+  props: ButtonHTMLAttributes<HTMLButtonElement>,
 ) {
   function onClick(e: React.MouseEvent<HTMLButtonElement>) {
     const id = e.currentTarget.id;

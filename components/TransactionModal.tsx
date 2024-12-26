@@ -5,6 +5,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
+  AlertDialogDescription,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
@@ -19,6 +20,7 @@ import {
 } from './ui/select';
 import { addExpenseAction } from '@/actions/addExpense';
 import { Doc } from '@/convex/_generated/dataModel';
+import { UserIdInput } from './auth';
 
 const TAGS = ['insurance', 'rent', 'bank', 'other'];
 
@@ -39,6 +41,9 @@ export default function TransactionModal({
         <AlertDialogHeader>
           <AlertDialogTitle>Add expense</AlertDialogTitle>
         </AlertDialogHeader>
+        <AlertDialogDescription className="hidden">
+          Add a new expense to your transactions
+        </AlertDialogDescription>
 
         <form action={addExpenseAction} className="grid gap-4">
           <div className="grid gap-2">
@@ -80,6 +85,7 @@ export default function TransactionModal({
           </div>
 
           <input name="type" type="hidden" value={type} />
+          <UserIdInput />
 
           <div className="flex gap-3 justify-end mt-3">
             <AlertDialogCancel>Cancel</AlertDialogCancel>
