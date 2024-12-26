@@ -10,14 +10,8 @@ export default async function Home() {
 
   return (
     <main className="container mx-auto gap-10 mt-10 grid grid-cols-2">
-      {transactionsIn.length && transactionsOut.length ? (
-        <>
-          <TransactionsTable type="IN" transactions={transactionsIn} />
-          <TransactionsTable type="OUT" transactions={transactionsOut} />
-        </>
-      ) : (
-        'No transactions'
-      )}
+      <TransactionsTable type="IN" transactions={transactionsIn} />
+      <TransactionsTable type="OUT" transactions={transactionsOut} />
     </main>
   );
 }
