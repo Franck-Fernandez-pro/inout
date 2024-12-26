@@ -29,7 +29,7 @@ export default function TransactionsTable({
 }) {
   const total = transactions.reduce(
     (acc, { amount }) => acc + Number(amount),
-    0
+    0,
   );
 
   return (
