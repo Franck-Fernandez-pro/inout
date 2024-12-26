@@ -19,6 +19,7 @@ import {
 } from './ui/select';
 import { addExpenseAction } from '@/actions/addExpense';
 import { Doc } from '@/convex/_generated/dataModel';
+import { UserIdInput } from './auth';
 
 const TAGS = ['insurance', 'rent', 'bank', 'other'];
 
@@ -80,6 +81,7 @@ export default function TransactionModal({
           </div>
 
           <input name="type" type="hidden" value={type} />
+          <UserIdInput />
 
           <div className="flex gap-3 justify-end mt-3">
             <AlertDialogCancel>Cancel</AlertDialogCancel>
