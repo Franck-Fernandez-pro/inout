@@ -7,6 +7,7 @@ export const transactions = {
   tags: v.string(),
   amount: v.string(),
   type: v.union(v.literal('IN'), v.literal('OUT')),
+  userId: v.id('users'),
 };
 
 export default defineSchema({
