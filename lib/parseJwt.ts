@@ -1,6 +1,6 @@
 import { Id } from '@/convex/_generated/dataModel';
 
-type JWT = {
+export type JWT = {
   aud: 'convex';
   exp: number;
   iat: number;
@@ -28,4 +28,14 @@ export function parseJwt(token: string | null) {
   jwt.sessionId = jwt.sub.split('|')[1];
 
   return jwt as JWT;
+}
+
+export function parseJwtNodeJS(token: string | null) {
+  if (!token) return;
+
+  const base64Url = token.split('.')[1];
+  const base64 = Buffer.from(base64Url, 'base64').toString();
+  const jwt = JSON.parse(base64) as JWT;
+
+  return jwt;
 }
