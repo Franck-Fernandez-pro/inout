@@ -33,7 +33,7 @@ export default function TransactionsTable({
   );
 
   return (
-    <Card x-chunk="dashboard-05-chunk-3">
+    <Card className="fit-content">
       <CardHeader className="px-7">
         <CardTitle className="flex items-center gap-2">
           {type === 'IN' ? 'Income' : 'Outcome'}
