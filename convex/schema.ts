@@ -11,6 +11,9 @@ export const transactions = {
 };
 
 export default defineSchema({
-  transactions: defineTable(transactions).index('by_type', ['type']),
+  transactions: defineTable(transactions).index('by_user_type', [
+    'userId',
+    'type',
+  ]),
   ...authTables,
 });

@@ -3,11 +3,11 @@ import { mutation, query } from './_generated/server';
 import { transactions } from './schema';
 
 export const get = query({
-  args: { type: transactions.type },
-  handler: async (ctx, { type }) =>
+  args: { type: transactions.type, userId: transactions.userId },
+  handler: async (ctx, { type, userId }) =>
     await ctx.db
       .query('transactions')
-      .filter((q) => q.eq(q.field('type'), type))
+      .withIndex('by_user_type', (q) => q.eq('userId', userId).eq('type', type))
       .order('asc')
       .collect(),
 });

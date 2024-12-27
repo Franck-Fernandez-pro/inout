@@ -11,9 +11,10 @@ export default async function Dashboard() {
   const jwt = getTokenFromCookie(cookieStore);
   if (!jwt) return redirect('/');
 
+  const userId = jwt.userId;
   const [transactionsIn, transactionsOut] = await Promise.all([
-    fetchQuery(api.transactions.get, { type: 'IN' }),
-    fetchQuery(api.transactions.get, { type: 'OUT' }),
+    fetchQuery(api.transactions.get, { type: 'IN', userId }),
+    fetchQuery(api.transactions.get, { type: 'OUT', userId }),
   ]);
 
   return (
