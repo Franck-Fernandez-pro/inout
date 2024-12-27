@@ -18,9 +18,11 @@ export default async function Dashboard() {
   ]);
 
   return (
-    <main className="container mx-auto ">
-      <AuthButton />
-      <div className="gap-10 mt-10 grid grid-cols-2">
+    <main className="container mx-auto pt-5">
+      <div className="w-full flex justify-end">
+        <AuthButton />
+      </div>
+      <div className="gap-10 grid grid-cols-2 mt-5">
         <TransactionsTable type="IN" transactions={transactionsIn} />
         <TransactionsTable type="OUT" transactions={transactionsOut} />
       </div>
