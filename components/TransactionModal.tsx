@@ -54,6 +54,7 @@ export default function TransactionModal({
               type="text"
               placeholder="Netflix"
               required
+              autoFocus
             />
           </div>
 

@@ -10,6 +10,13 @@ export type JWT = {
   userId: Id<'users'>;
 };
 
+function enrichJwt(jwt: JWT) {
+  jwt.userId = jwt.sub.split('|')[0] as Id<'users'>;
+  jwt.sessionId = jwt.sub.split('|')[1] as Id<'authSessions'>;
+
+  return jwt;
+}
+
 export function parseJwt(token: string | null) {
   if (!token) return;
   const base64Url = token.split('.')[1];
@@ -23,11 +30,10 @@ export function parseJwt(token: string | null) {
       })
       .join(''),
   );
-  const jwt = JSON.parse(jsonPayload);
-  jwt.userId = jwt.sub.split('|')[0];
-  jwt.sessionId = jwt.sub.split('|')[1];
+  const rawJwt = JSON.parse(jsonPayload);
+  const jwt = enrichJwt(rawJwt);
 
-  return jwt as JWT;
+  return jwt;
 }
 
 export function parseJwtNodeJS(token: string | null) {
@@ -35,7 +41,8 @@ export function parseJwtNodeJS(token: string | null) {
 
   const base64Url = token.split('.')[1];
   const base64 = Buffer.from(base64Url, 'base64').toString();
-  const jwt = JSON.parse(base64) as JWT;
+  const rawJwt = JSON.parse(base64);
+  const jwt = enrichJwt(rawJwt);
 
   return jwt;
 }

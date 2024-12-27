@@ -1,20 +1,17 @@
-'use client';
-
-import { parseJwt } from '@/lib';
-import { useAuthToken } from '@convex-dev/auth/react';
+import { getTokenFromCookie } from '@/lib';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 import { InputHTMLAttributes } from 'react';
 
-export function UserIdInput(props: InputHTMLAttributes<HTMLInputElement>) {
-  const token = useAuthToken();
-  const userId = parseJwt(token);
+export async function UserIdInput(
+  props: InputHTMLAttributes<HTMLInputElement>,
+) {
+  const cookieStore = await cookies();
+  const jwt = getTokenFromCookie(cookieStore);
+  if (!jwt) return redirect('/');
 
-  return (
-    <input
-      type="hidden"
-      name="userId"
-      defaultValue={userId?.userId}
-      {...props}
-    />
-  );
+  const userId = jwt.userId;
+
+  return <input type="hidden" name="userId" defaultValue={userId} {...props} />;
 }
