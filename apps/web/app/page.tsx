@@ -1,14 +1,9 @@
-"use client";
+import { AuthButton } from '@/components/auth';
 
-import { Button } from "@repo/ui";
-
-import styles from "../styles/index.module.css";
-
-export default function Web() {
+export default async function Home() {
   return (
-    <div className={styles.container}>
-      <h1>Web</h1>
-      <Button onClick={() => console.log("Pressed!")} text="Boop" />
-    </div>
+    <main className="flex items-center justify-center min-h-screen gap-3">
+      <AuthButton />
+    </main>
   );
 }
