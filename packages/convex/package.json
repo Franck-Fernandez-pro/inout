@@ -1,0 +1,17 @@
+{
+  "name": "@repo/convex",
+  "version": "0.0.0",
+  "main": "./index.ts",
+  "scripts": {
+    "dev": "convex dev"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "typescript": "latest"
+  },
+  "dependencies": {
+    "@auth/core": "0.37.0",
+    "@convex-dev/auth": "^0.0.77",
+    "convex": "^1.25.4"
+  }
+}
