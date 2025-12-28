@@ -11,7 +11,7 @@
     "cy:run": "cypress run"
   },
   "dependencies": {
-    "@auth/core": "0.37.0",
+    "@auth/core": "0.41.1",
     "@convex-dev/auth": "^0.0.77",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-label": "^2.1.0",

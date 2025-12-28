@@ -11,7 +11,7 @@
     "typescript": "latest"
   },
   "dependencies": {
-    "@auth/core": "0.37.0",
+    "@auth/core": "0.41.1",
     "@convex-dev/auth": "^0.0.77",
     "convex": "^1.25.4",
     "dotenv": "^17.0.0"
