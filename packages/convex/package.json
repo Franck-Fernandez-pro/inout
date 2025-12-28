@@ -14,6 +14,6 @@
     "@auth/core": "0.37.0",
     "@convex-dev/auth": "^0.0.77",
     "convex": "^1.25.4",
-    "dotenv": "^16.4.5"
+    "dotenv": "^17.0.0"
   }
 }
