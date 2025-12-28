@@ -14,5 +14,5 @@
     "node": ">=18"
   },
   "name": "with-react-native-web",
-  "packageManager": "pnpm@10.13.1"
+  "packageManager": "pnpm@10.26.2"
 }
