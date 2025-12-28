@@ -1,7 +1,6 @@
 'use server';
 
-import { api } from '@/convex/_generated/api';
-import { Doc } from '@/convex/_generated/dataModel';
+import { Doc, api } from '@repo/convex';
 import { fetchMutation } from 'convex/nextjs';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';

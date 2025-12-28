@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "main": "./index.ts",
   "scripts": {
-    "dev": "convex dev"
+    "dev": "node generate-config.js && npx convex dev",
+    "generate-config": "node generate-config.js"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
@@ -12,6 +13,7 @@
   "dependencies": {
     "@auth/core": "0.37.0",
     "@convex-dev/auth": "^0.0.77",
-    "convex": "^1.25.4"
+    "convex": "^1.25.4",
+    "dotenv": "^16.4.5"
   }
 }

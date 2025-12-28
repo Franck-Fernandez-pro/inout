@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from './ui/select';
 import { addExpenseAction } from '@/actions/addExpense';
-import { Doc } from '@/convex/_generated/dataModel';
+import { Doc } from '@repo/convex';
 import { UserIdInput } from './auth';
 
 const TAGS = ['insurance', 'rent', 'bank', 'other'];

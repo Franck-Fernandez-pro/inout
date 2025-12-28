@@ -1,6 +1,6 @@
 import { AuthButton } from '@/components/auth';
 import TransactionsTable from '@/components/TransactionsTable';
-import { api } from '@/convex/_generated/api';
+import { api } from '@repo/convex';
 import { getTokenFromCookie } from '@/lib';
 import { fetchQuery } from 'convex/nextjs';
 import { cookies } from 'next/headers';

@@ -1,4 +1,4 @@
-import { Id } from '@/convex/_generated/dataModel';
+import { Id } from '@repo/convex';
 
 export type JWT = {
   aud: 'convex';

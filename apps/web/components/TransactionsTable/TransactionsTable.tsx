@@ -1,4 +1,4 @@
-import { Doc } from '@/convex/_generated/dataModel';
+import { Doc } from '@repo/convex';
 import {
   Table,
   TableBody,
