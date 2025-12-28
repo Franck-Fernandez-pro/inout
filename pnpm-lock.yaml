@@ -182,8 +182,8 @@ importers:
         specifier: 19.1.6
         version: 19.1.6(@types/react@19.1.8)
       babel-plugin-react-native-web:
-        specifier: ^0.19.10
-        version: 0.19.13
+        specifier: ^0.21.0
+        version: 0.21.2
       cypress:
         specifier: ^13.16.0
         version: 13.17.0
@@ -3097,6 +3097,9 @@ packages:
 
   babel-plugin-react-native-web@0.19.13:
     resolution: {integrity: sha512-4hHoto6xaN23LCyZgL9LJZc3olmAxd7b6jDzlZnKXAh4rRAbZRKNBJoOOdp46OBqgy+K0t0guTj5/mhA8inymQ==}
+
+  babel-plugin-react-native-web@0.21.2:
+    resolution: {integrity: sha512-SPD0J6qjJn8231i0HZhlAGH6NORe+QvRSQM2mwQEzJ2Fb3E4ruWTiiicPlHjmeWShDXLcvoorOCXjeR7k/lyWA==}
 
   babel-plugin-syntax-hermes-parser@0.23.1:
     resolution: {integrity: sha512-uNLD0tk2tLUjGFdmCk+u/3FEw2o+BAwW4g+z2QVlxJrzZYOOPADroEcNtTPt5lNiScctaUmnsTkVEnOwZUOLhA==}
@@ -9986,6 +9989,8 @@ snapshots:
       - supports-color
 
   babel-plugin-react-native-web@0.19.13: {}
+
+  babel-plugin-react-native-web@0.21.2: {}
 
   babel-plugin-syntax-hermes-parser@0.23.1:
     dependencies:
