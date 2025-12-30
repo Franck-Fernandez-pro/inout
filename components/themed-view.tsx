@@ -7,8 +7,19 @@ export type ThemedViewProps = ViewProps & {
   darkColor?: string;
 };
 
-export function ThemedView({ style, lightColor, darkColor, ...otherProps }: ThemedViewProps) {
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+export function ThemedView({
+  style,
+  lightColor,
+  darkColor,
+  ...otherProps
+}: ThemedViewProps) {
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    'background'
+  );
 
-  return <View style={[{ backgroundColor }, style]} {...otherProps} />;
+  return (
+    // @ts-expect-error - React 19 compatibility issue with React Native types
+    <View style={[{ backgroundColor }, style]} {...otherProps} />
+  );
 }
