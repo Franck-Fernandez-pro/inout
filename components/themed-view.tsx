@@ -19,6 +19,7 @@ export function ThemedView({
   );
 
   return (
+    // @ts-expect-error - React 19 compatibility issue with React Native types
     <View style={[{ backgroundColor }, style]} {...otherProps} />
   );
 }
