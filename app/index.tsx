@@ -1,6 +1,17 @@
+import { api } from '@/convex/_generated/api';
+import { useQuery } from 'convex/react';
 import { Text, View } from 'react-native';
 
 export default function Index() {
+  const transactionIns = useQuery(api.transactions.get, {
+    type: 'IN',
+    userId: 'toto',
+  });
+  const transactionOuts = useQuery(api.transactions.get, {
+    type: 'OUT',
+    userId: 'toto',
+  });
+
   return (
     <View
       style={{
@@ -9,7 +20,16 @@ export default function Index() {
         alignItems: 'center',
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+      <Text>
+        {transactionIns?.length
+          ? transactionIns.map((transaction) => transaction.title)
+          : null}
+      </Text>
+      <Text>
+        {transactionOuts?.length
+          ? transactionOuts.map((transaction) => transaction.title)
+          : null}
+      </Text>
     </View>
   );
 }
