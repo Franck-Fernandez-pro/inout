@@ -6,15 +6,21 @@ export function useGoogleAuth() {
 
   async function login() {
     try {
-      const { createdSessionId, setActive } = await startSSOFlow({
-        redirectUrl: Linking.createURL('/', { scheme: 'inout' }),
-        strategy: 'oauth_google',
-      });
+      const { createdSessionId, setActive, signIn, signUp } =
+        await startSSOFlow({
+          redirectUrl: Linking.createURL('/', { scheme: 'inout' }),
+          strategy: 'oauth_google',
+        });
 
       if (createdSessionId) {
-        setActive!({ session: createdSessionId });
+        await setActive!({ session: createdSessionId });
+        return;
       } else {
-        // 2FA
+        if (signIn || signUp) {
+          // Route to verification UI / complete MFA or new user flow
+          return;
+        }
+        throw new Error('SSO did not return a session or verification object');
       }
     } catch (err) {
       console.error('Erreur OAuth', err);
