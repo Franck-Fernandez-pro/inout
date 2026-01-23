@@ -7,7 +7,7 @@ export function useGoogleAuth() {
   async function login() {
     try {
       const { createdSessionId, setActive } = await startSSOFlow({
-        redirectUrl: Linking.createURL('/dashboard', { scheme: 'inout' }),
+        redirectUrl: Linking.createURL('/', { scheme: 'inout' }),
         strategy: 'oauth_google',
       });
 
