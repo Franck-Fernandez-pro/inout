@@ -9,8 +9,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { styles } from './TransactionForm.styles';
 import { TAGS, TYPES } from './TransactionForm.constant';
+import { styles } from './TransactionForm.styles';
 
 type Props = {
   initialValues?: Partial<Doc<'transactions'>>;
@@ -48,6 +48,7 @@ export function TransactionForm({
       <View style={styles.container}>
         <Text style={styles.label}>Titre</Text>
         <TextInput
+          testID="title-input"
           style={styles.input}
           value={title}
           onChangeText={setTitle}
@@ -59,6 +60,7 @@ export function TransactionForm({
           {TAGS.map((tag) => (
             <TouchableOpacity
               key={tag}
+              testID={`tag-${tag.toLowerCase()}`}
               style={[
                 styles.selectOption,
                 tags === tag && styles.selectOptionActive,
@@ -79,6 +81,7 @@ export function TransactionForm({
 
         <Text style={styles.label}>Montant (€/$)</Text>
         <TextInput
+          testID="amount-input"
           style={styles.input}
           value={amount}
           onChangeText={setAmount}
@@ -91,6 +94,7 @@ export function TransactionForm({
           {TYPES.map((typeOption) => (
             <TouchableOpacity
               key={typeOption}
+              testID={`type-${typeOption.toLowerCase()}`}
               style={[
                 styles.selectOption,
                 type === typeOption && styles.selectOptionActive,
@@ -110,8 +114,12 @@ export function TransactionForm({
         </View>
 
         <View style={styles.buttonContainer}>
-          <Button title="Annuler" onPress={onCancel} />
-          <Button title="Valider" onPress={handleSubmit} />
+          <Button testID="cancel-button" title="Annuler" onPress={onCancel} />
+          <Button
+            testID="submit-button"
+            title="Valider"
+            onPress={handleSubmit}
+          />
         </View>
       </View>
     </TouchableWithoutFeedback>
