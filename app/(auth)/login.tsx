@@ -1,7 +1,7 @@
-import { Button } from '@/components';
 import { useGoogleAuth } from '@/hooks';
 import { useAuth } from '@clerk/clerk-expo';
 import { Text, View } from 'react-native';
+import { Button } from 'tamagui';
 
 export default function Index() {
   const { isSignedIn } = useAuth();
@@ -14,7 +14,7 @@ export default function Index() {
           <Text>Tu es déjà connecté !</Text>
         </>
       ) : (
-        <Button title="Se connecter avec Google" onPress={login} />
+        <Button onPress={login}>Se connecter avec Google</Button>
       )}
     </View>
   );

@@ -1,5 +1,5 @@
-import { Button } from '@/components';
 import { Doc } from '@/convex';
+import { Button } from 'tamagui';
 import React, { useState } from 'react';
 import {
   Keyboard,
@@ -114,12 +114,8 @@ export function TransactionForm({
         </View>
 
         <View style={styles.buttonContainer}>
-          <Button testID="cancel-button" title="Annuler" onPress={onCancel} />
-          <Button
-            testID="submit-button"
-            title="Valider"
-            onPress={handleSubmit}
-          />
+          <Button testID="cancel-button" onPress={onCancel}>Annuler</Button>
+          <Button testID="submit-button" onPress={handleSubmit}>Valider</Button>
         </View>
       </View>
     </TouchableWithoutFeedback>

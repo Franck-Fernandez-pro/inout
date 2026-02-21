@@ -1,8 +1,8 @@
-import { Button } from '@/components';
 import { api } from '@/convex/_generated/api';
 import { useAuth } from '@clerk/clerk-expo';
 import { useQuery } from 'convex/react';
 import { Text, View } from 'react-native';
+import { Button } from 'tamagui';
 
 export default function Index() {
   const { signOut } = useAuth();
@@ -29,7 +29,7 @@ export default function Index() {
       </Text>
 
       <Text>Bienvenue sur ton Budget ! 💰</Text>
-      <Button title="Se déconnecter" onPress={() => signOut()} />
+      <Button onPress={() => signOut()}>Se déconnecter</Button>
     </View>
   );
 }
