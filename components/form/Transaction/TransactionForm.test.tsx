@@ -1,28 +1,8 @@
 import { Doc } from '@/convex';
-import { fireEvent, render } from '@testing-library/react-native';
+import { fireEvent, render } from '@/test/test-utils';
 import React from 'react';
 
 import { TransactionForm } from './TransactionForm';
-
-// Mock the Button component to avoid Clerk dependencies
-jest.mock('@/components', () => ({
-  Button: ({
-    title,
-    onPress,
-    testID,
-  }: {
-    title: string;
-    onPress: () => void;
-    testID?: string;
-  }) => {
-    const { TouchableOpacity, Text } = require('react-native');
-    return (
-      <TouchableOpacity testID={testID} onPress={onPress}>
-        <Text>{title}</Text>
-      </TouchableOpacity>
-    );
-  },
-}));
 
 // Mock the constants
 jest.mock('./TransactionForm.constant', () => ({
