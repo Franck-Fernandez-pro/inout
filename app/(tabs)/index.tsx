@@ -1,8 +1,7 @@
 import { api } from '@/convex/_generated/api';
 import { useAuth } from '@clerk/clerk-expo';
 import { useQuery } from 'convex/react';
-import { Text, View } from 'react-native';
-import { Button } from 'tamagui';
+import { Button, Text, YStack } from 'tamagui';
 
 export default function Index() {
   const { signOut } = useAuth();
@@ -16,7 +15,7 @@ export default function Index() {
   });
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <YStack flex={1} justify="center" items="center">
       <Text>
         {transactionIns?.length
           ? transactionIns.map((transaction) => transaction.title)
@@ -30,6 +29,6 @@ export default function Index() {
 
       <Text>Bienvenue sur ton Budget ! 💰</Text>
       <Button onPress={() => signOut()}>Se déconnecter</Button>
-    </View>
+    </YStack>
   );
 }
