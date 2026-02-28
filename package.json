@@ -17,7 +17,7 @@
     "transformIgnorePatterns": [
       "node_modules/(?!(?:.pnpm/)?((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules-*|sentry-expo|native-base|react-native-svg|tamagui|@tamagui/.*))"
     ],
-    "setupFiles": ["./jest.setup.ts"]
+    "setupFilesAfterEnv": ["./jest.setup.ts"]
   },
   "dependencies": {
     "@clerk/clerk-expo": "^2.19.17",
