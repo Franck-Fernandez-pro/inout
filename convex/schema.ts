@@ -3,7 +3,7 @@ import { v } from 'convex/values';
 
 export const transactions = {
   title: v.string(),
-  tags: v.string(),
+  tags: v.optional(v.string()),
   amount: v.string(),
   type: v.union(v.literal('IN'), v.literal('OUT')),
   userId: v.string(),
