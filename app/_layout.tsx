@@ -3,6 +3,7 @@ import { ConvexReactClient } from 'convex/react';
 import { ConvexProviderWithClerk } from 'convex/react-clerk';
 import { tokenCache } from '@clerk/clerk-expo/token-cache';
 import { AuthGuard } from '@/components/AuthGuard';
+import { TamaguiProvider } from '@/components/Tamagui.provider';
 
 if (!process.env.EXPO_PUBLIC_CONVEX_URL) {
   throw new Error('EXPO_PUBLIC_CONVEX_URL environment variable is not set');
@@ -22,7 +23,9 @@ export default function RootLayout() {
   return (
     <ClerkProvider tokenCache={tokenCache} publishableKey={publishableKey}>
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
-        <AuthGuard />
+        <TamaguiProvider>
+          <AuthGuard />
+        </TamaguiProvider>
       </ConvexProviderWithClerk>
     </ClerkProvider>
   );

@@ -1,16 +1,35 @@
-import { Button } from '@/components';
 import { Doc } from '@/convex';
 import React, { useState } from 'react';
+import { Keyboard } from 'react-native';
 import {
-  Keyboard,
+  Button,
+  Input,
+  SizableText,
+  styled,
   Text,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+  XStack,
+  YStack,
+} from 'tamagui';
 import { TAGS, TYPES } from './TransactionForm.constant';
-import { styles } from './TransactionForm.styles';
+
+const SelectOption = styled(XStack, {
+  borderWidth: 1,
+  borderColor: '$borderColor',
+  rounded: '$4',
+  p: '$3',
+  bg: '$gray2',
+  pressStyle: { opacity: 0.7 },
+  cursor: 'pointer',
+
+  variants: {
+    active: {
+      true: {
+        bg: '$blue10',
+        borderColor: '$blue10',
+      },
+    },
+  } as const,
+});
 
 type Props = {
   initialValues?: Partial<Doc<'transactions'>>;
@@ -44,84 +63,78 @@ export function TransactionForm({
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <Text style={styles.label}>Titre</Text>
-        <TextInput
-          testID="title-input"
-          style={styles.input}
-          value={title}
-          onChangeText={setTitle}
-          placeholder="Entrez le titre"
-        />
+    <YStack width="100%" p="$5" onPress={Keyboard.dismiss}>
+      <SizableText fontWeight="bold" mb="$2" mt="$4">
+        Titre
+      </SizableText>
+      <Input
+        testID="title-input"
+        value={title}
+        onChangeText={setTitle}
+        placeholder="Entrez le titre"
+      />
 
-        <Text style={styles.label}>Tags</Text>
-        <View style={styles.selectContainer}>
-          {TAGS.map((tag) => (
-            <TouchableOpacity
-              key={tag}
-              testID={`tag-${tag.toLowerCase()}`}
-              style={[
-                styles.selectOption,
-                tags === tag && styles.selectOptionActive,
-              ]}
-              onPress={() => setTags(tag)}
+      <SizableText fontWeight="bold" mb="$2" mt="$4">
+        Tags
+      </SizableText>
+      <XStack flexWrap="wrap" gap="$2">
+        {TAGS.map((tag) => (
+          <SelectOption
+            key={tag}
+            testID={`tag-${tag.toLowerCase()}`}
+            active={tags === tag}
+            onPress={() => setTags(tag)}
+          >
+            <Text
+              color={tags === tag ? 'white' : '$gray11'}
+              fontWeight={tags === tag ? 'bold' : 'normal'}
             >
-              <Text
-                style={[
-                  styles.selectOptionText,
-                  tags === tag && styles.selectOptionTextActive,
-                ]}
-              >
-                {tag}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+              {tag}
+            </Text>
+          </SelectOption>
+        ))}
+      </XStack>
 
-        <Text style={styles.label}>Montant (€/$)</Text>
-        <TextInput
-          testID="amount-input"
-          style={styles.input}
-          value={amount}
-          onChangeText={setAmount}
-          placeholder="0.00"
-          keyboardType="numeric"
-        />
+      <SizableText fontWeight="bold" mb="$2" mt="$4">
+        Montant (€/$)
+      </SizableText>
+      <Input
+        testID="amount-input"
+        value={amount}
+        onChangeText={setAmount}
+        placeholder="0.00"
+        keyboardType="numeric"
+      />
 
-        <Text style={styles.label}>Type</Text>
-        <View style={styles.selectContainer}>
-          {TYPES.map((typeOption) => (
-            <TouchableOpacity
-              key={typeOption}
-              testID={`type-${typeOption.toLowerCase()}`}
-              style={[
-                styles.selectOption,
-                type === typeOption && styles.selectOptionActive,
-              ]}
-              onPress={() => setType(typeOption)}
+      <SizableText fontWeight="bold" mb="$2" mt="$4">
+        Type
+      </SizableText>
+      <XStack flexWrap="wrap" gap="$2">
+        {TYPES.map((typeOption) => (
+          <SelectOption
+            key={typeOption}
+            testID={`type-${typeOption.toLowerCase()}`}
+            active={type === typeOption}
+            onPress={() => setType(typeOption)}
+          >
+            <Text
+              color={type === typeOption ? 'white' : '$gray11'}
+              fontWeight={type === typeOption ? 'bold' : 'normal'}
             >
-              <Text
-                style={[
-                  styles.selectOptionText,
-                  type === typeOption && styles.selectOptionTextActive,
-                ]}
-              >
-                {typeOption}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+              {typeOption}
+            </Text>
+          </SelectOption>
+        ))}
+      </XStack>
 
-        <View style={styles.buttonContainer}>
-          <Button testID="cancel-button" title="Annuler" onPress={onCancel} />
-          <Button
-            testID="submit-button"
-            title="Valider"
-            onPress={handleSubmit}
-          />
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
+      <XStack justify="space-around" mt="$8">
+        <Button testID="cancel-button" onPress={onCancel}>
+          Annuler
+        </Button>
+        <Button testID="submit-button" onPress={handleSubmit}>
+          Valider
+        </Button>
+      </XStack>
+    </YStack>
   );
 }
