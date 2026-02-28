@@ -1,14 +1,6 @@
-import { createTamagui, TamaguiProvider as TamaguiProviderBase } from 'tamagui';
-import { defaultConfig } from '@tamagui/config/v5';
 import { type ReactNode } from 'react';
-
-// you usually export this from a tamagui.config.ts file
-const config = createTamagui(defaultConfig);
-
-type Conf = typeof config;
-declare module '@tamagui/core' {
-  interface TamaguiCustomConfig extends Conf {}
-}
+import { TamaguiProvider as TamaguiProviderBase } from 'tamagui';
+import { config } from '@/tamagui.config';
 
 export const TamaguiProvider = ({ children }: { children: ReactNode }) => (
   <TamaguiProviderBase config={config} defaultTheme="light">
