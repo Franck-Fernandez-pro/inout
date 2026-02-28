@@ -9,22 +9,27 @@ Ce projet est une application mobile moderne utilisant Expo (v54), React Native 
 - Utilise les tokens, les thèmes et les variants définis dans notre configuration Tamagui plutôt que des valeurs en dur (ex: utilise `padding="$4"` au lieu de `padding={16}`).
 - Privilégie la fonction `styled()` de Tamagui pour créer des éléments réutilisables.
 
-# Routage et Navigation (Expo Router)
+# Expo et Navigation (Expo Router)
 - La navigation est gérée exclusivement par **Expo Router** (routage basé sur les fichiers dans le dossier `app/`).
 - Utilise le composant `<Link href="..." />` et l'objet `router` d'Expo Router. 
 - Ne configure JAMAIS de `Stack` ou de `Tabs` via `@react-navigation` manuellement, utilise les fichiers `_layout.tsx`.
+- Consulte `@expo-full.txt` pour la documentation générale d'Expo.
+- Consulte `@sdk.txt` pour la documentation des librairies du SDK Expo et la configuration.
+- Consulte `@eas.txt` pour les services EAS (build, submit, update, workflows CI/CD).
 
 # Backend et Base de données (Convex)
 - Le backend est géré par **Convex**.
 - Utilise exclusivement les hooks `useQuery` et `useMutation` importés de `convex/react` pour interagir avec les données.
 - Les fonctions backend doivent être placées et modifiées dans le dossier `convex/`.
+- Consulte le fichier `@convex_rules.mdc` pour les guidelines, la syntaxe et les bonnes pratiques Convex.
 
 # Authentification (Clerk)
 - L'authentification utilise **@clerk/clerk-expo**.
 - Utilise les hooks fournis par Clerk (`useAuth`, `useUser`, etc.). 
 - La gestion du cache des tokens doit obligatoirement utiliser `expo-secure-store`.
 
-# Animations et Gestes
+# React Native - Performance, Animations et Gestes
+- Consulte `@react-native-skill.md` pour les règles de performance et d'optimisation React Native.
 - Pour les animations, utilise **EXCLUSIVEMENT** `react-native-reanimated` (v4). N'utilise pas l'API `Animated` de base de React Native.
 - Pour les interactions tactiles avancées, utilise `react-native-gesture-handler`.
 
@@ -38,3 +43,11 @@ Ce projet est une application mobile moderne utilisant Expo (v54), React Native 
 - N'ajoute pas de commentaires pour désactiver le linter (`// eslint-disable-next-line`) sauf consigne explicite.
 - Pour les tests unitaires et d'intégration, utilise Jest et `@testing-library/react-native`.
 - Le code doit être propre, modulaire, et les variables/fonctions/commits nommés en anglais.
+
+# Documentation de référence
+- Tamagui : `@tamagui-llms.txt`
+- Convex : `@convex_rules.mdc`
+- Expo : `@expo-full.txt`
+- Expo SDK : `@sdk.txt`
+- EAS : `@eas.txt`
+- React Native (performance) : `@react-native-skill.md`
