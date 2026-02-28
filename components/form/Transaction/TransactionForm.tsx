@@ -1,7 +1,15 @@
 import { Doc } from '@/convex';
 import React, { useState } from 'react';
 import { Keyboard } from 'react-native';
-import { Button, Input, SizableText, styled, Text, XStack, YStack } from 'tamagui';
+import {
+  Button,
+  Input,
+  SizableText,
+  styled,
+  Text,
+  XStack,
+  YStack,
+} from 'tamagui';
 import { TAGS, TYPES } from './TransactionForm.constant';
 
 const SelectOption = styled(XStack, {
@@ -56,7 +64,9 @@ export function TransactionForm({
 
   return (
     <YStack width="100%" p="$5" bg="$background" onPress={Keyboard.dismiss}>
-      <SizableText fontWeight="bold" mb="$2" mt="$4">Titre</SizableText>
+      <SizableText fontWeight="bold" mb="$2" mt="$4">
+        Titre
+      </SizableText>
       <Input
         testID="title-input"
         value={title}
@@ -64,7 +74,9 @@ export function TransactionForm({
         placeholder="Entrez le titre"
       />
 
-      <SizableText fontWeight="bold" mb="$2" mt="$4">Tags</SizableText>
+      <SizableText fontWeight="bold" mb="$2" mt="$4">
+        Tags
+      </SizableText>
       <XStack flexWrap="wrap" gap="$2">
         {TAGS.map((tag) => (
           <SelectOption
@@ -83,7 +95,9 @@ export function TransactionForm({
         ))}
       </XStack>
 
-      <SizableText fontWeight="bold" mb="$2" mt="$4">Montant (€/$)</SizableText>
+      <SizableText fontWeight="bold" mb="$2" mt="$4">
+        Montant (€/$)
+      </SizableText>
       <Input
         testID="amount-input"
         value={amount}
@@ -92,7 +106,9 @@ export function TransactionForm({
         keyboardType="numeric"
       />
 
-      <SizableText fontWeight="bold" mb="$2" mt="$4">Type</SizableText>
+      <SizableText fontWeight="bold" mb="$2" mt="$4">
+        Type
+      </SizableText>
       <XStack flexWrap="wrap" gap="$2">
         {TYPES.map((typeOption) => (
           <SelectOption
@@ -112,8 +128,12 @@ export function TransactionForm({
       </XStack>
 
       <XStack justify="space-around" mt="$8">
-        <Button testID="cancel-button" onPress={onCancel}>Annuler</Button>
-        <Button testID="submit-button" onPress={handleSubmit}>Valider</Button>
+        <Button testID="cancel-button" onPress={onCancel}>
+          Annuler
+        </Button>
+        <Button testID="submit-button" onPress={handleSubmit}>
+          Valider
+        </Button>
       </XStack>
     </YStack>
   );
