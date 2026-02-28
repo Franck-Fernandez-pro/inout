@@ -63,7 +63,7 @@ export function TransactionForm({
   };
 
   return (
-    <YStack width="100%" p="$5" bg="$background" onPress={Keyboard.dismiss}>
+    <YStack width="100%" p="$5" onPress={Keyboard.dismiss}>
       <SizableText fontWeight="bold" mb="$2" mt="$4">
         Titre
       </SizableText>
