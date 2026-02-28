@@ -1,7 +1,8 @@
+import { TransactionCard } from '@/components';
 import { api } from '@/convex/_generated/api';
 import { useAuth } from '@clerk/clerk-expo';
 import { useQuery } from 'convex/react';
-import { Button, Text, YStack } from 'tamagui';
+import { Button, ScrollView, Text, YStack } from 'tamagui';
 
 export default function Index() {
   const { signOut } = useAuth();
@@ -15,20 +16,21 @@ export default function Index() {
   });
 
   return (
-    <YStack flex={1} justify="center" items="center">
-      <Text>
-        {transactionIns?.length
-          ? transactionIns.map((transaction) => transaction.title)
-          : null}
-      </Text>
-      <Text>
-        {transactionOuts?.length
-          ? transactionOuts.map((transaction) => transaction.title)
-          : null}
-      </Text>
+    <ScrollView flex={1}>
+      <YStack gap="$4" items="center" p="$4">
+        <Text>Bienvenue sur ton Budget ! 💰</Text>
 
-      <Text>Bienvenue sur ton Budget ! 💰</Text>
-      <Button onPress={() => signOut()}>Se déconnecter</Button>
-    </YStack>
+        <TransactionCard
+          transactions={transactionIns ?? []}
+          type="IN"
+        />
+        <TransactionCard
+          transactions={transactionOuts ?? []}
+          type="OUT"
+        />
+
+        <Button onPress={() => signOut()}>Se déconnecter</Button>
+      </YStack>
+    </ScrollView>
   );
 }
