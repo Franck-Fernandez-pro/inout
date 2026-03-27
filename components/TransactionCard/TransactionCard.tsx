@@ -14,6 +14,12 @@ const currencyFormatter = new Intl.NumberFormat('fr-FR', {
   currency: 'EUR',
 });
 
+function formatAmount(amount: string, prefix: string): string {
+  const parsed = Number(amount);
+  if (!amount || Number.isNaN(parsed)) return '—';
+  return `${prefix}${currencyFormatter.format(parsed)}`;
+}
+
 const TAG_COLORS: Record<string, '$blue5' | '$orange5' | '$purple5'> = {
   Besoin: '$blue5',
   Plaisir: '$orange5',
@@ -70,8 +76,7 @@ export function TransactionCard({ transactions, type }: TransactionCardProps) {
                   ) : null}
                 </YStack>
                 <SizableText fontWeight="bold" color={color}>
-                  {type === 'IN' ? '+' : '-'}
-                  {currencyFormatter.format(Number(transaction.amount))}
+                  {formatAmount(transaction.amount, type === 'IN' ? '+' : '-')}
                 </SizableText>
               </XStack>
             </YStack>

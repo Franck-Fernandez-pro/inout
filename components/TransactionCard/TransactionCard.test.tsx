@@ -139,4 +139,36 @@ describe('TransactionCard', () => {
       expect(getByText('Besoin')).toBeTruthy();
     });
   });
+
+  describe('Invalid amount', () => {
+    it('should display placeholder when amount is empty', () => {
+      const emptyAmount = makeTransaction({
+        _id: '5',
+        title: 'Empty amount',
+        amount: '',
+        type: 'IN',
+      });
+
+      const { getByText } = render(
+        <TransactionCard transactions={[emptyAmount]} type="IN" />
+      );
+
+      expect(getByText('—')).toBeTruthy();
+    });
+
+    it('should display placeholder when amount is non-numeric', () => {
+      const badAmount = makeTransaction({
+        _id: '6',
+        title: 'Bad amount',
+        amount: 'abc',
+        type: 'OUT',
+      });
+
+      const { getByText } = render(
+        <TransactionCard transactions={[badAmount]} type="OUT" />
+      );
+
+      expect(getByText('—')).toBeTruthy();
+    });
+  });
 });
