@@ -4,6 +4,8 @@
   "platformAutomerge": true,
   "automergeType": "pr",
   "automergeStrategy": "squash",
+  "prConcurrentLimit": 1,
+  "rebaseWhen": "behind-base-branch",
   "packageRules": [
     {
       "description": "Patch + minor devDependencies",
