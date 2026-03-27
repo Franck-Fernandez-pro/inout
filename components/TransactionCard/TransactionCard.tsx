@@ -1,4 +1,5 @@
 import { Doc } from '@/convex';
+import { TAGS } from '@/components/form/Transaction/TransactionForm.constant';
 import {
   Card,
   H3,
@@ -20,7 +21,10 @@ function formatAmount(amount: string, prefix: string): string {
   return `${prefix}${currencyFormatter.format(parsed)}`;
 }
 
-const TAG_COLORS: Record<string, '$blue5' | '$orange5' | '$purple5'> = {
+type Tag = (typeof TAGS)[number];
+type TagColor = '$blue5' | '$orange5' | '$purple5';
+
+const TAG_COLORS: Partial<Record<Tag, TagColor>> = {
   Besoin: '$blue5',
   Plaisir: '$orange5',
   Investissement: '$purple5',
@@ -70,7 +74,7 @@ export function TransactionCard({ transactions, type }: TransactionCardProps) {
                     {transaction.title}
                   </SizableText>
                   {transaction.tags ? (
-                    <Badge bg={TAG_COLORS[transaction.tags] ?? '$gray5'}>
+                    <Badge bg={TAG_COLORS[transaction.tags as Tag] ?? '$gray5'}>
                       <SizableText size="$2">{transaction.tags}</SizableText>
                     </Badge>
                   ) : null}
