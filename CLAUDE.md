@@ -95,6 +95,16 @@ Key rules that interact with this project's constraints:
 | Integrating into existing native app | [`.agents/skills/expo-brownfield/SKILL.md`](.agents/skills/expo-brownfield/SKILL.md) |
 | Setting up Tailwind CSS (if needed) | [`.agents/skills/expo-tailwind-setup/SKILL.md`](.agents/skills/expo-tailwind-setup/SKILL.md) |
 
+## EAS Update monitoring
+
+When monitoring OTA (over-the-air) updates published via EAS, read the matching reference:
+
+| Scenario | Reference file |
+|---|---|
+| Check specific update health: crashes, launches, users, payload size | [`.agents/skills/eas-update-insights/references/update-insights-schema.md`](.agents/skills/eas-update-insights/references/update-insights-schema.md) |
+| Check channel-level metrics: embedded vs OTA users, popular updates | [`.agents/skills/eas-update-insights/references/channel-insights-schema.md`](.agents/skills/eas-update-insights/references/channel-insights-schema.md) |
+| General EAS Update Insights guidance & CLI commands | [`.agents/skills/eas-update-insights/SKILL.md`](.agents/skills/eas-update-insights/SKILL.md) |
+
 ## Hard constraints (from `.cursorrules`)
 
 - **No `StyleSheet.create()`** or inline React Native styles — Tamagui only
