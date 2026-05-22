@@ -62,10 +62,10 @@ In `targets/clip/expo-target.config.js`, declare the Clip's entitlement:
 ```js
 /** @type {import('@bacons/apple-targets/app.plugin').ConfigFunction} */
 module.exports = (config) => ({
-  type: "clip",
-  icon: "https://github.com/expo.png",
+  type: 'clip',
+  icon: 'https://github.com/expo.png',
   entitlements: {
-    "com.apple.developer.associated-domains": ["appclips:may20.expo.app"],
+    'com.apple.developer.associated-domains': ['appclips:may20.expo.app'],
   },
 });
 ```
@@ -136,7 +136,7 @@ bunx expo customize src/app/+html.tsx
 Add the meta tag to the `<head>`:
 
 ```tsx
-import { ScrollViewStyleReset } from "expo-router/html";
+import { ScrollViewStyleReset } from 'expo-router/html';
 
 export default function Root({ children }: { children: React.ReactNode }) {
   return (

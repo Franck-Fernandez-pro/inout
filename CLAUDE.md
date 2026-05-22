@@ -50,13 +50,13 @@ In components, use `useQuery(api.transactions.get, {...})` and `useMutation(api.
 
 #### Convex skills (read the matching file before writing Convex code)
 
-| Scenario | Skill file |
-|---|---|
-| Schema changes, field type changes, backfills | [`.agents/skills/convex-migration-helper/SKILL.md`](.agents/skills/convex-migration-helper/SKILL.md) |
-| Slow queries, OCC conflicts, high reads | [`.agents/skills/convex-performance-audit/SKILL.md`](.agents/skills/convex-performance-audit/SKILL.md) |
-| Reusable backend component with isolated tables | [`.agents/skills/convex-create-component/SKILL.md`](.agents/skills/convex-create-component/SKILL.md) |
-| Auth setup or changes (Clerk JWT, protected functions) | [`.agents/skills/convex-setup-auth/SKILL.md`](.agents/skills/convex-setup-auth/SKILL.md) |
-| Unsure which skill applies | [`.agents/skills/convex/SKILL.md`](.agents/skills/convex/SKILL.md) |
+| Scenario                                               | Skill file                                                                                             |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| Schema changes, field type changes, backfills          | [`.agents/skills/convex-migration-helper/SKILL.md`](.agents/skills/convex-migration-helper/SKILL.md)   |
+| Slow queries, OCC conflicts, high reads                | [`.agents/skills/convex-performance-audit/SKILL.md`](.agents/skills/convex-performance-audit/SKILL.md) |
+| Reusable backend component with isolated tables        | [`.agents/skills/convex-create-component/SKILL.md`](.agents/skills/convex-create-component/SKILL.md)   |
+| Auth setup or changes (Clerk JWT, protected functions) | [`.agents/skills/convex-setup-auth/SKILL.md`](.agents/skills/convex-setup-auth/SKILL.md)               |
+| Unsure which skill applies                             | [`.agents/skills/convex/SKILL.md`](.agents/skills/convex/SKILL.md)                                     |
 
 ### Tamagui styling
 
@@ -64,18 +64,19 @@ Use Tamagui primitives (`YStack`, `XStack`, `Text`, `Button`, etc.) and design t
 
 #### Tamagui references (read before styling or theming work)
 
-| Scenario | Reference file |
-|---|---|
-| Creating styled components, variants, extending components | [`.agents/skills/tamagui/references/components.md`](.agents/skills/tamagui/references/components.md) |
-| Design tokens, themes, customizing colors/spacing/sizes | [`.agents/skills/tamagui/references/configuration.md`](.agents/skills/tamagui/references/configuration.md) |
-| Animations with Tamagui and Reanimated | [`.agents/skills/tamagui/references/animations.md`](.agents/skills/tamagui/references/animations.md) |
-| General Tamagui patterns & guidance | [`.agents/skills/tamagui/SKILL.md`](.agents/skills/tamagui/SKILL.md) |
+| Scenario                                                   | Reference file                                                                                             |
+| ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Creating styled components, variants, extending components | [`.agents/skills/tamagui/references/components.md`](.agents/skills/tamagui/references/components.md)       |
+| Design tokens, themes, customizing colors/spacing/sizes    | [`.agents/skills/tamagui/references/configuration.md`](.agents/skills/tamagui/references/configuration.md) |
+| Animations with Tamagui and Reanimated                     | [`.agents/skills/tamagui/references/animations.md`](.agents/skills/tamagui/references/animations.md)       |
+| General Tamagui patterns & guidance                        | [`.agents/skills/tamagui/SKILL.md`](.agents/skills/tamagui/SKILL.md)                                       |
 
 ## React Native best practices
 
 Follow all rules in [`.agents/skills/vercel-react-native-skills/AGENTS.md`](.agents/skills/vercel-react-native-skills/AGENTS.md) when writing or reviewing React Native/Expo code. The rules cover list performance, animations, navigation, state management, UI patterns, and more — each with incorrect/correct code examples.
 
 Key rules that interact with this project's constraints:
+
 - Use `expo-image` (not React Native's `<Image>`) for all images
 - Never track scroll position in `useState` — use Reanimated shared values
 - Use `FlashList` or `LegendList` for any list (not `FlatList`/`ScrollView`)
@@ -84,26 +85,26 @@ Key rules that interact with this project's constraints:
 
 ## Expo skills (read the matching file before working on Expo-specific tasks)
 
-| Scenario | Skill file |
-|---|---|
-| Upgrading Expo SDK or dependencies | [`.agents/skills/upgrading-expo/SKILL.md`](.agents/skills/upgrading-expo/SKILL.md) |
-| Deploying to iOS/Android App Stores or web | [`.agents/skills/expo-deployment/SKILL.md`](.agents/skills/expo-deployment/SKILL.md) |
-| CI/CD workflows, EAS Build, GitHub Actions | [`.agents/skills/expo-cicd-workflows/SKILL.md`](.agents/skills/expo-cicd-workflows/SKILL.md) |
-| Building/distributing dev client for testing | [`.agents/skills/expo-dev-client/SKILL.md`](.agents/skills/expo-dev-client/SKILL.md) |
-| Creating native modules (Swift/Kotlin) | [`.agents/skills/expo-module/SKILL.md`](.agents/skills/expo-module/SKILL.md) |
-| API routes with Expo Router | [`.agents/skills/expo-api-routes/SKILL.md`](.agents/skills/expo-api-routes/SKILL.md) |
-| Integrating into existing native app | [`.agents/skills/expo-brownfield/SKILL.md`](.agents/skills/expo-brownfield/SKILL.md) |
-| Setting up Tailwind CSS (if needed) | [`.agents/skills/expo-tailwind-setup/SKILL.md`](.agents/skills/expo-tailwind-setup/SKILL.md) |
+| Scenario                                     | Skill file                                                                                   |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Upgrading Expo SDK or dependencies           | [`.agents/skills/upgrading-expo/SKILL.md`](.agents/skills/upgrading-expo/SKILL.md)           |
+| Deploying to iOS/Android App Stores or web   | [`.agents/skills/expo-deployment/SKILL.md`](.agents/skills/expo-deployment/SKILL.md)         |
+| CI/CD workflows, EAS Build, GitHub Actions   | [`.agents/skills/expo-cicd-workflows/SKILL.md`](.agents/skills/expo-cicd-workflows/SKILL.md) |
+| Building/distributing dev client for testing | [`.agents/skills/expo-dev-client/SKILL.md`](.agents/skills/expo-dev-client/SKILL.md)         |
+| Creating native modules (Swift/Kotlin)       | [`.agents/skills/expo-module/SKILL.md`](.agents/skills/expo-module/SKILL.md)                 |
+| API routes with Expo Router                  | [`.agents/skills/expo-api-routes/SKILL.md`](.agents/skills/expo-api-routes/SKILL.md)         |
+| Integrating into existing native app         | [`.agents/skills/expo-brownfield/SKILL.md`](.agents/skills/expo-brownfield/SKILL.md)         |
+| Setting up Tailwind CSS (if needed)          | [`.agents/skills/expo-tailwind-setup/SKILL.md`](.agents/skills/expo-tailwind-setup/SKILL.md) |
 
 ## EAS Update monitoring
 
 When monitoring OTA (over-the-air) updates published via EAS, read the matching reference:
 
-| Scenario | Reference file |
-|---|---|
-| Check specific update health: crashes, launches, users, payload size | [`.agents/skills/eas-update-insights/references/update-insights-schema.md`](.agents/skills/eas-update-insights/references/update-insights-schema.md) |
-| Check channel-level metrics: embedded vs OTA users, popular updates | [`.agents/skills/eas-update-insights/references/channel-insights-schema.md`](.agents/skills/eas-update-insights/references/channel-insights-schema.md) |
-| General EAS Update Insights guidance & CLI commands | [`.agents/skills/eas-update-insights/SKILL.md`](.agents/skills/eas-update-insights/SKILL.md) |
+| Scenario                                                             | Reference file                                                                                                                                         |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Check specific update health: crashes, launches, users, payload size | [`.agents/skills/eas-update-insights/references/update-insights-schema.md`](.agents/skills/eas-update-insights/references/update-insights-schema.md)   |
+| Check channel-level metrics: embedded vs OTA users, popular updates  | [`.agents/skills/eas-update-insights/references/channel-insights-schema.md`](.agents/skills/eas-update-insights/references/channel-insights-schema.md) |
+| General EAS Update Insights guidance & CLI commands                  | [`.agents/skills/eas-update-insights/SKILL.md`](.agents/skills/eas-update-insights/SKILL.md)                                                           |
 
 ## Hard constraints (from `.cursorrules`)
 

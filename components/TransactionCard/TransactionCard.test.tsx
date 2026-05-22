@@ -20,7 +20,6 @@ const makeTransaction = (
   };
 };
 
-
 const MOCK_IN = makeTransaction({
   _id: '1',
   title: 'Salary',

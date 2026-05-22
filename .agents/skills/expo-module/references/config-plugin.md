@@ -23,22 +23,23 @@ import {
   withInfoPlist,
   withAndroidManifest,
   AndroidConfig,
-} from "expo/config-plugins";
+} from 'expo/config-plugins';
 
 const withMyConfig: ConfigPlugin<{ apiKey: string }> = (config, { apiKey }) => {
   // iOS: modify Info.plist
   config = withInfoPlist(config, (config) => {
-    config.modResults["MY_API_KEY"] = apiKey;
+    config.modResults['MY_API_KEY'] = apiKey;
     return config;
   });
 
   // Android: modify AndroidManifest.xml
   config = withAndroidManifest(config, (config) => {
-    const mainApp =
-      AndroidConfig.Manifest.getMainApplicationOrThrow(config.modResults);
+    const mainApp = AndroidConfig.Manifest.getMainApplicationOrThrow(
+      config.modResults
+    );
     AndroidConfig.Manifest.addMetaDataItemToMainApplication(
       mainApp,
-      "MY_API_KEY",
+      'MY_API_KEY',
       apiKey
     );
     return config;
