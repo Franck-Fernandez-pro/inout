@@ -4,7 +4,7 @@
   "platformAutomerge": true,
   "automergeType": "pr",
   "automergeStrategy": "squash",
-  "prConcurrentLimit": 1,
+  "prConcurrentLimit": 5,
   "rebaseWhen": "behind-base-branch",
   "packageRules": [
     {
