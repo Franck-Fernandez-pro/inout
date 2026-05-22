@@ -20,14 +20,8 @@ export default function Index() {
       <YStack gap="$4" items="center" p="$4">
         <Text>Bienvenue sur ton Budget ! 💰</Text>
 
-        <TransactionCard
-          transactions={transactionIns ?? []}
-          type="IN"
-        />
-        <TransactionCard
-          transactions={transactionOuts ?? []}
-          type="OUT"
-        />
+        <TransactionCard transactions={transactionIns ?? []} type="IN" />
+        <TransactionCard transactions={transactionOuts ?? []} type="OUT" />
 
         <Button onPress={() => signOut()}>Se déconnecter</Button>
       </YStack>
