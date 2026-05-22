@@ -73,6 +73,19 @@ Key rules that interact with this project's constraints:
 - Use `Pressable` over `TouchableOpacity`
 - Animate only `transform` and `opacity`, never layout properties
 
+## Expo skills (read the matching file before working on Expo-specific tasks)
+
+| Scenario | Skill file |
+|---|---|
+| Upgrading Expo SDK or dependencies | [`.agents/skills/upgrading-expo/SKILL.md`](.agents/skills/upgrading-expo/SKILL.md) |
+| Deploying to iOS/Android App Stores or web | [`.agents/skills/expo-deployment/SKILL.md`](.agents/skills/expo-deployment/SKILL.md) |
+| CI/CD workflows, EAS Build, GitHub Actions | [`.agents/skills/expo-cicd-workflows/SKILL.md`](.agents/skills/expo-cicd-workflows/SKILL.md) |
+| Building/distributing dev client for testing | [`.agents/skills/expo-dev-client/SKILL.md`](.agents/skills/expo-dev-client/SKILL.md) |
+| Creating native modules (Swift/Kotlin) | [`.agents/skills/expo-module/SKILL.md`](.agents/skills/expo-module/SKILL.md) |
+| API routes with Expo Router | [`.agents/skills/expo-api-routes/SKILL.md`](.agents/skills/expo-api-routes/SKILL.md) |
+| Integrating into existing native app | [`.agents/skills/expo-brownfield/SKILL.md`](.agents/skills/expo-brownfield/SKILL.md) |
+| Setting up Tailwind CSS (if needed) | [`.agents/skills/expo-tailwind-setup/SKILL.md`](.agents/skills/expo-tailwind-setup/SKILL.md) |
+
 ## Hard constraints (from `.cursorrules`)
 
 - **No `StyleSheet.create()`** or inline React Native styles — Tamagui only
