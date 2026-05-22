@@ -48,6 +48,16 @@ Schema lives in `convex/schema.ts`. Query/mutation functions in `convex/transact
 
 In components, use `useQuery(api.transactions.get, {...})` and `useMutation(api.transactions.add)` from `convex/react`. Convex handles loading states and real-time sync automatically.
 
+#### Convex skills (read the matching file before writing Convex code)
+
+| Scenario | Skill file |
+|---|---|
+| Schema changes, field type changes, backfills | [`.agents/skills/convex-migration-helper/SKILL.md`](.agents/skills/convex-migration-helper/SKILL.md) |
+| Slow queries, OCC conflicts, high reads | [`.agents/skills/convex-performance-audit/SKILL.md`](.agents/skills/convex-performance-audit/SKILL.md) |
+| Reusable backend component with isolated tables | [`.agents/skills/convex-create-component/SKILL.md`](.agents/skills/convex-create-component/SKILL.md) |
+| Auth setup or changes (Clerk JWT, protected functions) | [`.agents/skills/convex-setup-auth/SKILL.md`](.agents/skills/convex-setup-auth/SKILL.md) |
+| Unsure which skill applies | [`.agents/skills/convex/SKILL.md`](.agents/skills/convex/SKILL.md) |
+
 ### Tamagui styling
 
 Use Tamagui primitives (`YStack`, `XStack`, `Text`, `Button`, etc.) and design tokens (`$4` for spacing, `gap="$4"`). Never use `StyleSheet.create()` or inline styles. Create reusable components with Tamagui's `styled()` function.
