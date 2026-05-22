@@ -66,7 +66,7 @@ For each item, decide if it applies to this change; if yes, fix in the same edit
 
 - **NEVER render mac glyphs without detecting platform** (when the app ships to non-mac users)
   **Instead:** Detect platform once (`navigator.platform`, `userAgent`, or a `usePlatform()` hook if the project has one) and swap to `Ctrl+S` / `Alt` / `Esc` text on Windows/Linux. If the project is mac-only, state that here and skip the swap.
-  **Why:** `⌘` and `⌥` render as unfamiliar symbols (or boxes in missing fonts) on Windows/Linux, turning a hint into noise. The bind still works; the *label* lies about which key to press.
+  **Why:** `⌘` and `⌥` render as unfamiliar symbols (or boxes in missing fonts) on Windows/Linux, turning a hint into noise. The bind still works; the _label_ lies about which key to press.
 
 - **NEVER force items that don't apply**
   **Instead:** Skip an item when the change has no surface for it (e.g., a backend-only tweak that touched a `.tsx` import). Padding with "N/A" wastes the user's attention.

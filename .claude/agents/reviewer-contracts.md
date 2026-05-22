@@ -37,14 +37,14 @@ Filter to `*.ts`, `*.tsx`, `*.sql`, `*.prisma`, `*.graphql`, OpenAPI yamls. Skip
 
 For each changed file, classify what kind of producer it contains:
 
-| Producer | How to detect |
-|---|---|
-| Server function (TanStack Start) | exports from `src/fn/` or `createServerFn(` calls |
-| Route handler (Next/Express/Hono) | `export async function GET/POST` in route files, `app.get/post` |
-| tRPC procedure | `.query(`/`.mutation(` with `.input(` and return value |
-| Zod schema / DTO | `z.object(`, `z.infer`, exported `*Schema` or `*Dto` types |
-| DB schema | drizzle `pgTable`/`sqliteTable`, prisma models, raw `CREATE TABLE` |
-| Route definition | `createFileRoute(`/`createRoute(` with `params`/`search`/`loader` |
+| Producer                          | How to detect                                                      |
+| --------------------------------- | ------------------------------------------------------------------ |
+| Server function (TanStack Start)  | exports from `src/fn/` or `createServerFn(` calls                  |
+| Route handler (Next/Express/Hono) | `export async function GET/POST` in route files, `app.get/post`    |
+| tRPC procedure                    | `.query(`/`.mutation(` with `.input(` and return value             |
+| Zod schema / DTO                  | `z.object(`, `z.infer`, exported `*Schema` or `*Dto` types         |
+| DB schema                         | drizzle `pgTable`/`sqliteTable`, prisma models, raw `CREATE TABLE` |
+| Route definition                  | `createFileRoute(`/`createRoute(` with `params`/`search`/`loader`  |
 
 For each producer found, capture **before** and **after** shape from `git diff`. The diff is the contract change.
 

@@ -5,7 +5,6 @@ description: Tighten TypeScript safety in changed files — strip `any`, dangero
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Code Harden Types
 
 Each occurrence is examined and classified before any edit. One wrong cast removal cascades into a type-error storm; one over-eager zod schema rejects valid input in production. Read first, then decide.
@@ -42,6 +41,7 @@ Before classifying any cast, read the call site that produces the value — the 
 For every flagged construct in the scope, classify before touching it. **MANDATORY — READ [`references/classification.md`](references/classification.md)** for the full decision tree (boundary vs. internal, mechanical vs. structural, legitimate `as`).
 
 Constructs to flag:
+
 - `: any` parameter, return, variable, generic
 - `as <T>` and `as unknown as <T>`
 - `// @ts-ignore`, `// @ts-expect-error`, `// @ts-nocheck`
@@ -62,15 +62,15 @@ Per occurrence, write a one-line classification: `MECHANICAL | STRUCTURAL | LEGI
 
 For each MECHANICAL occurrence, apply the matching fix:
 
-| Construct | Fix |
-|---|---|
-| `(x: any)` where the call sites all pass one shape | replace with the inferred concrete type |
-| `as SomeType` where `SomeType` is structurally compatible | remove the cast |
-| `as unknown as T` over a JSON parse / fetch / message handler | replace with `Schema.parse(input)` from the chosen validator |
-| `@ts-expect-error` over a now-correct line | delete the directive |
-| `@ts-ignore` over a real error | classify as STRUCTURAL — do not silently delete |
-| Missing return type on exported function | add the inferred return type explicitly |
-| Boundary entry without validator | wrap input in `Schema.parse(...)`; export the schema next to the handler |
+| Construct                                                     | Fix                                                                      |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `(x: any)` where the call sites all pass one shape            | replace with the inferred concrete type                                  |
+| `as SomeType` where `SomeType` is structurally compatible     | remove the cast                                                          |
+| `as unknown as T` over a JSON parse / fetch / message handler | replace with `Schema.parse(input)` from the chosen validator             |
+| `@ts-expect-error` over a now-correct line                    | delete the directive                                                     |
+| `@ts-ignore` over a real error                                | classify as STRUCTURAL — do not silently delete                          |
+| Missing return type on exported function                      | add the inferred return type explicitly                                  |
+| Boundary entry without validator                              | wrap input in `Schema.parse(...)`; export the schema next to the handler |
 
 After each file's edits, run the project's typecheck. Detect from `package.json` scripts in this order: `typecheck`, `check-types`, `tsc`. If none exists, fall back to `npx tsc --noEmit -p <nearest tsconfig.json>` (walk up from the edited file). The build must stay green file-by-file. If a fix produces new errors elsewhere, revert that one fix and re-classify it as STRUCTURAL.
 

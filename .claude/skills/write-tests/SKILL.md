@@ -8,7 +8,6 @@ description: Internal handoff target invoked as Phase 8 of add-feature and as th
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Code Write Tests
 
 Phased workflow. Each phase has a hard exit condition — do not proceed until it's met.
@@ -70,12 +69,14 @@ Ask: `Approve install? (y/n)`.
 ## Phase 4 — Inherit Conventions
 
 If existing tests are present, read 1–2 of them (pick recently-modified ones near the target). Extract:
+
 - File location + naming pattern
 - Assertion style (e.g., `expect().toBe()` vs `assert.equal`)
 - Fixture / setup pattern (`beforeEach`, fixtures dir, factories)
 - Mock policy (real DB? in-memory? mocks at boundary?)
 
 If no existing tests, defaults:
+
 - File location: colocated `<name>.test.<ext>` next to the source file (use stack idiom if different — see `runners-by-stack.md`).
 - Mocks: **real test DB; do not stub internal calls**. Only mock at third-party API boundaries that require real auth keys (Stripe, OAuth, OpenAI, etc.).
 - Fixtures: inline factory functions until duplication justifies extraction.
@@ -104,6 +105,7 @@ This gate exists because piling on 20 tests against a misconfigured runner produ
 Before each test, ask: **what is the externally observable contract — return value, DB row, emitted event, HTTP response — that proves this works?** Assert that, not the call sequence.
 
 For each item on the target module's public surface, write:
+
 1. **Happy path** — typical input, expected output / side effect.
 2. **Edge cases** — boundaries (empty, max, null/undefined where allowed, unicode, large input).
 3. **Error paths** — invalid input, downstream failure, auth/permission denial.

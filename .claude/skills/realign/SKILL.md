@@ -8,7 +8,6 @@ description: Internal handoff target invoked by add-feature, modify-feature, or 
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Code Realign
 
 A realignment changes the **meaning** of a code model so it matches a changed business requirement. It is not a refactor (which preserves behavior) and not a cleanup (which has no new requirement). Naming the work correctly sets reviewer expectations and surfaces hidden scope — most importantly, **persisted data migration**.

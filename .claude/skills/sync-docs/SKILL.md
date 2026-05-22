@@ -11,7 +11,7 @@ Keep existing documentation in lockstep with code that just changed. Edit only �
 
 ## Phase 1 — Identify the change
 
-Determine *what changed* before touching any doc. Sources, in order:
+Determine _what changed_ before touching any doc. Sources, in order:
 
 1. If the user named a specific change ("I just renamed `/users` to `/accounts`"), use that.
 2. Otherwise run `git diff HEAD~1` (or `git diff <base>...HEAD` for a branch) and `git log -1 --stat`.
@@ -40,7 +40,7 @@ rg -l -g 'README*' -g 'CHANGELOG*' -g 'docs/**' -g '*.md'
 rg -l -g '.env.example' -g '.env.sample'
 ```
 
-For each candidate file, also grep for the *specific symbol* that changed (old route path, old function name, removed env var). A doc that doesn't mention the changed surface is not stale — leave it alone.
+For each candidate file, also grep for the _specific symbol_ that changed (old route path, old function name, removed env var). A doc that doesn't mention the changed surface is not stale — leave it alone.
 
 **Exit condition:** you have a list of `(file, lines, why-it's-stale)`. If the list is empty, skip to Phase 5 and report "no existing docs reference this change."
 
@@ -50,8 +50,8 @@ For each candidate file, also grep for the *specific symbol* that changed (old r
 
 For each file in the list, Read it fully (or the surrounding section for large files). Confirm:
 
-- The doc actually describes the *changed* behavior (not a similarly-named unrelated thing).
-- The doc is hand-maintained, not generated. If the file header says "AUTO-GENERATED — DO NOT EDIT" or it lives next to a codegen config (`openapi-generator`, `swagger-codegen`, `typedoc`, etc.), do not edit it. Note it for the report and find the *source* spec to edit instead.
+- The doc actually describes the _changed_ behavior (not a similarly-named unrelated thing).
+- The doc is hand-maintained, not generated. If the file header says "AUTO-GENERATED — DO NOT EDIT" or it lives next to a codegen config (`openapi-generator`, `swagger-codegen`, `typedoc`, etc.), do not edit it. Note it for the report and find the _source_ spec to edit instead.
 
 **Exit condition:** every file in your list is confirmed hand-maintained and genuinely stale. Drop the rest.
 
@@ -74,10 +74,11 @@ Edit with the smallest diff that makes the doc accurate. Format-specific care:
     - Rename a schema component as a side effect of editing one endpoint
     - Drop a response status code without confirming the code no longer returns it
   ```
+
 - **README install/usage**: update commands and code blocks verbatim from the new code; do not paraphrase flag names.
 - **CHANGELOG**: append under the unreleased section in the project's existing style (Keep a Changelog, conventional, or freeform — match what's already there).
 - **`.env.example`**: add new required vars with a comment; remove vars no longer read by code; preserve ordering and existing comments.
-- **ADRs**: do not rewrite a decided ADR. If a tech-stack swap supersedes one, append a "Superseded by …" note or add a new ADR *only if a docs/adr directory already exists and the user asks*.
+- **ADRs**: do not rewrite a decided ADR. If a tech-stack swap supersedes one, append a "Superseded by …" note or add a new ADR _only if a docs/adr directory already exists and the user asks_.
 - **Inline doc comments** (JSDoc, docstrings, rustdoc): update parameter names, types, and return shape; remove `@deprecated` lines for things that are now gone.
 
 **Exit condition:** every staged edit is justified by a specific code change you can point to.
@@ -91,7 +92,7 @@ Edit with the smallest diff that makes the doc accurate. Format-specific care:
 3. Report to the user:
    - **Updated:** `file:lines` — what was synced
    - **Skipped (generated):** files you didn't touch and where the source lives
-   - **Gaps:** changes with no existing doc surface — name the change and suggest which existing doc *could* hold it, but do not create the file
+   - **Gaps:** changes with no existing doc surface — name the change and suggest which existing doc _could_ hold it, but do not create the file
 
 ---
 
@@ -106,7 +107,7 @@ Edit with the smallest diff that makes the doc accurate. Format-specific care:
   **Why:** Edits to generated output are silently destroyed on the next codegen run, and the drift looks like a bug to the next reader.
 
 - **NEVER edit a doc without reading the surrounding section first**
-  **Instead:** Read enough context to confirm the doc describes *this* change, not a similarly-named unrelated one.
+  **Instead:** Read enough context to confirm the doc describes _this_ change, not a similarly-named unrelated one.
   **Why:** Targeted Edits on partial reads have wiped correct sections that happened to share a string with the stale one.
 
 - **NEVER fabricate example payloads, version numbers, or dates to fill a doc**

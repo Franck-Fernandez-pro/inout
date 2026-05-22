@@ -11,6 +11,7 @@ npm install -D vitest
 ```
 
 Add to `package.json`:
+
 ```json
 "scripts": { "test": "vitest run" }
 ```
@@ -24,9 +25,11 @@ npm install -D jest @types/jest ts-jest
 ```
 
 **E2E (only on explicit request):** Playwright.
+
 ```
 npm init playwright@latest
 ```
+
 Do not propose Playwright for unit-level coverage.
 
 ## Python
@@ -40,6 +43,7 @@ pip install pytest        # or: uv add --dev pytest, poetry add --group dev pyte
 Test file convention: `tests/test_<name>.py` at project root, OR `test_<name>.py` colocated.
 
 Add to `pyproject.toml`:
+
 ```toml
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -77,6 +81,7 @@ Test file convention: `spec/<name>_spec.rb`.
 **Default: JUnit 5 (Jupiter)**.
 
 Maven — add to `pom.xml`:
+
 ```xml
 <dependency>
   <groupId>org.junit.jupiter</groupId>
@@ -87,6 +92,7 @@ Maven — add to `pom.xml`:
 ```
 
 Gradle — add to `build.gradle`:
+
 ```groovy
 testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
 test { useJUnitPlatform() }

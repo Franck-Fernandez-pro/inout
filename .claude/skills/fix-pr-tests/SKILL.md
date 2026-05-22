@@ -5,7 +5,6 @@ description: Diagnose and fix failing CI tests on a GitHub pull request. Pulls f
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Fix PR Tests
 
 A failing PR test means **one** of three things. Get the classification right before touching code — fixing the wrong side either ships a real bug masked by a "fixed" test, or wastes time changing prod code when the test was just stale.

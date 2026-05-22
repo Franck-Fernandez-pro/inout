@@ -5,7 +5,6 @@ description: Add a Playwright end-to-end test for a user-facing flow — sign-in
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Add E2E Test
 
 Browser tests are expensive — slow, flaky-prone, and dependent on a live server. They earn their cost only when they exercise the real user path. Anything that can be tested at the unit or integration layer should be tested there instead.
@@ -60,6 +59,7 @@ Read 1–2 existing spec files. Extract:
 - baseURL handling (env var, hardcoded, project-specific)
 
 If no existing tests, defaults:
+
 - Tests live in `tests/` (or `e2e/` if `tests/` is unit tests).
 - File: `<flow>.spec.ts`.
 - Auth: if the flow needs a logged-in user, create `tests/auth.setup.ts` that logs in once and saves `storageState`, referenced from `playwright.config.ts`.
@@ -74,9 +74,9 @@ Before writing the real flow, write **one** trivial Playwright test:
 
 ```ts
 test('app loads', async ({ page }) => {
-  await page.goto('/')
-  await expect(page).toHaveTitle(/.+/)
-})
+  await page.goto('/');
+  await expect(page).toHaveTitle(/.+/);
+});
 ```
 
 Start the dev server (or rely on `webServer` config), run the smoke test:
@@ -97,19 +97,20 @@ Build the test from the user's three sentences:
 
 ```ts
 test('<observable outcome>', async ({ page }) => {
-  await page.goto('<start url>')
+  await page.goto('<start url>');
 
   // user actions — prefer role-based selectors
-  await page.getByLabel('Email').fill('test@example.com')
-  await page.getByLabel('Password').fill('correct-horse')
-  await page.getByRole('button', { name: 'Sign in' }).click()
+  await page.getByLabel('Email').fill('test@example.com');
+  await page.getByLabel('Password').fill('correct-horse');
+  await page.getByRole('button', { name: 'Sign in' }).click();
 
   // observable outcome
-  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
-})
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
+});
 ```
 
 Selector preference, in order:
+
 1. `getByRole(...)` (with accessible name)
 2. `getByLabel(...)` for form inputs
 3. `getByText(...)` for non-interactive content
@@ -133,6 +134,7 @@ npx playwright test <path> --repeat-each 3
 ```
 
 If any run fails: the test is flaky as-is. Common causes:
+
 - Missing `await` on a network-dependent assertion → use `expect(...).toBeVisible()` (auto-retries) instead of `expect(await locator.isVisible()).toBe(true)`.
 - Hard-coded `waitForTimeout` instead of waiting on a condition.
 - Race between navigation and assertion → `await page.waitForURL(...)` before asserting on the new page.

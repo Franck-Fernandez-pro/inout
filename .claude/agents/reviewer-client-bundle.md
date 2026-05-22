@@ -30,6 +30,7 @@ fd -1 -e ts -e js 'tanstack.config|next.config|vite.config|remix.config' .
 ```
 
 Set the **client boundary**:
+
 - **TanStack Start**: client = `src/routes/`, `src/components/`, `src/hooks/`, `src/queries/`. Server-only = `src/fn/`, `src/data-access/`, `src/db/`, `src/lib/server/`.
 - **Next.js (app router)**: client = files with `'use client'`. Server-only = the rest, esp. `lib/server`, `db`, route handlers in `app/api/`.
 - **Vite SPA**: everything is client; flag any node-only imports.
@@ -54,6 +55,7 @@ rg -n --type ts --type tsx -F 'process.env.' <client-files>
 ```
 
 Classify each var by framework:
+
 - Next.js: must be `NEXT_PUBLIC_*` for client.
 - Vite: must be `VITE_*` (or `import.meta.env.VITE_*`).
 - TanStack Start: depends on config; flag any non-`PUBLIC_*` env in client files.

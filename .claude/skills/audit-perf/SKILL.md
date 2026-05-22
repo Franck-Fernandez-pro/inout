@@ -5,7 +5,6 @@ description: Static performance audit of a route, page, server function, or modu
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Audit Perf
 
 Static analysis only. Every finding has an evidence line (file:line) and a concrete fix. No "consider optimizing" — either a measurable issue is visible in the code or it isn't reported.

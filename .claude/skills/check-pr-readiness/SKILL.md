@@ -5,7 +5,6 @@ description: Pre-PR gauntlet — run the project's typecheck, linter, formatter,
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Check PR Readiness
 
 A pre-flight gate for code that is about to go on a pull request. Each check has one exit condition: **green** or **report-and-stop**. Do not run the next check if the previous fails — surface the failure first.
@@ -29,13 +28,13 @@ If the changed-file list is empty, stop: "No changes against base — nothing to
 
 Read `package.json` (or `pyproject.toml` / `Cargo.toml` / `go.mod` for non-JS) to find the actual scripts. Do not guess command names. Map to:
 
-| Gate | Detection (in order) |
-|---|---|
-| typecheck | `package.json` script `typecheck` / `check-types` / `tsc`; else `npx tsc --noEmit` |
-| lint | script `lint` / `lint:check`; else local config presence (`eslint.config.*`, `.eslintrc*`) → `npx eslint <changed-files>` |
-| format | script `format:check` / `prettier:check`; else `npx prettier --check <changed-files>` if `.prettierrc*` exists |
-| test | script `test` / `test:unit` / `test:run`; for vitest, prefer `vitest run --changed <base>` |
-| build | script `build` (only if user asks for full readiness; otherwise skip) |
+| Gate      | Detection (in order)                                                                                                      |
+| --------- | ------------------------------------------------------------------------------------------------------------------------- |
+| typecheck | `package.json` script `typecheck` / `check-types` / `tsc`; else `npx tsc --noEmit`                                        |
+| lint      | script `lint` / `lint:check`; else local config presence (`eslint.config.*`, `.eslintrc*`) → `npx eslint <changed-files>` |
+| format    | script `format:check` / `prettier:check`; else `npx prettier --check <changed-files>` if `.prettierrc*` exists            |
+| test      | script `test` / `test:unit` / `test:run`; for vitest, prefer `vitest run --changed <base>`                                |
+| build     | script `build` (only if user asks for full readiness; otherwise skip)                                                     |
 
 Report what was detected. If a gate has no tooling, mark it `n/a` and continue — do not invent a checker.
 

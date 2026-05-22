@@ -5,7 +5,6 @@ description: Run the agentsystem-core commit skill to produce grouped commits fr
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # commit-and-push
 
 Two steps, in order: (1) delegate commit work to the `commit` skill (which runs its own pre-flight quality gate), (2) push the current branch.
@@ -29,6 +28,7 @@ For explicit `mode=fast` or `mode=balanced`, this skill runs a **mandatory** `ch
 Invoke the `commit` skill, passing the active `mode=`. Do NOT re-implement its grouping logic here — it owns commit composition, ordering, message style, and the pre-flight quality gate.
 
 Exit conditions from Step 1:
+
 - **Commits were created** → proceed to Step 2.
 - **Working tree was already clean** (nothing to commit) → no-op the whole skill. Do not push. Tell the user "nothing to commit; not pushing" and stop.
 - **`commit` skill aborted or errored** → stop. Do not push a partial state.
@@ -42,6 +42,7 @@ Before pushing, confirm: the branch you're about to push is the one the user exp
 **Pre-push quality gate (mandatory for `mode=fast` and `mode=balanced`):**
 
 If the active mode is `fast` or `balanced`, invoke `agentsystem-core:check-pr-readiness` against the branch vs. its base now. If any gate fails, **stop the push**. Ask via `AskUserQuestion`:
+
 - **Fix and retry** → exit; user fixes and re-runs.
 - **Push anyway** → require an explicit acknowledgement string; record the bypass in the push report.
 

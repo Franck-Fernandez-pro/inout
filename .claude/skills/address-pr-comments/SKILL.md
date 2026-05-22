@@ -5,7 +5,6 @@ description: Address every unresolved review comment on a GitHub pull request �
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Address PR Comments
 
 Resolve every reviewer thread on a PR with a per-comment commit, a reply, and a resolved thread. Reviewer ends with zero unresolved threads and a clear audit trail.
@@ -28,6 +27,7 @@ gh issue view <number> --json closedByPullRequestsReferences
 ```
 
 **Exit conditions:**
+
 - PR found and `state=OPEN` → continue.
 - No PR for current branch → ask the user for a PR number/URL; do not guess.
 - PR is `MERGED` or `CLOSED` → stop and ask the user to confirm.
@@ -97,6 +97,7 @@ THREAD:
 ```
 
 **The subagent's contract** (see `pr-comment-resolver`):
+
 - Read the file at `path:line` (with the branch-local diff context).
 - Classify the comment: `change_request` | `question` | `nit` | `stale` | (sub-decision) `declined`.
 - If applicable: edit code, commit (one commit per thread), reply via the right gh API surface, resolve the thread (unless declined).
@@ -111,11 +112,13 @@ After each subagent returns, record its result in a worklist for Phase 4. If the
 **Manual fallback** — if for any reason the subagent isn't available or the thread is unusually complex (multi-comment back-and-forth requiring context the agent can't be briefed with), fall back to running the steps inline:
 
 ### 3a. Ground the fix
+
 - Read the file at the comment's `path` and `line`.
 - Run `git log <base>..HEAD -- <path>` to see what this branch already changed there.
 - If the anchor is stale (line shifted, code rewritten), re-read surrounding context and confirm the comment still applies. If it doesn't, note this for the reply (don't silently skip).
 
 ### 3b. Before fixing, ask yourself:
+
 - **Is this a change request, a question, or a nit?** Reviewers signal differently — a question may not want code touched at all; a nit may want acknowledgement, not action.
 - **What outcome would satisfy the reviewer?** The fix you want to write and the fix they're asking for can diverge — pick theirs, or push back explicitly.
 - **Does the question imply a fix?** If a reviewer asks "why not X here?" and X is obviously better, the question IS the change request. If X is a tradeoff, answer the question and let them decide.
@@ -124,16 +127,20 @@ After each subagent returns, record its result in a worklist for Phase 4. If the
 This classification drives whether you fix-and-reply, reply-only, or decline-and-leave-unresolved in 3c–3e.
 
 ### 3c. Apply the fix (when needed)
+
 Edit the code. Stay in scope — fix only what this comment is about. Do not opportunistically refactor neighbors.
 
 ### 3d. Commit (one per addressed comment)
+
 ```bash
 git add <files>
 git commit -m "address review: <short summary> (#<thread-id-or-anchor>)"
 ```
+
 One thread = one commit. If a single reviewer comment legitimately requires changes in multiple files, that's still one commit. If you replied without code changes, no commit.
 
 ### 3e. Reply and resolve
+
 Reply to the thread (use `in_reply_to` for inline comments so it threads properly):
 
 ```bash
@@ -145,6 +152,7 @@ gh api graphql -f query='mutation($id:ID!){ resolveReviewThread(input:{threadId:
 ```
 
 Reply text:
+
 - **Fixed**: one short sentence on what changed + the commit SHA. Example: `Fixed in abc1234 — extracted to formatUserName().`
 - **Question only**: answer it directly.
 - **Declined**: explain why briefly; do NOT auto-resolve a declined thread — leave for reviewer.

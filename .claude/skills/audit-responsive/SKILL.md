@@ -34,7 +34,7 @@ Scan for the failure-mode catalog. Each match becomes a finding with file:line, 
 <div className="grid-cols-4 ...">        // fixed grid → breaks below ~640px
 ```
 
-Layout containers (the elements *deciding* width — main, sidebar, page wrappers) should be fluid by default. `w-full md:w-[480px]` is fine; bare `w-[480px]` is not.
+Layout containers (the elements _deciding_ width — main, sidebar, page wrappers) should be fluid by default. `w-full md:w-[480px]` is fine; bare `w-[480px]` is not.
 
 ### Missing `flex-wrap`
 
@@ -71,7 +71,7 @@ Tables that have > 3 columns or any column with long content (URLs, ids, free te
 ### Long unbreakable words
 
 ```tsx
-<span>{user.id}</span>                          // long ids, URLs, emails break out of containers
+<span>{user.id}</span> // long ids, URLs, emails break out of containers
 ```
 
 For fields that may contain long unbreakable strings (UUIDs, URLs, emails), use `break-all` or `break-words` (Tailwind: `break-words`).
@@ -79,7 +79,7 @@ For fields that may contain long unbreakable strings (UUIDs, URLs, emails), use 
 ### Fixed-width images
 
 ```tsx
-<img src="..." />                               // intrinsic width can exceed mobile viewport
+<img src="..." /> // intrinsic width can exceed mobile viewport
 ```
 
 Images need `max-w-full h-auto` (or equivalent) so they scale down on narrow viewports.

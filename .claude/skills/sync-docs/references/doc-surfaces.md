@@ -54,7 +54,7 @@ For each change type, the typical existing doc files that may need updating. Sea
 ## Behavior change / bug fix (same surface, different result)
 
 - CHANGELOG (under "Fixed" or equivalent, only if user-visible)
-- Doc comments that *describe behavior* ("Returns null when …", "Throws if …")
+- Doc comments that _describe behavior_ ("Returns null when …", "Throws if …")
 - README "Known issues" / "Limitations" sections — remove the entry if the bug is now fixed
 - Test names occasionally double as docs; do not rename them as a doc-update task
 
@@ -70,6 +70,7 @@ Skip docs entirely for purely internal refactors with no observable change.
 - i18n string files — these are code, not docs; out of scope unless user asks
 
 **Flag for human, do not auto-edit:**
+
 - Screenshots / GIFs / videos — note that they're stale; do not regenerate
 - Marketing copy in `docs/landing/**` or website repos
 - Anything in an external CMS (Notion, Readme.io, GitBook) — out of repo
@@ -79,6 +80,7 @@ Skip docs entirely for purely internal refactors with no observable change.
 ## Cross-cutting checks
 
 Regardless of change type, also grep for:
+
 - Hardcoded version numbers in docs that should match `package.json` / `Cargo.toml` / `pyproject.toml`
 - Code blocks that import or call the changed symbol — these often live in `docs/examples/**` or README and must compile against the new shape
 - Links to renamed files or moved sections (`docs/old-name.md` → `docs/new-name.md`)

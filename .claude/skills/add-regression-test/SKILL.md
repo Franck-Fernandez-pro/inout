@@ -5,7 +5,6 @@ description: After a bug fix lands (or is staged), generate a regression test th
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Add Regression Test
 
 A regression test is only valuable if it would have failed before the fix and passes after. Anything else is a confidence test pretending to be a regression test. The whole skill is built around proving both halves.
@@ -21,6 +20,7 @@ Determine what changed:
 - If the user names a commit: `git show <sha>`.
 
 Read the changed code. Identify:
+
 - The function / route / component the fix lives in
 - The input shape that triggers the bug (from the diff context, the bug report, or the user)
 - The expected externally-observable outcome (return value, DB row, HTTP response, emitted event, rendered DOM)
@@ -69,7 +69,7 @@ If it doesn't pass: either the assertion is wrong (too strict, asserting unrelat
 ## Phase 5 — Wire It In
 
 - Place the test in the project's convention (colocated `<name>.test.ts`, `tests/`, `__tests__/`, etc. — match the nearest sibling).
-- Name it after the bug's *symptom*, not the fix: `it("returns 404 when slug contains uppercase letters")`, not `it("normalizes slug case")`. The next reader needs to recognize the bug from the test name.
+- Name it after the bug's _symptom_, not the fix: `it("returns 404 when slug contains uppercase letters")`, not `it("normalizes slug case")`. The next reader needs to recognize the bug from the test name.
 - If a bug tracker reference exists (issue #, ticket id), include it in a one-line comment above the test.
 
 Run the full suite — the new test plus its neighbors must all pass.
@@ -114,7 +114,7 @@ Regression test added: <path>:<line>
 
 - **NEVER bundle unrelated cleanup or "while I'm here" assertions into the regression test.**
   **Instead:** one test, one assertion, one bug. Other tests go in their own block.
-  **Why:** if the file is later changed and the regression assertion fails, the developer needs to recognize *exactly* which behavior regressed. Mixed assertions make that ambiguous and erode trust in the test name.
+  **Why:** if the file is later changed and the regression assertion fails, the developer needs to recognize _exactly_ which behavior regressed. Mixed assertions make that ambiguous and erode trust in the test name.
 
 - **NEVER mock the layer where the bug lived.**
   **Instead:** test the real code path that produced the bug. If the bug was in the data-access layer, hit the test DB; if it was in a handler, call the handler.

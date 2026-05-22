@@ -88,6 +88,7 @@ For each `onMutate` that mutates the cache or local state: check for a correspon
 #### Detector E — Long-running region missing `aria-busy` (**LOW**)
 
 For regions guarded by `isPending`/`isLoading` wrapping substantial content (>200px tall, list/chart/table):
+
 - No `aria-busy="true"` AND no visible skeleton/spinner: **LOW**.
 - Mark `auto-fixable: true` only when the boundary is clear (`<div>` with `isPending` as the sole conditional).
 

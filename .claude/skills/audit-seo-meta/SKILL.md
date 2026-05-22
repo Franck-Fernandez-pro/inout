@@ -14,6 +14,7 @@ The audit ranks findings by what users see (broken share previews, no descriptio
 Default scope: every public route. The user may narrow to one route ("audit /pricing") or the marketing surfaces only.
 
 For a TanStack Start project: list `src/routes/**/*.tsx` and exclude:
+
 - Routes under `/_protected/`, `/admin/`, `/dashboard/` (auth-walled by convention)
 - API routes (`/api/`)
 - Catch-all error routes
@@ -31,20 +32,20 @@ If the user can't tell which routes are public, ask before scanning the whole re
 
 For each route, read its head/metadata source and check:
 
-| Tag / field | Required | Notes |
-|---|---|---|
-| `<title>` | YES | 30–65 chars; not the literal site name on every page |
-| `<meta name="description">` | YES | 50–160 chars; specific to the page |
-| `<link rel="canonical">` | YES on duplicate-prone pages | Required if the page has variants (query params, alt URLs); default to self-canonical |
-| `<meta property="og:title">` | YES | Often same as `<title>`; required for share preview |
-| `<meta property="og:description">` | YES | Often same as description |
-| `<meta property="og:image">` | YES | 1200×630 recommended; absolute URL |
-| `<meta property="og:url">` | YES | Absolute URL of this page |
-| `<meta property="og:type">` | OPTIONAL | `website` default, `article` for posts |
-| `<meta name="twitter:card">` | YES | `summary_large_image` for most pages |
-| `<meta name="twitter:image">` | YES if og:image absent | Otherwise inherits from og |
-| `<meta name="viewport">` | YES (any HTML page) | Set in root layout, not per-route |
-| `<meta name="robots">` | If non-default | `index, follow` is implicit; only set when overriding |
+| Tag / field                        | Required                     | Notes                                                                                 |
+| ---------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------- |
+| `<title>`                          | YES                          | 30–65 chars; not the literal site name on every page                                  |
+| `<meta name="description">`        | YES                          | 50–160 chars; specific to the page                                                    |
+| `<link rel="canonical">`           | YES on duplicate-prone pages | Required if the page has variants (query params, alt URLs); default to self-canonical |
+| `<meta property="og:title">`       | YES                          | Often same as `<title>`; required for share preview                                   |
+| `<meta property="og:description">` | YES                          | Often same as description                                                             |
+| `<meta property="og:image">`       | YES                          | 1200×630 recommended; absolute URL                                                    |
+| `<meta property="og:url">`         | YES                          | Absolute URL of this page                                                             |
+| `<meta property="og:type">`        | OPTIONAL                     | `website` default, `article` for posts                                                |
+| `<meta name="twitter:card">`       | YES                          | `summary_large_image` for most pages                                                  |
+| `<meta name="twitter:image">`      | YES if og:image absent       | Otherwise inherits from og                                                            |
+| `<meta name="viewport">`           | YES (any HTML page)          | Set in root layout, not per-route                                                     |
+| `<meta name="robots">`             | If non-default               | `index, follow` is implicit; only set when overriding                                 |
 
 For each missing tag, classify severity:
 

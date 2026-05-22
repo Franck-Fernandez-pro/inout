@@ -30,6 +30,7 @@ The bug class your search prevents: duplication at creation. The user's #1 state
 ### Step 1 — Translate the description into search terms
 
 Extract:
+
 - **Domain nouns** (Date, duration, email, URL, markdown, TOC, slug, money)
 - **Action verbs** (format, parse, validate, debounce, throttle, sanitize, slugify, group, sort)
 - **Likely identifier candidates** in this codebase's naming style (`formatDuration`, `formatRelativeTime`, `humanizeDuration`, `timeAgo`)
@@ -56,6 +57,7 @@ Filter out test fixtures, generated files, `node_modules`, vendor directories.
 ### Step 3 — Read each candidate
 
 For each candidate hit (cap at the top ~5 by signal):
+
 - Read the function signature
 - Read the body (or at least the JSDoc / first 10 lines)
 - Compare to the description: does it do the same thing? Almost? With what differences?
@@ -63,6 +65,7 @@ For each candidate hit (cap at the top ~5 by signal):
 ### Step 4 — Rank and verdict
 
 Each candidate gets one of three verdicts:
+
 - **Use as-is** — exact match in behavior and signature.
 - **Extend** — close enough that adding a parameter or a thin wrapper is cheaper than a new function.
 - **Different** — superficially similar name but actually different behavior; not a reuse opportunity.

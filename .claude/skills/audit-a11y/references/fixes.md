@@ -28,6 +28,7 @@ For each gap: detection pattern → fix-class → exact transform.
 **Fix-class:** auto.
 
 **Transform:**
+
 - If the image is decorative (background, illustration next to text that already conveys the info): `alt=""`.
 - If meaningful: derive alt from filename / nearby caption / `src` slug. If unclear, default to `alt=""` and add a finding "needs review: confirm decorative vs. content".
 
@@ -81,7 +82,9 @@ For shadcn `<FormField>`/`<FormLabel>`/`<FormControl>` patterns, the association
 **Fix-class:** auto for the obvious cases (status text, error messages → `aria-live="polite"`; critical errors → `aria-live="assertive"`).
 
 ```tsx
-<p className="text-destructive" aria-live="polite">{error}</p>
+<p className="text-destructive" aria-live="polite">
+  {error}
+</p>
 ```
 
 For toast systems, check if the toast root already has a live region (sonner / shadcn `<Toaster>` does); if so, no change.
@@ -111,6 +114,7 @@ For toast systems, check if the toast root already has a live region (sonner / s
 **Detect:** Tailwind class pairs like `text-X` on `bg-Y`, inline `color`/`background-color` styles, or CSS-variable token pairs.
 
 **Resolution steps:**
+
 1. Find the project's theme source — typically `tailwind.config.{ts,js}`, `app/globals.css`, or `src/styles/*.css` defining `--foreground`, `--muted-foreground`, etc.
 2. Resolve each token to a comparable color value (account for both light and dark mode if both are defined — check both):
    - **Hex (`#1a1a1a`)** — use directly.
@@ -127,6 +131,7 @@ For toast systems, check if the toast root already has a live region (sonner / s
 **Fix-class:** structural. Report the failing pair, the actual ratio, the threshold, and suggest a darker/lighter existing token (e.g. `text-muted-foreground` → `text-foreground/80`). Never silently change the token's value.
 
 Common offenders to check first:
+
 - `text-muted-foreground` on `bg-muted` (often borderline)
 - `text-gray-400`/`text-gray-500` on white
 - Placeholder text (`placeholder:text-muted-foreground`)

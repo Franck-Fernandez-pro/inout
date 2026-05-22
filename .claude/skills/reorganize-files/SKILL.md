@@ -16,7 +16,6 @@ description: >-
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Regroup loose files into a coherent layout, fix every pointer
 
 This skill targets one starting state: a directory where many files sit at the same level with no organizing scheme. The work is **propose a scheme, get approval, move, update every reference, verify**. Half-done is worse than not started.
@@ -29,11 +28,11 @@ Confirm scope first: the **exact root directory** to reorganize and any **exclus
 
 Output a table the user can scan:
 
-| File | Kind | Size | Apparent topic | Reference style |
-|---|---|---|---|---|
-| `public/hero-bg.png` | raster | 240KB | hero/marketing | string URL `/hero-bg.png` |
-| `public/icon-cart.svg` | vector icon | 2KB | commerce | `<img src>` + import |
-| `public/og-pricing.png` | raster | 180KB | metadata | `metadata.openGraph.images` |
+| File                    | Kind        | Size  | Apparent topic | Reference style             |
+| ----------------------- | ----------- | ----- | -------------- | --------------------------- |
+| `public/hero-bg.png`    | raster      | 240KB | hero/marketing | string URL `/hero-bg.png`   |
+| `public/icon-cart.svg`  | vector icon | 2KB   | commerce       | `<img src>` + import        |
+| `public/og-pricing.png` | raster      | 180KB | metadata       | `metadata.openGraph.images` |
 
 **Reference style** is the load-bearing column — string URLs, static imports, dynamic `import()`, `import.meta.glob`, CSS `url(…)`, and metadata fields each fail differently when paths change.
 

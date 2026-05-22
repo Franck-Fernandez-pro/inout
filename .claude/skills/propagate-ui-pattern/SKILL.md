@@ -5,14 +5,14 @@ description: When the user requests a UX-pattern change (keyboard, focus, dismis
 
 # UX Consistency
 
-Single-instance UX changes silently create drift. The user adds Cmd+Enter to one modal; six other modals stay inconsistent until someone notices months later. This skill catches the propagation question *before* the diff lands.
+Single-instance UX changes silently create drift. The user adds Cmd+Enter to one modal; six other modals stay inconsistent until someone notices months later. This skill catches the propagation question _before_ the diff lands.
 
 ## The flow
 
-1. **Classify the change.** Is it a UX *pattern* (a behavior that users expect to be uniform across similar components) or a one-off (a tweak specific to this component's role)?
+1. **Classify the change.** Is it a UX _pattern_ (a behavior that users expect to be uniform across similar components) or a one-off (a tweak specific to this component's role)?
 2. **Identify the component family.** What's the recurring type — Modal, Dialog, Form, Drawer, Card, Toast, Popover?
 3. **Enumerate siblings.** Grep the codebase for other instances of that family.
-4. **Present the list with per-instance recommendations.** For each sibling, mark *propagate* / *skip* / *ask* and give a one-line reason.
+4. **Present the list with per-instance recommendations.** For each sibling, mark _propagate_ / _skip_ / _ask_ and give a one-line reason.
 5. **Get per-instance approval.** Apply only to the ones the user confirms.
 
 Do not skip steps 3–5. The whole point of the skill is the sibling sweep — implementing the requested change without it defeats the purpose.
@@ -22,6 +22,7 @@ Do not skip steps 3–5. The whole point of the skill is the sibling sweep — i
 **Classify before enumerating.** Misclassifying a one-off as a pattern leaks role-specific behavior across the family (e.g. propagating a destructive-modal hotkey to benign modals); misclassifying a pattern as a one-off creates the silent drift this skill exists to prevent.
 
 Patterns to propagate by default:
+
 - Keyboard shortcuts on dismissable surfaces (Escape closes, Cmd/Ctrl+Enter submits)
 - Autofocus on the primary input when a modal/dialog opens
 - Click-outside-to-close on non-destructive overlays
@@ -30,6 +31,7 @@ Patterns to propagate by default:
 - Form submit-on-Enter for single-field forms
 
 Likely **one-offs** (don't propagate without asking):
+
 - A hotkey tied to that component's specific action (e.g. "G then I" for a Goto-Item picker)
 - Behavior tied to a unique business rule ("require typing the project name to delete")
 - Changes the user has already scoped ("just in NewAgentDialog")
@@ -75,9 +77,9 @@ Surface the asymmetry reasons explicitly — destructive vs. benign, form vs. pi
 
 ## Step 4 — Extract before applying (when 3+ siblings will share the same code)
 
-If the approved list has **3 or more siblings** that would each get the same inline implementation (same `useEffect` keydown handler, same `onKeyDown` block, same focus-trap setup), stop and propose extraction *before* writing any of the per-site changes. Two or fewer → just inline it; the abstraction isn't worth its own seam yet.
+If the approved list has **3 or more siblings** that would each get the same inline implementation (same `useEffect` keydown handler, same `onKeyDown` block, same focus-trap setup), stop and propose extraction _before_ writing any of the per-site changes. Two or fewer → just inline it; the abstraction isn't worth its own seam yet.
 
-**Read all approved sites before designing the seam.** Note each site's ref shape, event source, and any local quirks (debounce, conditional skip, alt keybinding). The hook/wrapper signature must fit the *union* of these needs — not the first site you opened. Skipping this step bakes site-1's quirks into the abstraction and forces every other site into adapter code.
+**Read all approved sites before designing the seam.** Note each site's ref shape, event source, and any local quirks (debounce, conditional skip, alt keybinding). The hook/wrapper signature must fit the _union_ of these needs — not the first site you opened. Skipping this step bakes site-1's quirks into the abstraction and forces every other site into adapter code.
 
 Pick the seam by what the behavior needs:
 

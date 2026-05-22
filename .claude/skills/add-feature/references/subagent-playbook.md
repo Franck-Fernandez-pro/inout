@@ -1,6 +1,6 @@
 # Subagent Fan-Out Playbook
 
-Subagents speed work up *only* when the pieces are truly independent. The wrong fan-out is slower than serial because reconciling inconsistent outputs costs more than running them one after another.
+Subagents speed work up _only_ when the pieces are truly independent. The wrong fan-out is slower than serial because reconciling inconsistent outputs costs more than running them one after another.
 
 ---
 
@@ -14,6 +14,7 @@ Fan out (parallel agents in a single message) when **all** are true:
 4. Outputs won't merge-conflict.
 
 Common good fits:
+
 - **Exploration:** "find how auth works" + "find how the job queue works" + "find existing pagination utilities" — three Explore agents in one message.
 - **Reviews:** code review + security review + performance review on a finished diff.
 - **Independent implementation:** a new DB migration AND an unrelated UI component AND a new doc snippet.

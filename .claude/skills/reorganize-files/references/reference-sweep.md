@@ -60,19 +60,19 @@ rg -n '"image"\s*:\s*"[^"]*<old-segment>'
 
 Check each that exists in the project:
 
-| Config | What to look for |
-|---|---|
-| `tsconfig.json` / `tsconfig.*.json` | `paths`, `baseUrl` |
-| `vite.config.*` | `publicDir`, `assetsInclude`, `resolve.alias`, `build.rollupOptions.input` |
-| `next.config.*` | `images.domains`, `rewrites`, `redirects`, `assetPrefix` |
-| `tailwind.config.*` | `content` globs, `theme.backgroundImage` |
-| `.storybook/main.*` | `staticDirs`, `stories` globs |
-| `playwright.config.*` | `testDir`, fixture paths |
-| `vitest.config.*` / `jest.config.*` | `moduleNameMapper`, `setupFiles`, `testMatch`, snapshot paths |
-| `astro.config.*` / `svelte.config.*` / `nuxt.config.*` | framework-specific publicDir / assets options |
-| `postcss.config.*` | `from` paths in plugin options |
-| i18n loaders (`next-intl`, `i18next`, `formatjs`) | locale file paths, message catalog globs |
-| `package.json` | `exports`, `files`, scripts that reference paths |
+| Config                                                 | What to look for                                                           |
+| ------------------------------------------------------ | -------------------------------------------------------------------------- |
+| `tsconfig.json` / `tsconfig.*.json`                    | `paths`, `baseUrl`                                                         |
+| `vite.config.*`                                        | `publicDir`, `assetsInclude`, `resolve.alias`, `build.rollupOptions.input` |
+| `next.config.*`                                        | `images.domains`, `rewrites`, `redirects`, `assetPrefix`                   |
+| `tailwind.config.*`                                    | `content` globs, `theme.backgroundImage`                                   |
+| `.storybook/main.*`                                    | `staticDirs`, `stories` globs                                              |
+| `playwright.config.*`                                  | `testDir`, fixture paths                                                   |
+| `vitest.config.*` / `jest.config.*`                    | `moduleNameMapper`, `setupFiles`, `testMatch`, snapshot paths              |
+| `astro.config.*` / `svelte.config.*` / `nuxt.config.*` | framework-specific publicDir / assets options                              |
+| `postcss.config.*`                                     | `from` paths in plugin options                                             |
+| i18n loaders (`next-intl`, `i18next`, `formatjs`)      | locale file paths, message catalog globs                                   |
+| `package.json`                                         | `exports`, `files`, scripts that reference paths                           |
 
 ## Tests, fixtures, snapshots
 

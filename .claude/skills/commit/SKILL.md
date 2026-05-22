@@ -5,7 +5,6 @@ description: Split the current working tree into one or more logically-grouped c
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # commit
 
 Compose grouped commits from the working tree. Never push. Never amend. One run = one or more new commits, ordered to keep `HEAD` buildable at every step.
@@ -17,10 +16,12 @@ The bug class this skill exists to prevent: a single mega-commit of 50 unrelated
 ## When to run vs. skip
 
 Run when **any** is true:
+
 - Working tree has uncommitted changes (staged or unstaged) and the user asked for a commit.
 - `commit-and-push` invoked this skill as Step 1.
 
 Skip and tell the user when **any** is true:
+
 - Working tree is clean (`git status --porcelain` is empty) → "nothing to commit".
 - The user is mid-rebase / mid-merge (`.git/MERGE_HEAD` or `.git/REBASE_HEAD` exists) → ask them to finish first.
 - The user said "amend" or "fixup" — that's a different workflow; tell them to run `git commit --amend` or `git rebase -i` directly.
@@ -31,10 +32,10 @@ Skip and tell the user when **any** is true:
 
 Accepts `mode=fast|balanced|production`. Default — when no `mode=` is specified — is `production`. The mission of this skill: **code before commit must be good**. The default is strict on purpose; downgrade only when you know what you're skipping.
 
-| Mode | Pre-flight (Step 0) |
-|---|---|
-| `fast` | Secrets scan + residue sweep only. Blocks on secrets, warns on residue. |
-| `balanced` | `fast` + typecheck + lint on changed files. Blocks on type errors and lint errors. |
+| Mode                   | Pre-flight (Step 0)                                                                                                                                                              |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fast`                 | Secrets scan + residue sweep only. Blocks on secrets, warns on residue.                                                                                                          |
+| `balanced`             | `fast` + typecheck + lint on changed files. Blocks on type errors and lint errors.                                                                                               |
 | `production` (default) | Full delegation to `check-pr-readiness` — typecheck, lint, formatter, test suite, residue sweep, large-file/lockfile checks — against the diff vs. base. Blocks on any red gate. |
 
 **Override:** explicit `mode=fast|balanced|production` in the user's prompt always wins. When `commit-and-push` invokes this skill, the parent's mode is forwarded — do not re-prompt.
@@ -57,7 +58,7 @@ Run **before** any commit composition. The user said they want commits to be goo
    - `debugger;` / `breakpoint()` statements.
    - New `TODO:` / `FIXME:` / `XXX:` lines added in this diff.
    - Merge-marker leftovers: `<<<<<<<`, `=======`, `>>>>>>>` (always a hard block).
-   **Mode-dependent action:** `fast` warns and asks to proceed; `balanced` / `production` block on `.only` / `debugger` / merge-markers, warn on the rest.
+     **Mode-dependent action:** `fast` warns and asks to proceed; `balanced` / `production` block on `.only` / `debugger` / merge-markers, warn on the rest.
 
 **Mode `balanced` adds:**
 
@@ -69,6 +70,7 @@ Run **before** any commit composition. The user said they want commits to be goo
 6. **Invoke `agentsystem-core:check-pr-readiness`** against `HEAD` vs. the base branch (or `HEAD` against an empty tree for the initial commit). Its full gauntlet — typecheck, lint, formatter, test suite, residue sweep, large-file additions, lockfile drift — runs. **Any red gate blocks Step 1.** Pipe its report through verbatim; do not summarize away failures.
 
 **On block:** stop. Print the failing gate(s) with the exact reproduction command. Ask via `AskUserQuestion`:
+
 - **Fix and re-run** → exit, let the user fix, re-invoke `/commit` to start fresh.
 - **Downgrade mode** (only offered when invoked at `production`) → re-run Step 0 at `balanced`. Never offer downgrade past `balanced` for a known-failing gate.
 - **Force-commit anyway** → require an explicit acknowledgement string. Record the bypassed gates in the commit body's trailer (`Bypassed-gates: typecheck, lint`). This is the escape hatch, not the default.
@@ -98,6 +100,7 @@ git log -20 --pretty=format:'%s'
 ```
 
 Decide:
+
 - **Conventional commits** (`feat:`, `fix:`, `chore:`, `refactor:`, etc.) — if >50% of recent commits use this pattern.
 - **Imperative-mood prose** (`Add X`, `Fix Y`, `Refactor Z`) — default fallback.
 - **Project-specific prefix** (`[scope] ...`, `JIRA-123: ...`) — match what's there.
@@ -160,6 +163,7 @@ Proposed commits (in order):
 ```
 
 Then ask via `AskUserQuestion`: "Proceed with this commit plan?" — options:
+
 - **Yes** → run Step 6.
 - **Edit** → ask which group to change (re-group / re-message / split / merge / drop) and loop back to Step 5.
 - **Cancel** → exit without committing anything. Working tree is untouched.

@@ -1,6 +1,6 @@
 # Dead-Code Sweep Checklist (Phase 5)
 
-Run through every category. For each, search the repo for surviving references to the *just-deleted* symbols, files, and strings. If a reference is found and points only to deleted code, it is an orphan — delete it, then loop.
+Run through every category. For each, search the repo for surviving references to the _just-deleted_ symbols, files, and strings. If a reference is found and points only to deleted code, it is an orphan — delete it, then loop.
 
 Do not skip a category because it "obviously doesn't apply" — that judgment is wrong often enough that the few seconds of grep are worth it.
 

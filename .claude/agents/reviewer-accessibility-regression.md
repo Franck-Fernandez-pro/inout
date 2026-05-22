@@ -48,6 +48,7 @@ rg -n --type tsx -E '<(div|span)[^>]*\bonClick' <scope>
 ```
 
 A `<div onClick>` is keyboard-inaccessible by default. Mark `auto-fixable: true` (replace with `<button type="button">`) ONLY when:
+
 - No nested interactive elements (button-in-button is invalid HTML).
 - No layout-critical CSS that depends on `<div>` defaults.
 

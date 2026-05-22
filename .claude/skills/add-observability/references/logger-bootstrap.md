@@ -24,23 +24,32 @@ Single file. Drop into the project's existing utility location (`src/lib/log.ts`
 
 ```ts
 // src/lib/log.ts
-type Level = "debug" | "info" | "warn" | "error";
-const ORDER: Record<Level, number> = { debug: 10, info: 20, warn: 30, error: 40 };
+type Level = 'debug' | 'info' | 'warn' | 'error';
+const ORDER: Record<Level, number> = {
+  debug: 10,
+  info: 20,
+  warn: 30,
+  error: 40,
+};
 const threshold: number =
-  ORDER[(process.env.LOG_LEVEL as Level) ?? "info"] ?? ORDER.info;
+  ORDER[(process.env.LOG_LEVEL as Level) ?? 'info'] ?? ORDER.info;
 
 function emit(level: Level, payload: Record<string, unknown>) {
   if (ORDER[level] < threshold) return;
-  const line = JSON.stringify({ ts: new Date().toISOString(), level, ...payload });
+  const line = JSON.stringify({
+    ts: new Date().toISOString(),
+    level,
+    ...payload,
+  });
   // stderr keeps logs out of stdout-as-data pipelines
-  process.stderr.write(line + "\n");
+  process.stderr.write(line + '\n');
 }
 
 export const log = {
-  debug: (p: Record<string, unknown>) => emit("debug", p),
-  info:  (p: Record<string, unknown>) => emit("info", p),
-  warn:  (p: Record<string, unknown>) => emit("warn", p),
-  error: (p: Record<string, unknown>) => emit("error", p),
+  debug: (p: Record<string, unknown>) => emit('debug', p),
+  info: (p: Record<string, unknown>) => emit('info', p),
+  warn: (p: Record<string, unknown>) => emit('warn', p),
+  error: (p: Record<string, unknown>) => emit('error', p),
 };
 ```
 
@@ -70,8 +79,8 @@ npm install pino
 
 ```ts
 // src/lib/log.ts
-import pino from "pino";
-export const log = pino({ level: process.env.LOG_LEVEL ?? "info" });
+import pino from 'pino';
+export const log = pino({ level: process.env.LOG_LEVEL ?? 'info' });
 ```
 
 Pino's API (`log.info({event, ...})`) matches the recipes in `boundary-recipes.md` directly — no wrapper needed.

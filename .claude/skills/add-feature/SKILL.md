@@ -5,7 +5,6 @@ description: End-to-end workflow for planning and shipping a new feature in an e
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Feature Delivery
 
 Drive a non-trivial feature from request to merged code without the four failures this skill exists to prevent: **shallow clarification, unreviewed code, bad code merged, duplication.**
@@ -18,11 +17,11 @@ The workflow is gated. Do not skip the approval checkpoint. Do not skip the revi
 
 This skill accepts a `mode=` argument that controls depth of execution. Default — when no `mode=` is specified — is `production`: the full 8-phase pipeline below.
 
-| Mode | Phases that run | Phases skipped |
-|---|---|---|
-| `production` (default) | 1, 2, 3, 4, 5, 6, 7a, 7b, 7c-7h (gated), 8, post-steps | none — full pipeline |
-| `balanced` | 1, 2, 3, 5, 6, 7a, 7b, 7e (gated), 7f (gated), 7g (gated), 8 (conditional), post-steps | 4 (Plan-gate), 7c (Security), 7d (Perf), 7h (Data Integrity) unless explicitly included |
-| `fast` | 5, 6 | 1, 2, 3, 4, 7a-7h, 8, post-steps |
+| Mode                   | Phases that run                                                                        | Phases skipped                                                                          |
+| ---------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `production` (default) | 1, 2, 3, 4, 5, 6, 7a, 7b, 7c-7h (gated), 8, post-steps                                 | none — full pipeline                                                                    |
+| `balanced`             | 1, 2, 3, 5, 6, 7a, 7b, 7e (gated), 7f (gated), 7g (gated), 8 (conditional), post-steps | 4 (Plan-gate), 7c (Security), 7d (Perf), 7h (Data Integrity) unless explicitly included |
+| `fast`                 | 5, 6                                                                                   | 1, 2, 3, 4, 7a-7h, 8, post-steps                                                        |
 
 **`include=` / `skip=` overrides.** Add or remove specific phases on top of the mode default — `mode=fast include=8` runs implement + verify + tests; `mode=production skip=7c` skips the security review even when the gate would have triggered. `include=` wins over the mode default; `skip=` wins over both.
 
@@ -32,12 +31,12 @@ This skill accepts a `mode=` argument that controls depth of execution. Default 
 
 **Integration-first lane.** If the feature touches HTTP/webhook dispatch, queues, jobs, cron, IPC, MCP tool calls, file writes, env-var injection, spawned processes, external APIs, email/SMS/push, imports/exports, or cache invalidation, plan the runtime contract and observation point in Phase 3. Dispatch the **`runtime-contract-tracer`** subagent (via `Agent(subagent_type=runtime-contract-tracer)`) with the integration name to get the trigger → dispatch → receive → observe trace with file:line refs and silent-failure sites flagged — this becomes the input to Phase 3's planning. After Phase 6, invoke `agentsystem-core:add-observability` unless the project already has equivalent structured evidence and you can name where it lives.
 
-**Mode safety override.** If `mode=fast` is requested for work that touches auth, permissions, payments, secrets, schema migrations, destructive deletes, background jobs, queues, cron, external APIs, email/SMS/push, imports/exports, file writes, spawned processes, IPC, caching/invalidation, feature flags, analytics/business reporting, concurrency-sensitive mutations, or external webhooks, pause and surface the conflict via `AskUserQuestion`: *"Detected high-risk signals. You requested fast mode — that skips clarify, plan, reviews, and tests. Confirm fast anyway, or upgrade to production?"* The `/ship` orchestrator enforces this upstream, but direct manual callers may not — don't silently honor a dangerous override.
+**Mode safety override.** If `mode=fast` is requested for work that touches auth, permissions, payments, secrets, schema migrations, destructive deletes, background jobs, queues, cron, external APIs, email/SMS/push, imports/exports, file writes, spawned processes, IPC, caching/invalidation, feature flags, analytics/business reporting, concurrency-sensitive mutations, or external webhooks, pause and surface the conflict via `AskUserQuestion`: _"Detected high-risk signals. You requested fast mode — that skips clarify, plan, reviews, and tests. Confirm fast anyway, or upgrade to production?"_ The `/ship` orchestrator enforces this upstream, but direct manual callers may not — don't silently honor a dangerous override.
 
 **Phase-gated NEVER scope.** Several rules in the NEVER section below are phase-gated. When the active mode skips a phase, the corresponding NEVER is explicitly suspended for that run:
 
-- `mode=fast` suspends: *"NEVER write feature code before Phase 4 approval"*, *"NEVER skip clarifying questions"*, *"NEVER skip the duplication scan"*, *"NEVER ship a new field to only one CRUD surface"*, *"NEVER ship a new UI instance without sibling audit"*, and all adjunct-skill routing unless explicitly included
-- `mode=balanced` suspends: *"NEVER write feature code before Phase 4 approval"*
+- `mode=fast` suspends: _"NEVER write feature code before Phase 4 approval"_, _"NEVER skip clarifying questions"_, _"NEVER skip the duplication scan"_, _"NEVER ship a new field to only one CRUD surface"_, _"NEVER ship a new UI instance without sibling audit"_, and all adjunct-skill routing unless explicitly included
+- `mode=balanced` suspends: _"NEVER write feature code before Phase 4 approval"_
 
 The universal NEVERs stay in force in every mode: no fan-out for tightly coupled work, declare-done only after running the code, no irrelevant security/perf review, no `--no-verify` bypass.
 
@@ -62,12 +61,12 @@ Then ask clarifying questions covering — at minimum — these categories. Skip
 
 1. **Scope** — what's in, what's explicitly out
 2. **User experience** — exact UX, error states, empty states, loading
-3. **Data** — first decide *whether* to persist before *what schema*. Default to derive-on-read for cheap/small/transient computation; default to persist when any of these triggers hit: per-request scan is expensive (filesystem walks, JSONL/log parsing, external API aggregation), the same inputs are queried repeatedly with mostly-unchanged results, results aggregate across sessions/runs, the source is slow or rate-limited, or the feature needs historical queries the source itself may not preserve (rotation, compaction, deletion). Once persist is chosen, then: new tables/columns, new fields on existing rows, retention, backfill.
+3. **Data** — first decide _whether_ to persist before _what schema_. Default to derive-on-read for cheap/small/transient computation; default to persist when any of these triggers hit: per-request scan is expensive (filesystem walks, JSONL/log parsing, external API aggregation), the same inputs are queried repeatedly with mostly-unchanged results, results aggregate across sessions/runs, the source is slow or rate-limited, or the feature needs historical queries the source itself may not preserve (rotation, compaction, deletion). Once persist is chosen, then: new tables/columns, new fields on existing rows, retention, backfill.
 4. **API surface** — new endpoints, contract changes to existing ones, auth requirements
 5. **Integration points** — what existing features does this touch, change, or risk breaking
 6. **CRUD/input surfaces** — enumerate every place a user creates, edits, configures, imports, or duplicates the affected artifact (create dialog AND edit dialog, settings page, bulk import, CSV upload, API client). Dispatch the **`crud-surface-mapper`** subagent (via `Agent(subagent_type=crud-surface-mapper)`) with the artifact name to get a complete surface inventory with file:line refs — keeps the search out of the parent's context. For each surface, decide explicitly whether the new field/behavior applies — silently shipping to only one is the most common "incomplete" failure. This is the inward complement to #5 (which looks outward at unrelated features that might break).
 7. **Edge cases** — concurrent writes, partial failures, large inputs, permissions
-8. **Non-goals** — adjacent things the user does *not* want done now
+8. **Non-goals** — adjacent things the user does _not_ want done now
 9. **Done criteria** — how the user will recognize this is finished
 
 **Always use the AskUserQuestion tool** (multi-question, structured choices) to ask clarifying questions — never present them as a static numbered list the user has to type answers to. Fall back to free-form prose only for a single question whose option space is genuinely open-ended.
@@ -81,6 +80,7 @@ Then ask clarifying questions covering — at minimum — these categories. Skip
 Read before writing. This is where duplication gets prevented and integration points get found.
 
 Map at least:
+
 - Files/modules likely touched
 - Existing patterns for similar features (reuse, don't reinvent)
 - Shared utilities, hooks, components that the new code should compose with
@@ -92,6 +92,7 @@ Map at least:
 **Pre-write utility check — prevent duplication at creation.** For each non-trivial helper/utility/component the plan calls for, dispatch the **`utility-finder`** subagent (via `Agent(subagent_type=utility-finder)`) with the function description. It searches the repo for existing equivalents (across naming variants) and returns a verdict — reuse / extend / write-new. The result short-circuits Phase 7b duplication-scan findings and keeps duplication out of the diff in the first place.
 
 **Subagent fan-out — use when scope is wide.** Spawn parallel `Explore` agents in a single message when:
+
 - Feature spans 3+ distinct subsystems (e.g., DB + API + UI + jobs)
 - You need to survey "is there already a utility for X?" across the repo
 - Different areas have independent search criteria
@@ -139,6 +140,7 @@ Tiny mechanical setup (creating empty files, adding a dependency the plan calls 
 Work the plan. Order: data layer → server/business logic → API → UI → wiring.
 
 **Subagent fan-out — use when work is genuinely independent.** Spawn parallel implementation agents in one message only when:
+
 - Two or more files have no shared edits and no ordering dependency (e.g., a new DB migration AND an unrelated UI component)
 - You can give each agent self-contained context (file paths, contracts, constraints)
 - Merging their outputs won't conflict
@@ -169,12 +171,15 @@ Run reviews **on the diff you just produced**. Each review is gated by what the 
 Subagent fan-out is encouraged here: dispatch the applicable reviews in parallel as separate agents, then consolidate findings.
 
 ### 7a. Code Review — ALWAYS
+
 Read [`references/code-review-checklist.md`](references/code-review-checklist.md) and apply it to the diff.
 
 ### 7b. Duplication Scan — ALWAYS
+
 Run `agentsystem-core:simplify` against the diff when it is non-trivial to surface parallel patterns, repeated literal-equality filters, and scattered enum literals the type system can't catch. Also, for each new function/component/utility, search the repo for existing equivalents and refactor to reuse if found. Skip for single-line fixes, comment/format-only changes, test-fixture edits, and non-TS files.
 
 ### 7c. Security Review — GATED
+
 **Run only if the diff changed backend logic** (server routes, server actions, auth, authz, query construction, file I/O on server, env/secret usage, deserialization, IPC handlers, anything executed outside the user's browser).
 
 If gate triggers → read [`references/security-review-checklist.md`](references/security-review-checklist.md) and apply.
@@ -182,6 +187,7 @@ Also dispatch the **`reviewer-security-regression`** subagent (via the `Agent` t
 **Do NOT load** `security-review-checklist.md` if the diff is purely client-side rendering / styling / static config / docs — skip and say so.
 
 ### 7d. Performance Review — GATED
+
 **Run only if the diff changed DB schema, queries, or a known hot path** (new tables/columns/indexes, new SQL, new ORM calls, new loops over user-scale data, new N+1 risks, new server-side aggregation).
 
 If gate triggers → read [`references/performance-review-checklist.md`](references/performance-review-checklist.md) and apply.
@@ -189,35 +195,45 @@ Dispatch the **`reviewer-perf`** subagent (via the `Agent` tool with `subagent_t
 **Do NOT load** `performance-review-checklist.md` if the diff is purely UI logic with no new data access — skip and say so.
 
 ### 7e. Contract Review — GATED
+
 Dispatch the **`reviewer-contracts`** subagent (via the `Agent` tool with `subagent_type=reviewer-contracts`) when the diff crosses a client/server, route/schema, IPC, OpenAPI, tRPC, server-function, DTO, or generated-client boundary. The subagent runs read-only and returns a severity-ranked findings report with both producer and consumer file:line refs; apply the `auto-fixable: true` mechanical renames and surface structural mismatches to the user. Skip for comment/format-only changes, doc-only edits, and changes with no contract surface.
 
 ### 7f. Concurrency Review — GATED
+
 Dispatch the **`reviewer-concurrency`** subagent (via the `Agent` tool with `subagent_type=reviewer-concurrency`) when the diff adds or changes mutations, background jobs, webhook handlers, queue workers, async UI writes, transactions, retries, idempotency, or read-modify-write flows. The subagent runs read-only and returns a severity-ranked findings report; apply the `auto-fixable: true` items (e.g., AbortController injection) and surface the rest to the user. Skip for read-only, UI-only, and doc/comment-only changes.
 
 ### 7g. Observability Coverage — GATED
+
 Dispatch the **`reviewer-observability-coverage`** subagent (via `Agent(subagent_type=reviewer-observability-coverage)`) after critical-path changes, especially new integration boundaries, async work, error paths, jobs, webhooks, or external API calls. The subagent runs read-only and reports gaps (no auto-instrumentation). If it reports missing evidence and the change is still in scope, invoke `agentsystem-core:add-observability` to instrument the boundary before declaring done.
 
 ### 7h. Data Integrity Review — GATED
+
 Dispatch the **`reviewer-data-integrity`** subagent (via the `Agent` tool with `subagent_type=reviewer-data-integrity`) when the diff changes persistence shape, migrations, status/enum values, denormalized data, deletes, backfills, import/export paths, or data-access invariants. The subagent runs read-only and returns a severity-ranked findings report with a change classification (additive / mutating / destructive); apply `auto-fixable: true` seed-fixture renames and surface schema/orphan/uniqueness findings to the user. Skip for changes with no persisted-data impact.
 
 If the feature requires a schema migration, invoke `agentsystem-core:add-migration` before this review; then run data-integrity on the migration + code diff.
 
 ### 7i. Failure UX — GATED
+
 Dispatch the **`reviewer-error-boundaries`** subagent (via `Agent(subagent_type=reviewer-error-boundaries)`) when the diff adds or changes a user-facing async flow, route loader, form submit, server action surfaced in UI, background failure visible to users, or any path where failure could blank the screen or silently corrupt state. Apply auto-fixable items (button disable, errorComponent stub when convention exists); surface the rest. Skip for backend-only changes with no user-facing flow, docs, and comments.
 
 ### 7j. Async UI — GATED
+
 Dispatch the **`reviewer-loading-states`** subagent (via `Agent(subagent_type=reviewer-loading-states)`) when the diff adds or changes async UI: route data, `useQuery`/`useSuspenseQuery`, `useMutation`, optimistic updates, submit buttons, polling, or client-side fetches. Apply auto-fixable items (`disabled={isPending}`, `aria-busy`); surface the rest. If the change wires data fetching that can return zero/null or fail, run `agentsystem-core:add-empty-error-states`.
 
 ### 7k. UI Regression — GATED
+
 Dispatch the **`reviewer-accessibility-regression`** subagent (via `Agent(subagent_type=reviewer-accessibility-regression)`) after interactive UI mutation (buttons, forms, dialogs, menus, custom click targets, focus changes, error messages). Apply auto-fixable items (icon-button labels, htmlFor on labels, decorative alt=""); surface the rest. Run `agentsystem-core:audit-responsive` when the diff changes layout containers, grids, tables, nav/sidebar structure, modals, or mobile-sensitive sizing.
 
 ### 7l. Client Bundle — GATED
+
 Dispatch the **`reviewer-client-bundle`** subagent (via `Agent(subagent_type=reviewer-client-bundle)`) when client-side code changes in routes/components/hooks, when a new dependency is imported from UI code, when server-only modules might cross into the browser bundle, or when large editor/chart/image/media dependencies are added. Apply the lodash → lodash-es swap if flagged auto-fixable; surface the rest.
 
 ### Resolving review conflicts
+
 If two review subagents contradict each other (e.g., one flags a query as N+1, another says it's fine), pick one and document why. Do not average — one is right and one is wrong. Read both findings against the actual code and decide.
 
 ### Review exit gate
+
 Every finding must be either fixed or explicitly acknowledged with the user before continuing. Do not silently defer issues.
 
 ---
@@ -225,10 +241,12 @@ Every finding must be either fixed or explicitly acknowledged with the user befo
 ## Phase 8 — Automated Tests
 
 Add tests where they earn their keep:
+
 - **Unit / Integration** — invoke `agentsystem-core:write-tests` to author or expand the suite for the changed module. It detects the existing test harness (Vitest/Jest/pytest/go test/etc.), inherits naming and mocking conventions, and wires a smoke test before generating the rest. If no harness exists, it proposes the smallest industry-standard runner for the stack and waits for user approval before installing.
 - **E2E / UI** — when the feature is a user-facing flow (sign-in, form submit, multi-step wizard, payment, navigation) AND the project either already has Playwright or the user approves installing it, invoke `agentsystem-core:add-e2e-test`. Skip this branch when the project has no browser harness and the user does not want one — stop at integration.
 
 Categories to cover within `write-tests`:
+
 - **Unit** — pure functions, non-trivial branching logic, parsers, validators
 - **Integration** — API endpoints (real DB if the project does that), data-layer code, multi-module flows
 

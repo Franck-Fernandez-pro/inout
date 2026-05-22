@@ -5,7 +5,6 @@ description: Walk a developer through a git merge or rebase conflict carefully �
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Resolve Conflict
 
 A merge conflict means git could not pick — both branches changed the same lines. The dangerous failure mode is "pick theirs" or "pick ours" without reading both, which silently throws away work. This skill exists to make that failure mode hard.
@@ -23,11 +22,11 @@ Determine what operation is mid-flight:
 
 Run `git status` to list `Unmerged paths`. Group them:
 
-| Group | Paths | Strategy |
-|---|---|---|
-| Lockfiles | `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`, `bun.lockb`, `Cargo.lock`, `poetry.lock`, `uv.lock`, `Gemfile.lock`, `go.sum` | Regenerate, do not hand-merge. |
-| Generated | `*.gen.ts`, files in `drizzle/`, `__generated__/`, `dist/` | Rebuild from source after resolving the source files. |
-| Source | everything else | Hand-resolve per Phase 3. |
+| Group     | Paths                                                                                                                             | Strategy                                              |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| Lockfiles | `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`, `bun.lockb`, `Cargo.lock`, `poetry.lock`, `uv.lock`, `Gemfile.lock`, `go.sum` | Regenerate, do not hand-merge.                        |
+| Generated | `*.gen.ts`, files in `drizzle/`, `__generated__/`, `dist/`                                                                        | Rebuild from source after resolving the source files. |
+| Source    | everything else                                                                                                                   | Hand-resolve per Phase 3.                             |
 
 **Exit:** the operation is identified and the file groups are listed.
 
@@ -65,12 +64,12 @@ For each source file in the source group:
 
 3. **Resolve per block:**
 
-   | Case | Resolution |
-   |---|---|
-   | Identical intent | Keep one side; check formatting matches project style. |
-   | Complementary (e.g., both added a different prop, both added a different import) | Combine both changes. |
-   | Incompatible (both edit the same logic differently) | **Stop.** Surface to the user with both versions side-by-side. Do not guess. |
-   | One side is clearly a refactor that subsumes the other | Keep the refactor side and re-apply the other side's intent on top. |
+   | Case                                                                             | Resolution                                                                   |
+   | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+   | Identical intent                                                                 | Keep one side; check formatting matches project style.                       |
+   | Complementary (e.g., both added a different prop, both added a different import) | Combine both changes.                                                        |
+   | Incompatible (both edit the same logic differently)                              | **Stop.** Surface to the user with both versions side-by-side. Do not guess. |
+   | One side is clearly a refactor that subsumes the other                           | Keep the refactor side and re-apply the other side's intent on top.          |
 
 4. **Remove all markers** (`<<<<<<<`, `=======`, `>>>>>>>`). If any remain, the file is not resolved.
 

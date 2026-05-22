@@ -47,7 +47,7 @@ Drop findings where the pattern signature matches but the impact doesn't:
 - An unmemoized computation inside a component that renders once per page load is fine.
 - A loader that fires N `ensureQueryData` calls where each genuinely depends on the previous is not a waterfall — it's correct sequencing.
 
-For each remaining finding, restate the impact in concrete terms: *"this fires N additional DB queries per request, where N = number of items in `posts`"* beats *"potential N+1 issue."*
+For each remaining finding, restate the impact in concrete terms: _"this fires N additional DB queries per request, where N = number of items in `posts`"_ beats _"potential N+1 issue."_
 
 ### Step 4 — Return structured report
 
@@ -114,7 +114,7 @@ The second form parallelizes the queries but still issues one per item — still
 
 **Fix:** add `index('<table>_<col>_idx').on(table.col)` to the Drizzle schema and a migration.
 
-### P3 — SELECT * on a wide table when consumer reads few columns (MEDIUM)
+### P3 — SELECT \* on a wide table when consumer reads few columns (MEDIUM)
 
 **Signature:** `db.select().from(...)` (no projection) where the caller reads only `result.id` / `result.name`.
 
@@ -127,9 +127,9 @@ The second form parallelizes the queries but still issues one per item — still
 **Signature:**
 
 ```ts
-const a = await getA()
-const b = await getB()   // does not depend on a
-return { a, b }
+const a = await getA();
+const b = await getB(); // does not depend on a
+return { a, b };
 ```
 
 **Impact:** roundtrip-bound — total latency = sum, could be max.

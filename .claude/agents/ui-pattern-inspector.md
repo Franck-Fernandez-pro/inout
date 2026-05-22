@@ -35,6 +35,7 @@ rg -n --type tsx -F '<form ' <repo> | head -30
 ```
 
 Pick **2–3 representative siblings** that:
+
 - Are user-facing (skip Storybook stories, test fixtures)
 - Have non-trivial body (skip empty stubs)
 - Span different feature areas if possible (one create-modal, one settings-modal, one confirm-modal)
@@ -43,17 +44,17 @@ Pick **2–3 representative siblings** that:
 
 For each chosen sibling, extract these conventions by reading the file:
 
-| Convention | What to grep for |
-|---|---|
-| Submit hotkey | `Cmd+Enter`, `metaKey`, `onKeyDown`, `useHotkeys`, `Mousetrap` |
-| Cancel/close hotkey | `Escape`, `onEscapeKeyDown`, default Radix Esc |
-| Kbd hint visible | `<Kbd>`, `<kbd>`, `aria-keyshortcuts`, footer pill text |
-| Autofocus target | `autoFocus`, `<DialogPrimitive.Trigger>` `onOpenAutoFocus`, ref + `.focus()` |
-| Loading/disabled state | `disabled={isPending}`, `aria-busy`, `<Spinner>` in submit |
-| Footer chrome | layout of cancel/submit (left-cancel/right-submit vs. opposite), divider |
-| Error display | inline under field (with `aria-describedby`) vs. toast vs. top-banner |
-| Click-outside behavior | `closeOnInteractOutside`, `closeOnClickOutside`, default Radix |
-| Underlying primitive | Radix `<DialogPrimitive>`, shadcn `<Dialog>`, custom |
+| Convention             | What to grep for                                                             |
+| ---------------------- | ---------------------------------------------------------------------------- |
+| Submit hotkey          | `Cmd+Enter`, `metaKey`, `onKeyDown`, `useHotkeys`, `Mousetrap`               |
+| Cancel/close hotkey    | `Escape`, `onEscapeKeyDown`, default Radix Esc                               |
+| Kbd hint visible       | `<Kbd>`, `<kbd>`, `aria-keyshortcuts`, footer pill text                      |
+| Autofocus target       | `autoFocus`, `<DialogPrimitive.Trigger>` `onOpenAutoFocus`, ref + `.focus()` |
+| Loading/disabled state | `disabled={isPending}`, `aria-busy`, `<Spinner>` in submit                   |
+| Footer chrome          | layout of cancel/submit (left-cancel/right-submit vs. opposite), divider     |
+| Error display          | inline under field (with `aria-describedby`) vs. toast vs. top-banner        |
+| Click-outside behavior | `closeOnInteractOutside`, `closeOnClickOutside`, default Radix               |
+| Underlying primitive   | Radix `<DialogPrimitive>`, shadcn `<Dialog>`, custom                         |
 
 For each convention, cite `file:line` for the evidence.
 

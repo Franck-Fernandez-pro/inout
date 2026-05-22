@@ -33,6 +33,7 @@ git diff --cached --name-only 2>/dev/null
 Filter to: migration files (`migrations/`, `*.sql`, `*.up.sql`, `prisma/migrations/`), schema files (`schema.ts`, `schema.prisma`, `*.sql`), persistence code (`src/data-access/`, repositories, models), and background-job files.
 
 Classify each change as one of:
+
 - **additive** — new tables/columns with safe defaults, no destructive ops
 - **mutating** — backfills, type changes, constraint additions on existing data
 - **destructive** — DROP COLUMN, DROP TABLE, TRUNCATE, ALTER COLUMN narrowing type

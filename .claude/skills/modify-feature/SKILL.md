@@ -7,7 +7,6 @@ description: Modify an existing feature — add to it, change how it works, or w
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Modify Feature
 
 A small extension is the most dangerous size of change: large enough to shift requirements and adjacent contracts, small enough that the agent skips the thinking a full feature would trigger. The user's proposed shape is one option, not the spec.
@@ -18,17 +17,17 @@ A small extension is the most dangerous size of change: large enough to shift re
 
 This skill accepts a `mode=` argument. Default — when no `mode=` is specified — is `balanced`: the four-question pre-flight + contract audit below.
 
-| Mode | Behavior |
-|---|---|
-| `fast` | Skip the four pre-flight questions. Implement the user's literal proposal. Use only when the user has explicitly locked the seam (e.g. `mode=fast` in their prompt) and the change is genuinely single-file. |
-| `balanced` (default) | The full pre-flight: alternative seam, contract audit, scope check, edge cases. Then edit, verify, and run gated post-checks for contracts, concurrency, observability, and tests when triggered. |
-| `production` | `balanced` + an explicit scope-confirm gate before editing if the Q2 contract audit surfaces 5+ affected sites, plus mandatory tests for logic/data/API changes and observability instrumentation for integration boundaries. Pause and ask via `AskUserQuestion` whether to proceed as an extension or escalate to `add-feature` / `realign`. |
+| Mode                 | Behavior                                                                                                                                                                                                                                                                                                                                       |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fast`               | Skip the four pre-flight questions. Implement the user's literal proposal. Use only when the user has explicitly locked the seam (e.g. `mode=fast` in their prompt) and the change is genuinely single-file.                                                                                                                                   |
+| `balanced` (default) | The full pre-flight: alternative seam, contract audit, scope check, edge cases. Then edit, verify, and run gated post-checks for contracts, concurrency, observability, and tests when triggered.                                                                                                                                              |
+| `production`         | `balanced` + an explicit scope-confirm gate before editing if the Q2 contract audit surfaces 5+ affected sites, plus mandatory tests for logic/data/API changes and observability instrumentation for integration boundaries. Pause and ask via `AskUserQuestion` whether to proceed as an extension or escalate to `add-feature` / `realign`. |
 
 **`include=` / `skip=` overrides.** Add or remove specific concerns on top of the mode default — `mode=fast include=q2` runs the contract audit even in fast mode; `mode=balanced skip=q1` skips the alternative-seam question.
 
 **Mode safety override.** If `mode=fast` is requested but the change touches auth, permissions, payments, secrets, schema migrations, destructive deletes, background jobs, queues, cron, external APIs, email/SMS/push, imports/exports, file writes, spawned processes, IPC, caching/invalidation, feature flags, analytics/business reporting, concurrency-sensitive mutations, or external webhooks, surface the conflict via `AskUserQuestion` and confirm before honoring. The `/ship` orchestrator enforces this upstream — direct manual callers may not.
 
-**Phase-gated NEVER scope.** When `mode=fast` is in effect, two NEVERs are explicitly suspended for the run: *"NEVER implement the user's literal proposal without naming one alternative"* and *"NEVER agree with the user's framing of effort before completing Q2"*. The remaining NEVERs (contract audit, peer-data consumers, scope creep, manual-override, stop-action symmetry, rename-realign boundary) stay in force in every mode — they protect against silent breakage that fast mode shouldn't override.
+**Phase-gated NEVER scope.** When `mode=fast` is in effect, two NEVERs are explicitly suspended for the run: _"NEVER implement the user's literal proposal without naming one alternative"_ and _"NEVER agree with the user's framing of effort before completing Q2"_. The remaining NEVERs (contract audit, peer-data consumers, scope creep, manual-override, stop-action symmetry, rename-realign boundary) stay in force in every mode — they protect against silent breakage that fast mode shouldn't override.
 
 ---
 
@@ -36,10 +35,9 @@ This skill accepts a `mode=` argument. Default — when no `mode=` is specified 
 
 **Always use the AskUserQuestion tool** (multi-question, structured choices) when you need clarification from the user — never present static numbered prompts they have to type answers to. Fall back to free-form prose only when the option space is genuinely open-ended.
 
+1. **Is the user's proposal the best seam?** They named one approach. Find at least one alternative — different layer (UI vs server vs data), different trigger (push vs pull, eager vs lazy), different ownership (existing module vs new). State the tradeoff. If their proposal still wins, say why; if not, surface the alternative _before_ implementing.
 
-1. **Is the user's proposal the best seam?** They named one approach. Find at least one alternative — different layer (UI vs server vs data), different trigger (push vs pull, eager vs lazy), different ownership (existing module vs new). State the tradeoff. If their proposal still wins, say why; if not, surface the alternative *before* implementing.
-
-2. **What contracts shift?** List every place the *meaning* of something changes: types, API responses, persisted rows, UI states, user expectations, docs, tests asserting the old behavior. The extension is done when all of these are coherent, not when the new path works.
+2. **What contracts shift?** List every place the _meaning_ of something changes: types, API responses, persisted rows, UI states, user expectations, docs, tests asserting the old behavior. The extension is done when all of these are coherent, not when the new path works.
 
    **Audit order:** types → API/IPC surface → persisted rows/migrations → UI states & conditionals → runtime/lifecycle state (spawned processes, child terminals, timers, watchers, in-memory registries — and which UI surface projects each one's liveness) → tests asserting old behavior → user-facing docs/copy → peer consumers (other components/hooks/routes reading or caching this same entity) → live-update wiring (event subscriptions, query invalidations, refetch triggers, and runtime-state projections like status badges, indicator dots, "is alive" booleans — name what owns the truth and how each reader stays consistent with it). Walk the list in this order; later layers depend on earlier layers' decisions.
 
@@ -47,7 +45,7 @@ This skill accepts a `mode=` argument. Default — when no `mode=` is specified 
 
 4. **What edge cases does the user's framing miss?** User overriding the derived value manually. Pre-existing rows that predate the extension. Failure of the new derivation step. Re-derivation when the source changes after the fact.
 
-   **Symmetric data-flow:** when adding a new *reader* of shared data, list the mutations that must invalidate it; when adding a new *mutation*, list the readers that must refresh.
+   **Symmetric data-flow:** when adding a new _reader_ of shared data, list the mutations that must invalidate it; when adding a new _mutation_, list the readers that must refresh.
 
    **Cold-start reconciliation:** on process/app restart, what's the source of truth for this feature's runtime state — persisted disk, a runtime probe (is the child process actually alive?), or "assume offline until re-triggered"? Decide explicitly; default-persist is a decision, not an absence of one. Stale persisted state that outlives its underlying runtime (a "running" row pointing at a dead PID, a green dot for a terminal that no longer exists) is the canonical bug class here.
 
@@ -106,7 +104,7 @@ If the extension touches HTTP/webhook dispatch, queues, jobs, cron, IPC, MCP too
 
 - **NEVER add a stop/cancel/remove/disable action without enumerating every side-effect of its start/create/add/enable counterpart**
   **Instead:** List spawned children (processes, terminals, workers), persisted rows, in-memory registries/maps, UI badges and indicator state, event listeners, pollers, and any cached "is alive" derivations created by the start path. The stop path must address each — kill, delete, unregister, reset, unsubscribe — or explicitly defer with a reason.
-  **Why:** Stop actions are framed as deletions but are really *reconciliations*. Missing one inverse leaves a zombie (orphan terminal still running, status dot still green, ghost row in a registry) that surfaces only after restart or the next interaction with the stale surface.
+  **Why:** Stop actions are framed as deletions but are really _reconciliations_. Missing one inverse leaves a zombie (orphan terminal still running, status dot still green, ghost row in a registry) that surfaces only after restart or the next interaction with the stale surface.
 
 - **NEVER proceed when the change crosses into rename/realign territory**
   **Instead:** Stop and recommend the `realign` skill, or propose breaking the work into (a) extension and (b) follow-up rename.

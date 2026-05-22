@@ -37,6 +37,7 @@ Before applying any fix, ask: **Does this change visible behavior?** If yes, mar
 Apply every `fix-class: auto` finding inline using the recipes in `references/fixes.md`. Group edits by file.
 
 Before each edit, verify:
+
 - The fix doesn't change visible behavior (e.g. don't add `aria-label="Close"` if a visible "Close" text already exists — use that).
 - For `<div onClick>` → `<button>` conversions, preserve existing classNames; add `type="button"` to avoid form-submit surprises.
 - For label association, prefer `htmlFor`/`id` over wrapping when the input is already standalone.

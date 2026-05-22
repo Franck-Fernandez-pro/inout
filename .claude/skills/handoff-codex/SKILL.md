@@ -5,12 +5,11 @@ description: Hand off a stalled task or stubborn bug to the OpenAI Codex CLI for
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # handoff-codex
 
 Hand off the current task to `codex exec` (OpenAI Codex CLI) when Claude is stuck or wants a second pass. Fire-wait-verify, not fire-and-forget.
 
-The user is delegating because *the existing approach didn't work* — so the value of this skill is in the **handoff packet**: the original goal, what was tried, what failed, and the exact diff Claude has produced so far. A thin packet wastes the codex run.
+The user is delegating because _the existing approach didn't work_ — so the value of this skill is in the **handoff packet**: the original goal, what was tried, what failed, and the exact diff Claude has produced so far. A thin packet wastes the codex run.
 
 ---
 
@@ -42,25 +41,33 @@ Required sections, in this order:
 # Task handoff from Claude Code
 
 ## Original request
+
 [verbatim or close paraphrase of what the user asked for]
 
 ## What I tried
+
 [bullet list — each attempt + what happened. Include error messages verbatim.]
 
 ## Where I got stuck
+
 [the specific blocker, in one paragraph. Be honest about what you don't understand.]
 
 ## Files I touched
+
 [list with one-line summary per file]
 
 ## Current `git status`
 ```
+
 [paste output]
+
 ```
 
 ## Current `git diff`
 ```
+
 [paste output — truncate to ~500 lines if huge, and say so]
+
 ```
 
 ## What I need from you
@@ -149,12 +156,12 @@ After codex returns:
 
 ## Reference — `codex exec` flags used
 
-| Flag | Why |
-|------|-----|
-| `-c model_reasoning_effort=high` | Forces high reasoning effort — this skill exists for hard problems, so spend the budget |
-| `--model <name>` | Omitted by default (codex picks its latest). Pass only when the user explicitly named a model |
-| `--sandbox workspace-write` | Lets codex edit files in cwd; blocks system-wide writes |
-| `--ask-for-approval never` | Mandatory for headless |
-| `-o <path>` | Final message → file for parsing |
-| `-` | Read prompt from stdin |
-| `--skip-git-repo-check` | Only when not in a git repo |
+| Flag                             | Why                                                                                           |
+| -------------------------------- | --------------------------------------------------------------------------------------------- |
+| `-c model_reasoning_effort=high` | Forces high reasoning effort — this skill exists for hard problems, so spend the budget       |
+| `--model <name>`                 | Omitted by default (codex picks its latest). Pass only when the user explicitly named a model |
+| `--sandbox workspace-write`      | Lets codex edit files in cwd; blocks system-wide writes                                       |
+| `--ask-for-approval never`       | Mandatory for headless                                                                        |
+| `-o <path>`                      | Final message → file for parsing                                                              |
+| `-`                              | Read prompt from stdin                                                                        |
+| `--skip-git-repo-check`          | Only when not in a git repo                                                                   |

@@ -5,7 +5,6 @@ description: Generate a markdown QA test plan a human tester can execute against
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Testing Plan
 
 Generate `testing-plans/<slug>.md` so a non-author QA tester can verify the current branch end-to-end without asking follow-up questions.
@@ -61,7 +60,6 @@ If any precondition cannot be inferred from the repo, ask the user once before w
 
 > **Before writing, ask:** could a tester who has never touched this code execute every step without asking the author a question? If no, fix the gap before saving.
 
-
 Path: `testing-plans/<slug>.md`. Create the `testing-plans/` directory if missing. If the file exists, append a new dated section rather than overwriting.
 
 **Slug derivation:** start from the branch name; strip leading `feature/`, `fix/`, `bug/`, `chore/`, `refactor/` prefixes; lowercase; replace `_` and spaces with `-`; collapse repeated hyphens. If the branch is `main` or generic, derive the slug from the feature name the user provided.
@@ -72,7 +70,7 @@ Use the template below verbatim. Every section is required. If a section legitim
 
 ## Template
 
-````markdown
+```markdown
 # Testing Plan: <Feature / Bug / Refactor Title>
 
 **Branch:** `<branch-name>`
@@ -88,16 +86,18 @@ Use the template below verbatim. Every section is required. If a section legitim
 ## Scope
 
 **In scope:**
+
 - <surface 1 — route, screen, or flow>
 - <surface 2>
 
 **Out of scope:**
+
 - <explicit non-goals so QA doesn't chase them>
 
 ## Test Users
 
-| Role | Email | How to log in | Notes |
-|------|-------|---------------|-------|
+| Role   | Email             | How to log in                                 | Notes                               |
+| ------ | ----------------- | --------------------------------------------- | ----------------------------------- |
 | <role> | <email from seed> | <password / magic-link / impersonation route> | <permissions or data this user has> |
 
 ## Preconditions
@@ -144,11 +144,11 @@ Adjacent surfaces that share code paths with the change. Verify these still work
 
 ## Sign-off
 
-- Tester: ____________________
-- Date: ____________________
-- Result: ☐ Pass  ☐ Pass with notes  ☐ Fail
+- Tester: ********\_\_\_\_********
+- Date: ********\_\_\_\_********
+- Result: ☐ Pass ☐ Pass with notes ☐ Fail
 - Notes:
-````
+```
 
 ---
 

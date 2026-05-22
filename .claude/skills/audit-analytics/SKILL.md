@@ -13,18 +13,19 @@ The bug class this skill targets is silent under-tracking: a feature ships, look
 
 Detect the analytics SDK by imports:
 
-| Import | SDK |
-|---|---|
-| `posthog-js`, `posthog-node` | PostHog |
-| `@amplitude/analytics-browser` | Amplitude |
-| `@segment/analytics-next` | Segment |
-| `mixpanel-browser` | Mixpanel |
-| `react-ga4`, `gtag` | GA4 |
+| Import                                          | SDK                           |
+| ----------------------------------------------- | ----------------------------- |
+| `posthog-js`, `posthog-node`                    | PostHog                       |
+| `@amplitude/analytics-browser`                  | Amplitude                     |
+| `@segment/analytics-next`                       | Segment                       |
+| `mixpanel-browser`                              | Mixpanel                      |
+| `react-ga4`, `gtag`                             | GA4                           |
 | Project-local wrapper (e.g., `@/lib/analytics`) | Wrapped SDK — use the wrapper |
 
 If none detected, stop: "No analytics SDK detected. Add tracking with one of [SDKs] before auditing."
 
 Look for an event catalog — common locations:
+
 - `src/lib/analytics/events.ts` exporting `EVENTS` const, enum, or schema
 - `src/analytics/`, `analytics.config.ts`
 - A typed wrapper: `track(event: 'signup_completed', props: ...)`
@@ -39,17 +40,17 @@ If a catalog exists, it is the convention source for naming. If not, infer the c
 
 For the user's scope (one route / feature / module), enumerate user-facing actions and check each:
 
-| Action class | Should emit? |
-|---|---|
-| Page view | Usually yes (often automatic with the SDK; verify it isn't disabled per-route) |
-| Form submit (success) | Yes |
-| Primary CTA click (signup, upgrade, "create X") | Yes |
-| Destructive action (delete, cancel subscription) | Yes |
-| Search / filter use | Often yes |
-| Modal open (when carrying user intent, not e.g. a tooltip) | Often yes |
-| Error encountered (after retries) | Often yes |
-| Hover / mouse enter / scroll | Usually no |
-| Internal navigation between sub-views | Sometimes |
+| Action class                                               | Should emit?                                                                   |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Page view                                                  | Usually yes (often automatic with the SDK; verify it isn't disabled per-route) |
+| Form submit (success)                                      | Yes                                                                            |
+| Primary CTA click (signup, upgrade, "create X")            | Yes                                                                            |
+| Destructive action (delete, cancel subscription)           | Yes                                                                            |
+| Search / filter use                                        | Often yes                                                                      |
+| Modal open (when carrying user intent, not e.g. a tooltip) | Often yes                                                                      |
+| Error encountered (after retries)                          | Often yes                                                                      |
+| Hover / mouse enter / scroll                               | Usually no                                                                     |
+| Internal navigation between sub-views                      | Sometimes                                                                      |
 
 For each found `track(...)` call, record event name and properties. For each user-action site without a `track()`, classify as:
 
@@ -82,7 +83,7 @@ For each drift, propose the corrected name/shape using the catalog's convention.
 
 Scan property values for likely PII or secrets:
 
-- **Email addresses** in event properties (often unintentional — `email: user.email`). Most setups should track a user *id*, not the email itself.
+- **Email addresses** in event properties (often unintentional — `email: user.email`). Most setups should track a user _id_, not the email itself.
 - **Raw passwords / tokens / API keys** (rare but catastrophic; check anyway).
 - **Full names** if the project's privacy stance excludes them.
 - **Device fingerprints, IPs** in setups that aren't explicitly designed to receive them.
@@ -121,7 +122,7 @@ PII / secret findings
 Total: 6 findings (1 CRITICAL, 1 HIGH MUST-track, 2 SHOULD-track, 2 drift).
 ```
 
-The report does not auto-fix events. Adding or renaming events is a product decision (taxonomy stability across dashboards depends on names *not* changing silently).
+The report does not auto-fix events. Adding or renaming events is a product decision (taxonomy stability across dashboards depends on names _not_ changing silently).
 
 ---
 
@@ -142,7 +143,7 @@ Only on explicit user request and one finding at a time:
   **Why:** an event name is a contract with the analytics tool. Silently renaming `signup_complete` → `signup_completed` breaks every saved dashboard and alert that referenced the old name. The fix has to be coordinated with the data team — the audit's job ends at flagging.
 
 - **NEVER invent events the user didn't ask for.**
-  **Instead:** report missing-event gaps with severity and a *suggested* name; do not insert.
+  **Instead:** report missing-event gaps with severity and a _suggested_ name; do not insert.
   **Why:** event creation is a product decision — adding a tracked event commits the team to maintaining it, paying per-event SDK costs, and answering "what does this measure" forever. The user owns that.
 
 - **NEVER allow PII in event properties without an explicit project policy that permits it.**

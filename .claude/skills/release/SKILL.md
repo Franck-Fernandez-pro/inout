@@ -17,10 +17,10 @@ Phased workflow. Do not skip phases. Each phase has an explicit exit condition; 
 
 A tag points at code that other people (and CI, package registries, ops dashboards) will treat as "this is what shipped." Default mode is `production` and you should rarely downgrade.
 
-| Mode | Quality gate (Phase 1.5) |
-|---|---|
-| `fast` | Residue sweep only (console.log / `.only` / debugger / merge markers / TODO additions in the release range). |
-| `balanced` | `fast` + typecheck + lint on the release range. Blocks on type/lint errors. |
+| Mode                   | Quality gate (Phase 1.5)                                                                                                                          |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fast`                 | Residue sweep only (console.log / `.only` / debugger / merge markers / TODO additions in the release range).                                      |
+| `balanced`             | `fast` + typecheck + lint on the release range. Blocks on type/lint errors.                                                                       |
 | `production` (default) | Full `agentsystem-core:check-pr-readiness` against the release range (last tag → HEAD, or all history when no prior tag). Blocks on any red gate. |
 
 The `check-release-risk` briefing in Phase 5 runs **in all modes** — it surfaces what changed, not whether the code is shippable.
@@ -64,11 +64,13 @@ Exit condition: the release range passes the mode-appropriate quality gate, or t
 Compute the release range: `<last-tag>..HEAD` if a prior tag exists, otherwise the full history reachable from `HEAD`.
 
 Run the mode-appropriate gate from the **Modes** table:
+
 - `mode=production` → invoke `agentsystem-core:check-pr-readiness` against the release range. Pipe its report through verbatim.
 - `mode=balanced` → typecheck + lint on the files changed in the release range + residue sweep on the release range diff.
 - `mode=fast` → residue sweep on the release range diff only.
 
 If any gate fails, **stop**. Ask via `AskUserQuestion`:
+
 - **Fix and retry** → exit; user fixes and re-invokes `/release`.
 - **Tag anyway with failing gates** → require an explicit acknowledgement string; record the bypassed gates in the annotated tag body (`Bypassed-gates: <list>`) and the release notes.
 
@@ -113,6 +115,7 @@ Show the diff to the user before staging.
 Exit condition: a notes string ready to use as the tag annotation and shown to the user.
 
 Range:
+
 - If prior tag exists: `LAST_TAG..HEAD`
 - Else: all commits (`git log --reverse`)
 

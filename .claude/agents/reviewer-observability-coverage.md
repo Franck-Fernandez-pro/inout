@@ -55,6 +55,7 @@ rg -n --type ts -B0 -A3 -F '.catch(' <scope>
 ```
 
 Classify each catch:
+
 - Empty `catch {}` → **HIGH**. Error vanishes.
 - Catch logging only a string (`console.log("failed")`) without the error object → **HIGH**. Stack and context lost.
 - Catch that re-throws OR logs `{ err }` AND uses the error reporter (`Sentry.captureException`) → pass.
@@ -63,6 +64,7 @@ Classify each catch:
 #### Detector C — Job / webhook without correlation id (**MEDIUM**)
 
 For each job runner or webhook handler in scope:
+
 - Is a request id, event id, or job id received (from headers, payload, or job framework)?
 - Is that id included in subsequent log lines (or attached to a log context / AsyncLocalStorage)?
 
@@ -76,6 +78,7 @@ rg -n --type ts -E 'console\.\w+\(.*\b(email|password|token|secret|apiKey|ssn|cr
 ```
 
 For each hit, classify the field:
+
 - Tokens, passwords, secrets → **HIGH**. Never log.
 - Email, full name, address, phone → **HIGH** under privacy regulation; **MEDIUM** otherwise. Recommend hashing or replacing with stable user id.
 
@@ -84,6 +87,7 @@ Generic names that contain the substring but aren't the sensitive datum (`emailE
 #### Detector E — Hot endpoint without latency/failure metric (**LOW**)
 
 For new endpoints in critical paths (auth, payment, search, list):
+
 - Project metrics library (`prom-client`, `@vercel/otel`, `posthog`/`statsig`)?
 - New endpoint emits a duration/success metric?
 

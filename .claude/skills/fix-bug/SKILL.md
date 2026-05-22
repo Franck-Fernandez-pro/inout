@@ -5,7 +5,6 @@ description: Diagnose an integration/feature that "should work but didn't" — h
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # fix-bug
 
 Diagnose silent integration failures — code that runs without error but the expected side effect never happens. The bug is almost always in the seams: a hook that wasn't loaded, an env var that wasn't injected, a fail-soft `|| true` that swallowed the real error, a shell-quoting mistake, a stale process.
@@ -18,7 +17,7 @@ The user has already done the hard part — they noticed the absence. Don't make
 
 The description covers when to activate. The non-obvious filter:
 
-**Do NOT run** when the failure already has a concrete error message, stack trace, or failing test — those have evidence; this skill is for the *no evidence* case where the side effect silently failed to occur.
+**Do NOT run** when the failure already has a concrete error message, stack trace, or failing test — those have evidence; this skill is for the _no evidence_ case where the side effect silently failed to occur.
 
 **Auto-switch to `mode=regression`** when the user reports that this used to work and recently broke with a named time/version anchor — "worked yesterday", "worked in v1.4", "broken since the deploy", "worked before the auth refactor". Git history is faster than runtime tracing when there's a known-good past. If the user cannot name a past-working anchor, stay in the default workflow — it's a debugging task, not a regression hunt.
 
@@ -28,18 +27,18 @@ The description covers when to activate. The non-obvious filter:
 
 This skill accepts a `mode=` argument. Default — when no `mode=` is specified — is `balanced`: the full 7-step workflow below.
 
-| Mode | Behavior |
-|---|---|
-| `fast` | Skip the full "Response shape for first message" structure. Trace, identify, patch. For known-cause bugs where the user has already named the suspected line, or trivial single-file fixes. |
-| `balanced` (default) | Full 7-step workflow: trace → runtime contract → silent-failure grep → single diagnostic → ranked hypotheses → read evidence literally → propose fix. |
-| `production` | `balanced` + after Step 7 (propose fix), invoke `agentsystem-core:add-regression-test` to pin the bug with a test that fails on the pre-fix code and passes on the post-fix code. |
-| `regression` | Load [`references/regression-hunt.md`](references/regression-hunt.md) and follow its phased workflow (confirm anchor → clean tree → repro → log/blame → bisect → root cause). Skip fix-bug's default workflow entirely — regression hunting works through git history, not runtime tracing. Stops at root-cause identification; user decides whether to revert, patch, or refactor. |
+| Mode                 | Behavior                                                                                                                                                                                                                                                                                                                                                                            |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fast`               | Skip the full "Response shape for first message" structure. Trace, identify, patch. For known-cause bugs where the user has already named the suspected line, or trivial single-file fixes.                                                                                                                                                                                         |
+| `balanced` (default) | Full 7-step workflow: trace → runtime contract → silent-failure grep → single diagnostic → ranked hypotheses → read evidence literally → propose fix.                                                                                                                                                                                                                               |
+| `production`         | `balanced` + after Step 7 (propose fix), invoke `agentsystem-core:add-regression-test` to pin the bug with a test that fails on the pre-fix code and passes on the post-fix code.                                                                                                                                                                                                   |
+| `regression`         | Load [`references/regression-hunt.md`](references/regression-hunt.md) and follow its phased workflow (confirm anchor → clean tree → repro → log/blame → bisect → root cause). Skip fix-bug's default workflow entirely — regression hunting works through git history, not runtime tracing. Stops at root-cause identification; user decides whether to revert, patch, or refactor. |
 
 **`include=` / `skip=` overrides.** Add or remove specific steps — `mode=fast include=regression-test` runs the lean trace + adds a regression test; `mode=production skip=regression-test` runs the full diagnostic without pinning.
 
 **Mode safety override.** If `mode=fast` is requested for a bug touching auth, payments, secrets, schema integrity, or external webhooks, surface the conflict via `AskUserQuestion` and confirm before honoring. Silent integration failures in those areas often have second-order causes the runtime contract surfaces — `mode=fast` skips that surfacing.
 
-**Phase-gated NEVER scope.** When `mode=fast` is in effect, *"NEVER list hypotheses without first stating the runtime contract"* is suspended for that run — fast mode explicitly opts out of the contract-first structure. The remaining NEVERs (no overconfident assertion, no parallel-hypothesis test asks, no theorizing past pasted evidence, no ignoring silent-failure patterns, no assuming the running process has latest code) stay in force in every mode.
+**Phase-gated NEVER scope.** When `mode=fast` is in effect, _"NEVER list hypotheses without first stating the runtime contract"_ is suspended for that run — fast mode explicitly opts out of the contract-first structure. The remaining NEVERs (no overconfident assertion, no parallel-hypothesis test asks, no theorizing past pasted evidence, no ignoring silent-failure patterns, no assuming the running process has latest code) stay in force in every mode.
 
 ---
 
@@ -47,7 +46,7 @@ This skill accepts a `mode=` argument. Default — when no `mode=` is specified 
 
 ### Step 1 — Trace the integration end-to-end with file:line refs
 
-Before forming hypotheses, map the *actual* runtime path. **Strongly prefer dispatching the `runtime-contract-tracer` subagent** (via `Agent(subagent_type=runtime-contract-tracer)`) with the integration description — it returns the 4-link trace plus silent-failure sites in a fresh context, which keeps the parent's window clean for hypothesis formation. Use the inline guidance below only when running the trace inline is genuinely faster (single-file integration, you already have the file:line refs from prior turns).
+Before forming hypotheses, map the _actual_ runtime path. **Strongly prefer dispatching the `runtime-contract-tracer` subagent** (via `Agent(subagent_type=runtime-contract-tracer)`) with the integration description — it returns the 4-link trace plus silent-failure sites in a fresh context, which keeps the parent's window clean for hypothesis formation. Use the inline guidance below only when running the trace inline is genuinely faster (single-file integration, you already have the file:line refs from prior turns).
 
 The trace must cover:
 
@@ -84,25 +83,25 @@ rg -n '\|\| true|catch\s*\{\s*\}|catch\s*\(\s*\w*\s*\)\s*\{\s*\}|\.catch\(\s*\(\
 rg -n '>/dev/null 2>&1|2>/dev/null' <dispatch-files>
 ```
 
-For each hit, note: *"errors here are silently dropped — the only way to know if it ran is to instrument it."* This is almost always where the bug is hiding.
+For each hit, note: _"errors here are silently dropped — the only way to know if it ran is to instrument it."_ This is almost always where the bug is hiding.
 
 ### Step 4 — Ask for the ONE piece of runtime evidence that disambiguates
 
 Don't present 3 hypotheses and ask the user to test all of them. Pick the **single observation** that splits the hypothesis space in half, and ask for it.
 
-**Before picking, ask yourself:** *"Which single observation, if I had it right now, would let me discard the most hypotheses?"* That's the diagnostic to request — not the easiest, not the most familiar, the most disambiguating.
+**Before picking, ask yourself:** _"Which single observation, if I had it right now, would let me discard the most hypotheses?"_ That's the diagnostic to request — not the easiest, not the most familiar, the most disambiguating.
 
-| Integration type | Symptom keywords | Fastest diagnostic |
-|------------------|------------------|--------------------|
-| HTTP / webhook | "endpoint silent", "callback never came", "POST didn't arrive" | Tail the receiver log while user repros — does the request arrive at all? |
-| Claude Code hook | "hook didn't fire", "/hooks" | Run `/hooks` in the Claude session — it prints execution errors verbatim |
-| Env-var injection | "empty value", "command not found in subprocess" | In the spawned shell: `echo "$VAR1\|$VAR2\|$VAR3"` — empty fields = injection failed |
-| Config file write | "settings missing", "config not picked up" | Does `<path>` exist? `cat` it. Diff against expected shape. |
-| Queue / job worker | "job never ran", "task stuck queued" | Is the worker process alive? Tail its log. Inspect the queue depth/dead-letter. |
-| Cron / scheduled | "didn't run at <time>" | Check the scheduler's log for a fire entry; verify the schedule expression and timezone. |
-| File watcher | "save didn't trigger rebuild" | `lsof` or platform-specific watcher list — is the path actually being watched? |
-| MCP / tool call | "tool returned nothing", "agent didn't call it" | Check the MCP server's stderr; verify the tool is exposed in the tools list. |
-| Library boundary | "lib's API didn't behave as documented", payload-swap fixes don't stick | Open the installed JS source (`node_modules/<pkg>/lib/...` or `dist/`), grep the function name, read the branch your code actually hits — `.d.ts` files often misrepresent runtime behavior. |
+| Integration type   | Symptom keywords                                                        | Fastest diagnostic                                                                                                                                                                           |
+| ------------------ | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| HTTP / webhook     | "endpoint silent", "callback never came", "POST didn't arrive"          | Tail the receiver log while user repros — does the request arrive at all?                                                                                                                    |
+| Claude Code hook   | "hook didn't fire", "/hooks"                                            | Run `/hooks` in the Claude session — it prints execution errors verbatim                                                                                                                     |
+| Env-var injection  | "empty value", "command not found in subprocess"                        | In the spawned shell: `echo "$VAR1\|$VAR2\|$VAR3"` — empty fields = injection failed                                                                                                         |
+| Config file write  | "settings missing", "config not picked up"                              | Does `<path>` exist? `cat` it. Diff against expected shape.                                                                                                                                  |
+| Queue / job worker | "job never ran", "task stuck queued"                                    | Is the worker process alive? Tail its log. Inspect the queue depth/dead-letter.                                                                                                              |
+| Cron / scheduled   | "didn't run at <time>"                                                  | Check the scheduler's log for a fire entry; verify the schedule expression and timezone.                                                                                                     |
+| File watcher       | "save didn't trigger rebuild"                                           | `lsof` or platform-specific watcher list — is the path actually being watched?                                                                                                               |
+| MCP / tool call    | "tool returned nothing", "agent didn't call it"                         | Check the MCP server's stderr; verify the tool is exposed in the tools list.                                                                                                                 |
+| Library boundary   | "lib's API didn't behave as documented", payload-swap fixes don't stick | Open the installed JS source (`node_modules/<pkg>/lib/...` or `dist/`), grep the function name, read the branch your code actually hits — `.d.ts` files often misrepresent runtime behavior. |
 
 Pick the cheapest diagnostic that the user can run in <30 seconds.
 

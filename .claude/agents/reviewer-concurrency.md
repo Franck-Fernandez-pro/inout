@@ -52,6 +52,7 @@ rg -n --type ts -E '(create|insert|book|charge|send)\w*\(' <scope>
 ```
 
 Check for at least one safeguard:
+
 - API accepts an `idempotencyKey` arg and forwards it to the upstream service (Stripe etc.)
 - Schema has a `(userId, naturalKey)` unique constraint
 - UI submit-button locks (`disabled={isPending}`)
@@ -84,6 +85,7 @@ rg -n --type tsx -F 'AbortController' <scope>
 ```
 
 For each `useEffect` that fetches and writes to local state:
+
 - Dep array can change while a fetch is in flight (search box, tab switch)
 - AND no `AbortController` cleanup OR no request-id guard
 
@@ -139,5 +141,5 @@ If there are zero findings, return exactly: `No concurrency issues detected.`
 - **NEVER suggest an idempotency key without naming the upstream API's semantics.** Stripe accepts `idempotencyKey`; other APIs may dedupe on different headers or not at all. Always name the upstream.
 - **NEVER scan the whole repo when a diff exists.** Default to diff scope.
 - **NEVER flag a read-modify-write that uses an atomic SQL expression.** `UPDATE … SET col = col + 1` and `INSERT … ON CONFLICT DO UPDATE` are the safe patterns, not the unsafe ones.
-- **NEVER claim a webhook is idempotent because it returns 200.** Idempotency requires the *side effects* to be safe to repeat — verify a real check exists.
+- **NEVER claim a webhook is idempotent because it returns 200.** Idempotency requires the _side effects_ to be safe to repeat — verify a real check exists.
 - **NEVER ask the parent or user clarifying questions.** Make a defensible call and flag uncertainty in the finding rather than blocking.

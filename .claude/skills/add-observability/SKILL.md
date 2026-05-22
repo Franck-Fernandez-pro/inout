@@ -8,7 +8,7 @@ description: Internal handoff target invoked by add-feature and modify-feature w
 
 # Code Add Observability
 
-Add evidence to integration boundaries *before* something goes silent. The output of this skill is read by `/fix-bug` later — its first message reports endpoints, env vars, and **log/observation locations**. If the locations don't exist, `/fix-bug` is reduced to hypothesis-testing.
+Add evidence to integration boundaries _before_ something goes silent. The output of this skill is read by `/fix-bug` later — its first message reports endpoints, env vars, and **log/observation locations**. If the locations don't exist, `/fix-bug` is reduced to hypothesis-testing.
 
 A "boundary" is any place control or data leaves the local module: outbound HTTP, IPC send/receive, queue enqueue/handler, file write, env-var injection into a child process, hook invocation, webhook receiver, MCP tool entry, `spawn`/`exec`. Pure functions are not boundaries. Logs at non-boundaries are noise.
 
@@ -21,7 +21,7 @@ Determine mode:
 - **Targeted** — user named a feature, file, route, or integration. Scope = that surface plus its direct dispatch/receive sites.
 - **Sweep** — invoked after a feature ships (often after `/add-feature`). Scope = `git diff <base>..HEAD` filtered to source files.
 
-If mode is ambiguous, ask once: *"Targeted (which file/feature?) or sweep over the current branch's diff?"* Do not guess.
+If mode is ambiguous, ask once: _"Targeted (which file/feature?) or sweep over the current branch's diff?"_ Do not guess.
 
 **Exit condition:** you can list the file paths in scope as a bulleted list before moving on.
 
@@ -36,7 +36,7 @@ Detect first; install last. Check in this order, stop at the first hit:
 3. **Package manifest** — `package.json` `dependencies`/`devDependencies` for any of the above.
 4. **None found** — load [`references/logger-bootstrap.md`](references/logger-bootstrap.md) and follow its decision tree (zero-dep fallback vs. propose installing `pino`).
 
-**Before installing anything, ask the user.** Frame as: *"No logger detected. Options: (a) zero-dep `console`-based logger with `LOG_LEVEL` env gate (no install), (b) install `pino` (tiny, fast, structured), (c) point me at a logger I missed."*
+**Before installing anything, ask the user.** Frame as: _"No logger detected. Options: (a) zero-dep `console`-based logger with `LOG_LEVEL` env gate (no install), (b) install `pino` (tiny, fast, structured), (c) point me at a logger I missed."_
 
 **Exit condition:** you have a single `log.{debug,info,warn,error}` API to call, and you know its import path. Write that import path down — every recipe in Phase 4 reuses it.
 
@@ -73,12 +73,12 @@ Apply recipes one boundary at a time. After each file, run type-check (`tsc --no
 
 **Silent-failure handling** (the most error-prone case):
 
-| Pattern | Replacement |
-|---|---|
-| `await foo() \|\| true` (in shell) | `await foo() \|\| { log.error({event:"foo.failed", err:$?}); true; }` — preserves swallow, adds evidence |
-| `catch {}` | `catch (err) { log.error({event:"<site>.failed", err}); }` — never silently delete; the swallow may be load-bearing |
-| `.catch(() => {})` | `.catch((err) => log.error({event:"<site>.failed", err}))` |
-| `>/dev/null 2>&1` | `>>"$LOG_FILE" 2>&1` with `LOG_FILE` resolved from a known location, OR keep redirect and add a pre-call `log.info` |
+| Pattern                            | Replacement                                                                                                         |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `await foo() \|\| true` (in shell) | `await foo() \|\| { log.error({event:"foo.failed", err:$?}); true; }` — preserves swallow, adds evidence            |
+| `catch {}`                         | `catch (err) { log.error({event:"<site>.failed", err}); }` — never silently delete; the swallow may be load-bearing |
+| `.catch(() => {})`                 | `.catch((err) => log.error({event:"<site>.failed", err}))`                                                          |
+| `>/dev/null 2>&1`                  | `>>"$LOG_FILE" 2>&1` with `LOG_FILE` resolved from a known location, OR keep redirect and add a pre-call `log.info` |
 
 **Never delete a swallow.** Callers may depend on the failure being non-fatal. Add evidence; preserve behavior.
 
@@ -124,7 +124,7 @@ If it doesn't fire: the import is wrong, the level is gated out, or the boundary
 
 - **NEVER use `console.log` for instrumentation when a leveled logger exists**
   **Instead:** Use the detected logger's `info`/`debug` level. Reserve `console.log` for the zero-dep fallback's structured wrapper.
-  **Why:** `console.log` can't be filtered, can't be redirected per-environment, and gets mixed with framework noise. The whole point is a *greppable, filterable* trail.
+  **Why:** `console.log` can't be filtered, can't be redirected per-environment, and gets mixed with framework noise. The whole point is a _greppable, filterable_ trail.
 
 - **NEVER instrument and then skip Phase 6 (fire-the-trail verification)**
   **Instead:** Trigger at least one boundary and confirm the log appears at the documented location.

@@ -61,10 +61,12 @@ Pick exactly one:
 - **`stale`** — anchor is outdated AND the concern no longer applies.
 
 Sub-decision for `question`:
+
 - If the question implies a fix (the answer makes the change obvious), treat as `change_request`.
 - If the question is a tradeoff, answer it; treat as `question` (no commit).
 
 Sub-decision for `nit`:
+
 - Trivial or stylistic preference you agree with → treat as `change_request`.
 - Stylistic preference you disagree with → reply, decline, leave unresolved (`classify: "declined"`).
 
@@ -106,12 +108,12 @@ gh api "repos/$REPO/issues/$PR_NUMBER/comments" \
 
 Reply text by classification:
 
-| Classification | Reply shape |
-|---|---|
-| `change_request` (fix landed) | One short sentence on what changed + the commit SHA. Example: `Fixed in abc1234 — extracted to formatUserName().` |
-| `question` | Direct answer. No commit reference. |
-| `stale` | Brief explanation that the concern was already addressed (cite the prior commit/SHA if locatable) or no longer applies. |
-| `declined` | Brief rationale. Do NOT escalate; do NOT relitigate. |
+| Classification                | Reply shape                                                                                                             |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `change_request` (fix landed) | One short sentence on what changed + the commit SHA. Example: `Fixed in abc1234 — extracted to formatUserName().`       |
+| `question`                    | Direct answer. No commit reference.                                                                                     |
+| `stale`                       | Brief explanation that the concern was already addressed (cite the prior commit/SHA if locatable) or no longer applies. |
+| `declined`                    | Brief rationale. Do NOT escalate; do NOT relitigate.                                                                    |
 
 ### Step 5 — Resolve the thread (or don't)
 

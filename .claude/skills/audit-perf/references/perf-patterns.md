@@ -35,7 +35,7 @@ The second form parallelizes the queries but still issues one per item — still
 
 ---
 
-## P3. SELECT * on a wide table when the consumer reads few columns (MEDIUM)
+## P3. SELECT \* on a wide table when the consumer reads few columns (MEDIUM)
 
 **Signature:** `db.select().from(...)` (no projection) where the caller reads only `result.id` / `result.name`.
 
@@ -50,9 +50,9 @@ The second form parallelizes the queries but still issues one per item — still
 **Signature:**
 
 ```ts
-const a = await getA()
-const b = await getB()   // does not depend on a
-return { a, b }
+const a = await getA();
+const b = await getB(); // does not depend on a
+return { a, b };
 ```
 
 **Impact:** roundtrip-bound — total latency = sum, could be max.

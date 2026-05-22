@@ -28,11 +28,11 @@ For each, identify what's rendered with the result. The empty/error treatment go
 
 For each fetch, verify the component handles all three of:
 
-| Branch | Trigger | Treatment |
-|---|---|---|
-| Loading | first render before data resolves | Skeleton (handled by add-skeleton-loaders, out of scope here). |
-| Empty | data resolved but is `null`, `undefined`, `[]`, or otherwise represents "nothing" | Empty state UI. |
-| Error | query/loader threw or returned an error | Error state UI. |
+| Branch  | Trigger                                                                           | Treatment                                                      |
+| ------- | --------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| Loading | first render before data resolves                                                 | Skeleton (handled by add-skeleton-loaders, out of scope here). |
+| Empty   | data resolved but is `null`, `undefined`, `[]`, or otherwise represents "nothing" | Empty state UI.                                                |
+| Error   | query/loader threw or returned an error                                           | Error state UI.                                                |
 
 For TanStack Query: check that `query.isPending` / `query.isError` / `query.data` are all reachable in the render. With `useSuspenseQuery`, errors are caught by the nearest `<ErrorBoundary>` and loading by `<Suspense>` — verify both boundaries exist on the route.
 
@@ -63,7 +63,7 @@ For each MISSING or WEAK state, apply the inline fix:
 ### Empty state pattern
 
 ```tsx
-const { data: posts } = useQuery(postsQueryOptions())
+const { data: posts } = useQuery(postsQueryOptions());
 
 if (posts.length === 0) {
   return (
@@ -77,13 +77,14 @@ if (posts.length === 0) {
         </Button>
       }
     />
-  )
+  );
 }
 ```
 
 The empty state must:
-- Tell the user *what's empty* (specific to this surface — "No posts" not "No items").
-- Tell the user *what to do* if action is available (CTA button), or explain *why it's empty* if no action applies.
+
+- Tell the user _what's empty_ (specific to this surface — "No posts" not "No items").
+- Tell the user _what to do_ if action is available (CTA button), or explain _why it's empty_ if no action applies.
 - Use the same icon/spacing as other empty states in the codebase.
 
 If the empty state means "nothing yet, never will be without action" → lead with the action. If it means "you've filtered everything out" → lead with "clear filters".
@@ -100,11 +101,12 @@ if (query.isError) {
       // In dev, surface the actual error:
       details={import.meta.env.DEV ? String(query.error) : undefined}
     />
-  )
+  );
 }
 ```
 
 The error state must:
+
 - Use a human message — never raw `error.message` to end users (often a stack trace or technical noise).
 - Provide a retry affordance whenever the operation is retry-safe.
 - Surface the actual error in dev mode (helps the developer; gated so it doesn't ship to users).

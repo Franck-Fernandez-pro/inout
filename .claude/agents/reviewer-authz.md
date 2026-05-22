@@ -39,12 +39,12 @@ Build a list. Each entry: file path, handler export name, observed input shape (
 
 ### Phase 2 — Classify each entry point
 
-| Class | Description |
-|---|---|
-| **Public** | Intentionally anonymous (health check, public landing data, marketing API). |
-| **Authenticated** | Any logged-in user may call it (`getCurrentUser`). |
-| **User-scoped** | Caller must own (or be granted access to) the resource named in input. |
-| **Admin / role-gated** | Requires a specific role beyond "logged in". |
+| Class                  | Description                                                                          |
+| ---------------------- | ------------------------------------------------------------------------------------ |
+| **Public**             | Intentionally anonymous (health check, public landing data, marketing API).          |
+| **Authenticated**      | Any logged-in user may call it (`getCurrentUser`).                                   |
+| **User-scoped**        | Caller must own (or be granted access to) the resource named in input.               |
+| **Admin / role-gated** | Requires a specific role beyond "logged in".                                         |
 | **Service / internal** | Called by another service; auth via shared secret, signed request, network boundary. |
 
 Inputs naming a resource (`postId`, `projectId`, `userId`, `orgId`, `messageId`) almost always indicate **User-scoped** unless intentionally public.
@@ -83,13 +83,13 @@ Hardcoded token, no rotation path, or env var that's not actually checked.
 
 #### LOW — auth check happens after a side effect
 
-Handler does `console.log`, sends analytics, or starts a job *before* the auth check. Information leak rather than direct vulnerability.
+Handler does `console.log`, sends analytics, or starts a job _before_ the auth check. Information leak rather than direct vulnerability.
 
 ### Phase 4 — Return structured report
 
 Reply with ONLY this format. Do not preamble.
 
-```
+````
 Authz Audit — <scope>
 ─────────────────────
 
@@ -116,19 +116,25 @@ Total: <N> entry points, <M> findings.
    const user = await requireUser();
    const post = await db.query.posts.findFirst({ where: eq(posts.id, input.postId) });
    if (!post || post.authorId !== user.id) throw notFound();
-   ```
+````
 
 2. **`src/fn/updateProject.ts:21`** (CRITICAL — IDOR)
    ```ts
    const user = await requireUser();
-   const project = await db.query.projects.findFirst({ where: eq(projects.id, input.projectId) });
+   const project = await db.query.projects.findFirst({
+     where: eq(projects.id, input.projectId),
+   });
    if (!project || project.ownerId !== user.id) throw forbidden();
-   await db.update(projects).set(input.patch).where(eq(projects.id, input.projectId));
+   await db
+     .update(projects)
+     .set(input.patch)
+     .where(eq(projects.id, input.projectId));
    ```
 
 (One fix snippet per finding, using the project's existing auth helpers — not generic examples.)
 
 No fixes applied — the parent applies one at a time with user approval.
+
 ```
 
 If there are zero findings, return: `Authz Audit — <scope>: no findings across <N> entry points.`
@@ -145,3 +151,4 @@ If there are zero findings, return: `Authz Audit — <scope>: no findings across
 - **NEVER skip handlers that "look internal/test".** "Internal" is a deployment claim, not an enforced one — many breaches start with an "internal" admin endpoint reachable from public network.
 - **NEVER recommend a fix using a helper not already in the codebase.** Find and use existing helpers. If none exists, surface that as a separate finding rather than inventing one.
 - **NEVER ask the parent or user clarifying questions.**
+```

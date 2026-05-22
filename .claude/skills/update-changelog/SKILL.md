@@ -9,7 +9,7 @@ Append a new entry summarizing the current logical change to `CHANGELOG.md` at t
 
 ## When to invoke (and when not to)
 
-Invoke when there is a *user-visible* or *engineering-significant* change that just landed or is about to be committed:
+Invoke when there is a _user-visible_ or _engineering-significant_ change that just landed or is about to be committed:
 
 - New feature, capability, or UI surface
 - Bug fix
@@ -34,6 +34,7 @@ If unsure, ask the user once: "Worth a changelog entry, or skip?"
 Read the diff before writing. The wording must reflect the actual change, not the task description.
 
 Source of truth, in order:
+
 1. If staged changes exist (`git diff --cached --stat`) → use staged diff.
 2. Else if unstaged changes exist (`git diff --stat`) → use working-tree diff.
 3. Else → use the most recent commit (`git show --stat HEAD`).
@@ -48,24 +49,24 @@ When a diff produces multiple bullets, write the one with greater user impact fi
 
 Use exactly one emoji from this canonical set as the first character of each bullet. Do not invent new ones.
 
-| Emoji | Category | Use for |
-|-------|----------|---------|
-| ✨ | Feature | New user-facing capability |
-| 🐛 | Bug fix | Corrects incorrect behavior |
-| ⚡ | Performance | Faster, less memory, fewer queries |
-| 🔒 | Security | Fixes a vulnerability or hardens auth/input handling |
-| ♻️ | Refactor | Internal restructure users may notice (rename, reorg, dep swap) |
-| 🎨 | UI / UX | Visual or interaction polish without new capability |
-| 🔧 | Config | Build, tooling, env, or settings change devs will encounter |
-| 📝 | Docs | User-facing documentation changes (README, public guides) |
-| 🗑️ | Removal | Removed feature, endpoint, flag, or file |
-| 💥 | Breaking | Backwards-incompatible change (also pair with the relevant category if helpful) |
+| Emoji | Category    | Use for                                                                         |
+| ----- | ----------- | ------------------------------------------------------------------------------- |
+| ✨    | Feature     | New user-facing capability                                                      |
+| 🐛    | Bug fix     | Corrects incorrect behavior                                                     |
+| ⚡    | Performance | Faster, less memory, fewer queries                                              |
+| 🔒    | Security    | Fixes a vulnerability or hardens auth/input handling                            |
+| ♻️    | Refactor    | Internal restructure users may notice (rename, reorg, dep swap)                 |
+| 🎨    | UI / UX     | Visual or interaction polish without new capability                             |
+| 🔧    | Config      | Build, tooling, env, or settings change devs will encounter                     |
+| 📝    | Docs        | User-facing documentation changes (README, public guides)                       |
+| 🗑️    | Removal     | Removed feature, endpoint, flag, or file                                        |
+| 💥    | Breaking    | Backwards-incompatible change (also pair with the relevant category if helpful) |
 
-If a change fits two categories (e.g. a perf fix that also fixes a bug), pick the one the *user* would care about more. If it's truly breaking, lead with 💥.
+If a change fits two categories (e.g. a perf fix that also fixes a bug), pick the one the _user_ would care about more. If it's truly breaking, lead with 💥.
 
 ## Step 3 — Write the bullet
 
-Before writing, ask: *would a user reading these notes a year from now care about this line?* If no, skip — it isn't changelog-worthy.
+Before writing, ask: _would a user reading these notes a year from now care about this line?_ If no, skip — it isn't changelog-worthy.
 
 Format: `<emoji> <concise sentence>`
 
@@ -75,12 +76,14 @@ Format: `<emoji> <concise sentence>`
 - No file paths unless the change is dev-facing tooling (🔧).
 
 **Good:**
+
 - `✨ add CSV export to the reports page`
 - `🐛 fix duplicate confirmation emails when signup is retried`
 - `⚡ cut dashboard load time ~40% by batching project queries`
 - `🔒 reject path traversal in file-download endpoint`
 
 **Bad (rewrite before writing):**
+
 - `✨ added new feature` — not specific
 - `🐛 update handler.ts` — file-centric, not user-centric
 - `♻️ misc cleanup` — not changelog-worthy; skip instead
@@ -95,7 +98,6 @@ Read the existing `CHANGELOG.md`.
 # Changelog
 
 All notable changes to this project, newest first.
-
 ```
 
 Then append the new bullet under the title block.
@@ -103,6 +105,7 @@ Then append the new bullet under the title block.
 **If the file exists** — insert the new bullet at the top of the bullet list (immediately after the title/intro block, above all existing bullets). Preserve the existing file's exact spacing and trailing newline.
 
 **Dedup check** — before writing, scan the top ~10 bullets. If a near-identical bullet (same emoji + same core verb/noun) already exists, do not add a duplicate. Either:
+
 - Skip and tell the user it's already logged, or
 - If the new change extends the prior one, replace the existing bullet with a refined version (and tell the user you did).
 
@@ -118,7 +121,7 @@ Print the bullet you added (or the dedup decision) in one line. Do not stage or 
 
 - **NEVER add one bullet per file**
   **Instead:** Collapse all files implementing one logical change into a single bullet.
-  **Why:** A changelog is a log of *changes*, not a log of *file edits*. Per-file bullets are noise.
+  **Why:** A changelog is a log of _changes_, not a log of _file edits_. Per-file bullets are noise.
 
 - **NEVER invent new emojis or use multiple emojis per bullet**
   **Instead:** Pick exactly one from the canonical table; if it doesn't fit, the change probably isn't changelog-worthy.

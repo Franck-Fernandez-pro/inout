@@ -5,7 +5,6 @@ description: Autopilot orchestrator for engineering work. Classifies the user's 
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # ship
 
 The user gave you an engineering goal. Pick the right workflow, pick the right depth, announce both, run the workflow, report. Stop before git.
@@ -18,14 +17,14 @@ The tax on a vibe coder is choosing which skill to invoke and how thorough to be
 
 Read the user's prompt and map to one of six core skills:
 
-| Phrasing in the prompt | Intent | Routes to |
-|---|---|---|
-| "add", "build", "implement", "create", "scaffold", "introduce", "set up" in an existing codebase | CREATE | `add-feature` |
+| Phrasing in the prompt                                                                                                                                                                                        | Intent | Routes to        |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | ---------------- |
+| "add", "build", "implement", "create", "scaffold", "introduce", "set up" in an existing codebase                                                                                                              | CREATE | `add-feature`    |
 | "update", "extend", "change", "also do X when Y", "make this also", "modify", "derive from" — request adds or shifts behavior on an existing feature; also handles small cosmetic/copy tweaks via `mode=fast` | EVOLVE | `modify-feature` |
-| "polish this", "give this a UX pass", "polish the dashboard", "audit the polish on this page", "run the UX checklist on X" — apply UX checklist to existing UI without changing behavior | POLISH | `polish-ui` |
-| "remove", "delete", "deprecate", "kill", "rip out", "get rid of" | REMOVE | `remove-feature` |
-| "broken", "bug", "not working", "should have happened but didn't", "didn't trigger", "silent failure" | FIX | `fix-bug` |
-| "audit the codebase", "tech-debt sweep", "deep clean", "full cleanup", "production-readiness pass", "find all the rot" | AUDIT | `audit` |
+| "polish this", "give this a UX pass", "polish the dashboard", "audit the polish on this page", "run the UX checklist on X" — apply UX checklist to existing UI without changing behavior                      | POLISH | `polish-ui`      |
+| "remove", "delete", "deprecate", "kill", "rip out", "get rid of"                                                                                                                                              | REMOVE | `remove-feature` |
+| "broken", "bug", "not working", "should have happened but didn't", "didn't trigger", "silent failure"                                                                                                         | FIX    | `fix-bug`        |
+| "audit the codebase", "tech-debt sweep", "deep clean", "full cleanup", "production-readiness pass", "find all the rot"                                                                                        | AUDIT  | `audit`          |
 
 **EVOLVE vs POLISH boundary.** EVOLVE is one specific change the user named (whether it's a single-element cosmetic tweak or a behavior extension); POLISH is "apply the checklist" without a specified change. If the user names what to change, it's EVOLVE. If they ask for a pass, it's POLISH. For purely cosmetic single-element changes ("make this button green", "fix the alignment"), route to EVOLVE with `mode=fast`.
 
@@ -42,6 +41,7 @@ Read the user's prompt and map to one of six core skills:
 Three modes — `fast`, `balanced`, `production`. Pick one before announcing.
 
 **Risk signals (any one → `production`)**:
+
 - Touches auth, permissions, payments, billing, secrets, or external webhooks
 - Schema migration or persisted-data rewrite
 - Destructive deletion or deprecation of an external/public contract
@@ -50,6 +50,7 @@ Three modes — `fast`, `balanced`, `production`. Pick one before announcing.
 - Multi-subsystem in the same change (frontend + backend + DB)
 
 **Tiny-scope signals (all four → `fast`)**:
+
 - Single file
 - Cosmetic / copy / styling only
 - No data layer touched
@@ -79,11 +80,11 @@ Pipeline numbering must match what the routed core skill will actually run at th
 
 **Confirmation gating depends on mode:**
 
-| Mode | Gating |
-|---|---|
-| `production` | Use `AskUserQuestion` "Proceed with this pipeline?" before Step 4. Decline → stop. |
-| `balanced` | Print the plan inline, then proceed to Step 4 in the same turn. User can abort with ESC or a new prompt before the routed skill begins. |
-| `fast` | Print the plan inline as a one-line preamble, then execute immediately. No confirm prompt. |
+| Mode         | Gating                                                                                                                                  |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `production` | Use `AskUserQuestion` "Proceed with this pipeline?" before Step 4. Decline → stop.                                                      |
+| `balanced`   | Print the plan inline, then proceed to Step 4 in the same turn. User can abort with ESC or a new prompt before the routed skill begins. |
+| `fast`       | Print the plan inline as a one-line preamble, then execute immediately. No confirm prompt.                                              |
 
 ---
 
@@ -166,7 +167,7 @@ Surface findings, not just "done." If a sub-skill audit (security, perf, a11y, d
 
 ## Appendix — Sub-skills the routed front doors hand off to
 
-`/ship` itself is a router; the *adjunct* and *handoff* skills below are owned by the routed core skill (add-feature, modify-feature, fix-bug, remove-feature, audit). This appendix exists so users — and the announced pipeline at Step 3 — can see what the front door will likely invoke downstream when its gates trigger. The routed skill always has final say on whether a gate fires.
+`/ship` itself is a router; the _adjunct_ and _handoff_ skills below are owned by the routed core skill (add-feature, modify-feature, fix-bug, remove-feature, audit). This appendix exists so users — and the announced pipeline at Step 3 — can see what the front door will likely invoke downstream when its gates trigger. The routed skill always has final say on whether a gate fires.
 
 **Phrasing for Step 3 announcements:** when previewing the pipeline, name the most likely downstream sub-skills as `(routed: <core>) → may invoke <sub-skill>` rather than promising they'll run. The actual fire is gate-driven.
 
@@ -175,7 +176,7 @@ Surface findings, not just "done." If a sub-skill audit (security, perf, a11y, d
 - **UI scaffolding (when feature is user-facing):** `agentsystem-core:add-empty-error-states` (empty + error UI), `agentsystem-core:polish-ui` (post-step UX checklist), `agentsystem-core:propagate-ui-pattern` (when 3+ siblings of a recurring surface exist).
 - **Backend scaffolding (when persisted data or schema changes):** `agentsystem-core:add-migration`, `agentsystem-core:add-observability` (integration-first lane), `agentsystem-core:audit-authz` (when the feature adds or changes server entry points with ownership/permission checks).
 - **Tests (Phase 8):** `agentsystem-core:write-tests` (unit/integration), `agentsystem-core:add-e2e-test` (browser flows when Playwright is wired).
-- **Audits (Phase 7 gates):** reviewer-* subagents (contracts, concurrency, data-integrity, security-regression, error-boundaries, loading-states, accessibility-regression, client-bundle, observability-coverage, perf), audit-perf, audit-responsive, code-enforce-route-data, code-enforce-layers.
+- **Audits (Phase 7 gates):** reviewer-\* subagents (contracts, concurrency, data-integrity, security-regression, error-boundaries, loading-states, accessibility-regression, client-bundle, observability-coverage, perf), audit-perf, audit-responsive, code-enforce-route-data, code-enforce-layers.
 - **Cleanup (post-step):** simplify, polish-ui.
 
 ### EVOLVE → `modify-feature` may invoke
@@ -183,12 +184,12 @@ Surface findings, not just "done." If a sub-skill audit (security, perf, a11y, d
 - **UI extensions:** `agentsystem-core:add-empty-error-states`, `agentsystem-core:polish-ui`.
 - **Backend extensions:** `agentsystem-core:add-migration`, `agentsystem-core:add-observability`, `agentsystem-core:audit-authz` (when the extension touches server entry points with ownership/permission checks).
 - **Tests:** `agentsystem-core:write-tests`, `agentsystem-core:add-e2e-test` when extension warrants browser coverage.
-- **Contract / concurrency / data audits:** reviewer-* subagents (contracts, concurrency, observability-coverage, data-integrity, security-regression, error-boundaries, loading-states, accessibility-regression, client-bundle).
+- **Contract / concurrency / data audits:** reviewer-\* subagents (contracts, concurrency, observability-coverage, data-integrity, security-regression, error-boundaries, loading-states, accessibility-regression, client-bundle).
 - **Cleanup:** simplify, polish-ui.
 
 ### POLISH → `polish-ui` may invoke
 
-`polish-ui` runs the project's UX polish checklist against the surface and auto-fixes mechanical gaps (kbd hints on hotkey-bound buttons, focus management, loading/disabled states, footer/chrome consistency). It does not fan out — the work *is* the checklist.
+`polish-ui` runs the project's UX polish checklist against the surface and auto-fixes mechanical gaps (kbd hints on hotkey-bound buttons, focus management, loading/disabled states, footer/chrome consistency). It does not fan out — the work _is_ the checklist.
 
 ### FIX → `fix-bug` may invoke
 
@@ -202,6 +203,6 @@ Surface findings, not just "done." If a sub-skill audit (security, perf, a11y, d
 
 ### AUDIT → `audit` may invoke
 
-- The full reviewer-* subagent family across the repo, plus audit-perf, audit-a11y, audit-responsive, audit-seo-meta, audit-analytics, simplify, harden-types — see `audit/SKILL.md` for the full menu.
+- The full reviewer-\* subagent family across the repo, plus audit-perf, audit-a11y, audit-responsive, audit-seo-meta, audit-analytics, simplify, harden-types — see `audit/SKILL.md` for the full menu.
 
 **Course-author note:** because these are gate-driven, a given /ship run will invoke only a subset. The Step 5 pipeline summary names exactly which ones did fire — that's the authoritative record, not this appendix.

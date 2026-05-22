@@ -5,7 +5,6 @@ description: Open a GitHub pull request with a title and Summary/Test-plan body 
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Open PR
 
 Phased workflow. Do not skip the confirmation gate — a published PR notifies reviewers and is hard to un-publish.
@@ -14,10 +13,10 @@ Phased workflow. Do not skip the confirmation gate — a published PR notifies r
 
 Accepts `mode=fast|balanced|production`. Default — when no `mode=` is specified — is `production`. **A PR is a public artifact.** Reviewers will assume the diff is shippable; the mode controls how thoroughly we verify that before publishing.
 
-| Mode | Pre-publish gate (Phase 2.5) |
-|---|---|
-| `fast` | Residue sweep only (console.log / `.only` / debugger / merge markers / TODO additions). Blocks on merge markers; warns on the rest. |
-| `balanced` | `fast` + typecheck + lint on the cumulative diff. Blocks on type/lint errors. |
+| Mode                   | Pre-publish gate (Phase 2.5)                                                                                                                                                         |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `fast`                 | Residue sweep only (console.log / `.only` / debugger / merge markers / TODO additions). Blocks on merge markers; warns on the rest.                                                  |
+| `balanced`             | `fast` + typecheck + lint on the cumulative diff. Blocks on type/lint errors.                                                                                                        |
 | `production` (default) | Full `agentsystem-core:check-pr-readiness` against the branch vs. base. Blocks on any red gate (typecheck, lint, formatter, tests, residue, large/binary additions, lockfile drift). |
 
 **Override:** explicit `mode=…` in the user's prompt wins.
@@ -32,6 +31,7 @@ Run the reflexive checks (`git status`, current branch) plus these non-obvious o
 - `git diff <base>...HEAD --stat` and `git diff <base>...HEAD` — cumulative diff (note the **three dots** — diff from merge-base, not two)
 
 Stop conditions:
+
 - Uncommitted changes → ask whether to commit, stash, or include them. Do not silently ignore.
 - Branch == base branch → see **On base branch** below. Do NOT silently stop.
 - No commits ahead of base → stop. Nothing to PR.
@@ -55,6 +55,7 @@ Note: local `<base>` will still contain the same commits as the new branch until
 Before drafting, ask: **what does a reviewer need in order to engage with this PR?** That answer drives the title and the Summary bullets — not the commit log.
 
 Title:
+
 - 1 commit on branch → use the commit subject verbatim (already curated).
 - 2+ commits → synthesize from the **cumulative diff**, not the last commit. ≤70 chars. Imperative mood. No trailing period. No issue numbers unless the user added them.
 
@@ -72,10 +73,12 @@ Body — exactly this template:
 ```
 
 Summary rules:
+
 - 1–3 bullets. Each names a concrete area (file, module, behavior). No "various improvements" / "refactoring" / "cleanup."
 - Lead with WHY when the diff alone doesn't reveal it.
 
 Test plan rules:
+
 - Items must be checkable by a reviewer (run X, click Y, hit endpoint Z). Not "tests pass."
 - If you genuinely can't form a test plan from the diff (docs-only, config-only), write one bullet: `- [ ] Visual review of <file>` and stop.
 
@@ -89,6 +92,7 @@ Run the mode-appropriate gate from the **Modes** table above against the cumulat
 - `mode=balanced` / `mode=fast` → run the scoped checks listed in the table.
 
 If any gate fails, **stop**. Ask via `AskUserQuestion`:
+
 - **Fix and retry** → exit; user fixes and re-invokes `/open-pr`.
 - **Open as draft anyway** → switch the PR to draft and append a "## Known failing gates" section to the body listing each red gate. Require an explicit acknowledgement string. Do not open as a non-draft PR with failing gates.
 

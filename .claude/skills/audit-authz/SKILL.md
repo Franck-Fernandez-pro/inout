@@ -32,12 +32,12 @@ Build a list. Each entry: file path, handler export name, observed input shape (
 
 For each handler, classify by access requirement:
 
-| Class | Description |
-|---|---|
-| **Public** | Intentionally anonymous (health check, public landing data, marketing API). |
-| **Authenticated** | Any logged-in user may call it (e.g. `getCurrentUser`). |
-| **User-scoped** | Requires the caller to own (or be granted access to) the resource named in the input. |
-| **Admin / role-gated** | Requires a specific role beyond "logged in". |
+| Class                  | Description                                                                             |
+| ---------------------- | --------------------------------------------------------------------------------------- |
+| **Public**             | Intentionally anonymous (health check, public landing data, marketing API).             |
+| **Authenticated**      | Any logged-in user may call it (e.g. `getCurrentUser`).                                 |
+| **User-scoped**        | Requires the caller to own (or be granted access to) the resource named in the input.   |
+| **Admin / role-gated** | Requires a specific role beyond "logged in".                                            |
 | **Service / internal** | Called by another service; auth via shared secret, signed request, or network boundary. |
 
 Inputs that name a resource (`postId`, `projectId`, `userId`, `orgId`, `messageId`) almost always indicate **User-scoped** unless the resource is intentionally public.
@@ -76,7 +76,7 @@ src/fn/updateProject.ts:21  CRITICAL — IDOR
 
 ### HIGH — role granted but not resource-scoped
 
-A role is checked (`requireAdmin()`) but the action targets a specific resource that admins of *one* org should not access in *another* org.
+A role is checked (`requireAdmin()`) but the action targets a specific resource that admins of _one_ org should not access in _another_ org.
 
 ### HIGH — admin gated on client-supplied flag
 
@@ -100,7 +100,7 @@ A service endpoint guarded by a hardcoded token, no rotation path, or env var th
 
 ### LOW — auth check happens after a side effect
 
-The handler does a `console.log(...)`, sends an analytics event, or starts a job *before* the auth check. Information leak rather than direct vulnerability.
+The handler does a `console.log(...)`, sends an analytics event, or starts a job _before_ the auth check. Information leak rather than direct vulnerability.
 
 **Exit:** every handler is either marked OK or has a finding with severity.
 

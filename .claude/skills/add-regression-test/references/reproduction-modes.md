@@ -83,7 +83,7 @@ The pre-fix code can't import the new symbol, so the test won't run.
 
 Choose one:
 
-1. **Test against the public surface, not the new symbol.** If the fix added `validateSlug()` and a route uses it, test the *route's* behavior — that surface existed before and after.
+1. **Test against the public surface, not the new symbol.** If the fix added `validateSlug()` and a route uses it, test the _route's_ behavior — that surface existed before and after.
 2. **Stub the new symbol in the pre-fix run.** Temporarily inline the symbol with a no-op or pass-through implementation in the pre-fix worktree, so the test compiles and the underlying behavior fails.
 
 Option 1 is preferred — it produces a more durable test that survives further refactors of the new symbol.

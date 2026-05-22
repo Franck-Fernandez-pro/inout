@@ -24,6 +24,7 @@ State back: "Regression in [feature]: worked at [anchor], now [symptom]. Hunting
 Run `git status`. If there are uncommitted changes or untracked files relevant to the affected area:
 
 **Refuse to proceed.** Tell the user exactly what's dirty and ask them to either:
+
 - `git stash -u` (and remember to pop after)
 - commit the changes
 - discard them if intentional
@@ -37,6 +38,7 @@ Run `git status`. If there are uncommitted changes or untracked files relevant t
 Before touching history, define **one command or one short procedure** that reliably distinguishes "broken" from "working" — every time, in under ~30 seconds ideally.
 
 Forms it can take:
+
 - A failing test: `npm test -- path/to/file --grep "name"`
 - A CLI invocation with expected vs. actual output
 - A 3-step manual UI procedure with a clear pass/fail at the end
@@ -56,7 +58,7 @@ Try these in order. Stop as soon as you have a strong suspect commit.
 2. **`git log -S"<symbol>"`** to find the commit that added or removed a specific function name, string, or token tied to the broken behavior. Higher signal than message scanning when you know what to grep for.
 3. **`git blame`** on the suspect lines, then `git show` on each suspicious sha.
 
-For each plausible suspect: read the full diff, explain to the user how it could cause the symptom, and verify by checking out the commit *before* it and running the repro. Confirmed → go to Phase 6.
+For each plausible suspect: read the full diff, explain to the user how it could cause the symptom, and verify by checking out the commit _before_ it and running the repro. Confirmed → go to Phase 6.
 
 **Budget: ~10 plausible commits inspected with no clear suspect → escalate to bisect.** Don't keep grinding log/blame past that — you're past the point where the cheap path is cheaper than binary search.
 

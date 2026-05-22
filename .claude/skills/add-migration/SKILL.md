@@ -145,7 +145,7 @@ Apply locally: <command>
 Apply in prod: <command>  (run during low-traffic window if step requires lock)
 ```
 
-If the change was MUTATING or DESTRUCTIVE, remind the user that step 1 must deploy *before* step 2 runs in production.
+If the change was MUTATING or DESTRUCTIVE, remind the user that step 1 must deploy _before_ step 2 runs in production.
 
 ---
 

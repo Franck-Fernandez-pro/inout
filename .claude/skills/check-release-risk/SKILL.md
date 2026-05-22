@@ -8,7 +8,6 @@ description: Final pre-publish handoff invoked by commit-and-push, open-pr, and 
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Code Check Release Risk
 
 A pre-publish risk briefing. Reads the branch's full diff vs. the base, classifies the changes, and produces a concise summary the user sees BEFORE the irreversible step (push, PR, release tag). Sibling to `check-pr-readiness` (which runs typecheck/tests/lint); this skill is **content** review, not gate review.
@@ -20,6 +19,7 @@ This skill informs; it does not block.
 ## When to run
 
 Run when **any** is true:
+
 - The user invoked `/commit-and-push`, `/open-pr`, or `/release`.
 - The user says: "what could break", "release risk", "pre-publish check", "anything risky", "summarize this branch".
 
@@ -88,6 +88,7 @@ For each new env var: check if `.env.example` was updated. If not: **MEDIUM** �
 #### Categorizer 5 — Manual-QA-needed paths
 
 Manually classify changes touching:
+
 - File upload/download.
 - Email/SMS sending.
 - External webhook receiving.
@@ -110,6 +111,7 @@ If the branch has user-facing changes (categorizer 1, 3, or 5 hits) but no doc/c
 #### Categorizer 7 — Rollback concerns
 
 For each finding from categorizers 1–4, ask: "If this ships and breaks production, can we revert?"
+
 - Code-only change → revert is clean.
 - Migration change → revert may not roll back data; tag **HIGH**.
 - Auth/session change → may invalidate active sessions on rollback; tag **MEDIUM**.

@@ -5,7 +5,6 @@ description: Safely delete a feature, route, component, endpoint, or module and 
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Remove Feature
 
 Deletion is destructive and asymmetric: a missed reference breaks the build, but a missed dead helper rots silently for months. Both matter. Work the phases in order — each phase has an exit condition you must clear before moving on.
@@ -16,11 +15,11 @@ Deletion is destructive and asymmetric: a missed reference breaks the build, but
 
 This skill accepts a `mode=` argument. Default — when no `mode=` is specified — is `balanced`: the full 6-phase pipeline below.
 
-| Mode | Behavior |
-|---|---|
-| `fast` | Run Phases 2 (map references), 3 (classify), 4 (delete), 6 (verify). Skip Phase 1 (boundary user-confirm) and Phase 5 (multi-pass re-sweep). For obvious-feature deletions where the user has already explicitly confirmed scope. |
-| `balanced` (default) | Full 6-phase workflow. |
-| `production` | `balanced` + after Phase 6, broader smoke verification: dev-server check on 3+ adjacent features, explicit user sign-off before declaring done. |
+| Mode                 | Behavior                                                                                                                                                                                                                          |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fast`               | Run Phases 2 (map references), 3 (classify), 4 (delete), 6 (verify). Skip Phase 1 (boundary user-confirm) and Phase 5 (multi-pass re-sweep). For obvious-feature deletions where the user has already explicitly confirmed scope. |
+| `balanced` (default) | Full 6-phase workflow.                                                                                                                                                                                                            |
+| `production`         | `balanced` + after Phase 6, broader smoke verification: dev-server check on 3+ adjacent features, explicit user sign-off before declaring done.                                                                                   |
 
 **`include=` / `skip=` overrides.** Add or remove specific phases — `mode=fast include=p5` re-enables the multi-pass re-sweep; `mode=production skip=adjacent-smoke` skips the broader smoke check.
 
@@ -59,7 +58,7 @@ For each reference found, record: file path, line, and **kind** (call site / typ
 
 **Exit condition:** every kind above has been searched. A "0 results" answer is a valid result, but the search must have happened.
 
-> **Worked example.** Removing the `/admin/billing` route fans out into: symbol grep finds the page component and its handlers; *string* grep for `"/admin/billing"` finds a redirect rule, a sitemap entry, and an analytics event; i18n grep for `billing.*` finds 14 translation keys across 6 locale files; config grep finds an env var `BILLING_WEBHOOK_SECRET` and a feature flag `admin_billing_v2`. Symbol grep alone would have caught roughly a third of it.
+> **Worked example.** Removing the `/admin/billing` route fans out into: symbol grep finds the page component and its handlers; _string_ grep for `"/admin/billing"` finds a redirect rule, a sitemap entry, and an analytics event; i18n grep for `billing.*` finds 14 translation keys across 6 locale files; config grep finds an env var `BILLING_WEBHOOK_SECRET` and a feature flag `admin_billing_v2`. Symbol grep alone would have caught roughly a third of it.
 
 ---
 
@@ -90,9 +89,9 @@ Order matters. Deleting roots first leaves you editing files that will themselve
 
 **Persisted data is two separate decisions, not an automatic delete.**
 
-*(a) Schema decision.* Dropping a column is irreversible and may break replicas, analytics pipelines, or historical queries. Default to: stop writing the column now, schedule the drop in a later migration, and confirm with the user before generating any `DROP COLUMN` / destructive migration. Never delete or edit existing migration files — write a new migration.
+_(a) Schema decision._ Dropping a column is irreversible and may break replicas, analytics pipelines, or historical queries. Default to: stop writing the column now, schedule the drop in a later migration, and confirm with the user before generating any `DROP COLUMN` / destructive migration. Never delete or edit existing migration files — write a new migration.
 
-*(b) Existing-data decision.* The schema can be clean while rows still hold values tied to the removed feature (the `interrupted` status, the dropped enum variant, FK rows pointing at deleted entities, JSON blobs with stale keys). Use Phase 2's reference map to identify candidates — every enum value, status string, and FK target found there is a query target. Surface the counts — query for affected rows and report the number to the user — then ask which path to take: backfill/migrate to a replacement value, leave as historical (read-only) data, or hard-purge. Default behavior is **surface and ask** — never silently leave the rows in place and never silently rewrite them. Capture the chosen path in a migration or a one-shot data script, not in ad-hoc queries.
+_(b) Existing-data decision._ The schema can be clean while rows still hold values tied to the removed feature (the `interrupted` status, the dropped enum variant, FK rows pointing at deleted entities, JSON blobs with stale keys). Use Phase 2's reference map to identify candidates — every enum value, status string, and FK target found there is a query target. Surface the counts — query for affected rows and report the number to the user — then ask which path to take: backfill/migrate to a replacement value, leave as historical (read-only) data, or hard-purge. Default behavior is **surface and ask** — never silently leave the rows in place and never silently rewrite them. Capture the chosen path in a migration or a one-shot data script, not in ad-hoc queries.
 
 **Exit condition:** every item from Phase 3's deletion list has been removed, or explicitly deferred with a note.
 

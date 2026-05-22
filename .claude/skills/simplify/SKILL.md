@@ -8,7 +8,6 @@ description: Internal handoff target invoked as a post-step by add-feature, modi
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Code Simplify
 
 Refactor freshly-changed code into a smaller, drier, better-named, less-coupled version — without changing behavior. Default scope is the working-tree diff against the merge-base of the current branch and its upstream/base.
@@ -28,7 +27,7 @@ Refactor freshly-changed code into a smaller, drier, better-named, less-coupled 
 
 Decide per change:
 
-- **Mechanical fix** (rename a single-file local symbol, extract pure constant for magic number, swap inline logic for an existing util, delete a dead comment, collapse an unnecessary wrapper) → no test required; apply directly in Phase 4. **Exclusion:** renaming an *exported* symbol crosses module boundaries — every importer must update — so route it through the structural-fix gate, not the mechanical path.
+- **Mechanical fix** (rename a single-file local symbol, extract pure constant for magic number, swap inline logic for an existing util, delete a dead comment, collapse an unnecessary wrapper) → no test required; apply directly in Phase 4. **Exclusion:** renaming an _exported_ symbol crosses module boundaries — every importer must update — so route it through the structural-fix gate, not the mechanical path.
 - **Structural fix** (extract function across module boundary, split a component, move logic between layers, replace a duplicated block with a shared helper) → behavior could shift. If the touched code path has no covering test, invoke `agentsystem-core:write-tests` for that path BEFORE refactoring. The test must run green against the current code first; that's the safety net.
 
 If `write-tests` cannot wire a test (no harness, third-party-only path, UI without test infra), STOP and ask the user: "(a)pply mechanical fixes only / (b)refactor without a test net / (q)uit". Default to (a).
@@ -46,6 +45,7 @@ Launch three agents concurrently in a single message. Pass each the full diff, t
 ### Agent 1 — Code Reuse
 
 For each change:
+
 - Search for existing utilities and helpers that could replace newly written code. Common locations: utility directories (`lib/`, `utils/`, `helpers/`), shared modules, files adjacent to the changed ones, and files imported by neighboring code.
 - Flag any new function that duplicates existing functionality. Suggest the existing function to use instead, with its file path and signature.
 - Flag inline logic that could use an existing utility — hand-rolled string manipulation, manual path handling, custom environment checks, ad-hoc type guards, date math, deep-equality checks.
@@ -54,6 +54,7 @@ For each change:
 ### Agent 2 — Code Quality
 
 Headline items (full list in `references/code-smells.md`):
+
 - **DRY violations** — near-duplicate blocks encoding the same rule
 - **Long files / functions / giant UI components** — split at natural seams
 - **Magic numbers and strings** — name by business meaning
@@ -64,6 +65,7 @@ Headline items (full list in `references/code-smells.md`):
 ### Agent 3 — Efficiency
 
 Headline items (full list in `references/code-smells.md`):
+
 - **Unnecessary work** — redundant computation, duplicate I/O, N+1 patterns
 - **Missed concurrency** — independent ops run sequentially
 - **Hot-path bloat** — blocking work added to startup or per-render paths

@@ -21,6 +21,7 @@ A **boundary** is where untrusted data enters the program. These count:
 - Form submissions parsed without an existing validator
 
 These do **not** count as boundaries:
+
 - Internal function calls between modules in the same package
 - Database query results from your own typed schema (already validated by the schema layer)
 - Constants defined in source code
@@ -48,7 +49,7 @@ For `as unknown as T`:
 
 ```ts
 if (msg.kind === 'ping') {
-  const p = msg as PingMessage  // compiler often can't narrow across function boundaries
+  const p = msg as PingMessage; // compiler often can't narrow across function boundaries
 }
 ```
 

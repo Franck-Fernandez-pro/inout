@@ -68,7 +68,7 @@ When bisect lands on a merge commit and marks it bad, the regression came from t
 git log <merge-sha>^1..<merge-sha>^2 --oneline
 ```
 
-to list the commits that came in via the merge. If the bisect result is a merge, the *real* offender is usually one of those commits — inspect them directly.
+to list the commits that came in via the merge. If the bisect result is a merge, the _real_ offender is usually one of those commits — inspect them directly.
 
 ---
 

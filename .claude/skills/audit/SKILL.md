@@ -5,7 +5,6 @@ description: Whole-codebase tech-debt sweep. First maps architecture and data fl
 
 > **User-question protocol:** Whenever this skill needs the user to pick between options, confirm an action, or answer a multiple-choice prompt, you MUST call the `AskUserQuestion` tool to render a proper interactive picker. Do NOT print numbered options as plain text and wait for the user to type a number — that produces a degraded UX. Free-form questions (open-ended typing) may be asked in prose, but any time you would write "1) … 2) … 3) …", use `AskUserQuestion` instead.
 
-
 # Audit
 
 A whole-codebase tech-debt sweep. The diff-scoped `simplify` and the per-concern `audit-*` / `harden-*` skills each cover a slice; this skill runs the full battery against the whole repo, deduplicates findings, and walks the user through fixes. It is heavier than `simplify` and slower than any single `audit-*` — invoke it deliberately.
@@ -20,6 +19,7 @@ A whole-codebase tech-debt sweep. The diff-scoped `simplify` and the per-concern
 4. Announce the battery of audit skills that will run (Phase 4) so the user knows what's coming and can `skip=` any.
 
 **Inputs accepted from caller (e.g., `ship`):**
+
 - `scope=<path>` — narrow to a directory
 - `skip=<csv>` — comma-separated list of audit skill names to skip
 - `mode=fast|balanced|production` — `fast` runs only `simplify` + typecheck/lint; `balanced` adds the high-leverage audits; `production` runs everything. Default `balanced` when invoked directly; honor caller-supplied mode otherwise.
@@ -34,13 +34,13 @@ Before judging structure, understand it:
 2. Trace the main data flow for 2–3 representative user actions: UI/input -> validation -> API/server function -> domain/use-case -> persistence/external service -> cache invalidation/refetch -> rendered state.
 3. Name ownership boundaries: which modules own domain rules, persistence, UI composition, infrastructure concerns, and cross-cutting utilities.
 4. Record architecture smells separately from code smells: mixed UI/data access, duplicate domain rules, unclear source of truth, circular dependencies, cross-layer imports, stale cache patterns, overgrown modules.
-5. **Structural hygiene pass.** Walk the directory tree and flag layout rot — *don't* fix it here, just record findings for Phase 5:
+5. **Structural hygiene pass.** Walk the directory tree and flag layout rot — _don't_ fix it here, just record findings for Phase 5:
    - Directories with mixed concerns (UI components next to data-access next to domain logic with no separation).
    - Files that have outgrown their location (a single 800-line file holding three unrelated features; a `utils.ts` that has become a junk drawer).
    - Naming drift (sibling files using inconsistent casing/conventions; "v2"/"new"/"old" suffixes that stuck around).
    - Misplaced files (tests not co-located with the convention; types floating in random folders; one-off scripts in `src/`).
    - Dead directories (empty folders, or folders whose last meaningful change is ancient and whose contents look orphaned).
-   If layout issues are material, the Phase 5 report should call them out and recommend invoking `reorganize-files` as a follow-up — *after* the in-place fixes land, so the move diff isn't tangled with content changes.
+     If layout issues are material, the Phase 5 report should call them out and recommend invoking `reorganize-files` as a follow-up — _after_ the in-place fixes land, so the move diff isn't tangled with content changes.
 
 Output a short architecture summary before running the audit battery. If you cannot name the data flow, keep exploring; otherwise the findings will be local observations without system context.
 
@@ -49,6 +49,7 @@ Output a short architecture summary before running the audit battery. If you can
 ## Phase 3 — Baseline gates
 
 Run first, in parallel via Bash:
+
 - Project typecheck (e.g., `tsc --noEmit`, `pyright`, `cargo check`)
 - Linter (e.g., `eslint`, `ruff`, `clippy`)
 - Formatter check (no auto-fix yet)
@@ -63,10 +64,12 @@ Baseline failures get fixed first. Stacking refactors on top of a red baseline b
 Launch the applicable audit skills concurrently via the `Skill` tool, each scoped to the agreed Phase 1 scope (not just the diff). Pass `mode=audit` so each skill knows it's running repo-wide and should not auto-fix.
 
 **Always (every mode):**
+
 - `simplify` — DRY, magic numbers, naming, oversized files, parallel-enum drift, repeated literals (override default diff-only scope to Phase 1 scope)
 - `harden-types` — strip `any`, dangerous casts, missing return types, missing boundary validation
 
 **Balanced and production:**
+
 - **`reviewer-data-integrity`** (subagent — dispatch via the `Agent` tool with `subagent_type=reviewer-data-integrity`).
 - **`reviewer-error-boundaries`** (subagent — dispatch via `Agent(subagent_type=reviewer-error-boundaries)`).
 - **`reviewer-loading-states`** (subagent — dispatch via `Agent(subagent_type=reviewer-loading-states)`).
@@ -75,12 +78,14 @@ Launch the applicable audit skills concurrently via the `Skill` tool, each scope
 - **`reviewer-perf`** (subagent — dispatch via the `Agent` tool with `subagent_type=reviewer-perf`; isolates the read-heavy perf audit from the parent context). The `audit-perf` skill remains available as a manual entry point.
 
 **Production only (additionally):**
+
 - **`reviewer-security-regression`** (subagent — dispatch via the `Agent` tool with `subagent_type=reviewer-security-regression`; isolates the read-heavy security audit from the parent context).
 - **`reviewer-concurrency`** (subagent — dispatch via the `Agent` tool with `subagent_type=reviewer-concurrency`).
 - **`reviewer-client-bundle`** (subagent — dispatch via `Agent(subagent_type=reviewer-client-bundle)`).
 - **`reviewer-accessibility-regression`** (subagent — dispatch via `Agent(subagent_type=reviewer-accessibility-regression)`).
 
 **Stack-conditional (auto-include when the stack matches):**
+
 - TanStack Start present → `code-enforce-route-data`, `code-enforce-layers`
 
 Honor `skip=` from the caller. Do not run audits the user explicitly excluded.
@@ -128,6 +133,7 @@ Two paths, mirroring `simplify`:
 Before any structural fix on a code path with no covering test, invoke `write-tests` for that path and confirm green — same safety-net rule as `simplify`.
 
 Apply in this order to keep the diff bisectable:
+
 1. Formatter / lint auto-fixes (one commit-shaped chunk)
 2. Type hardening (one chunk)
 3. Mechanical simplifications
