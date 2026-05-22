@@ -62,6 +62,15 @@ In components, use `useQuery(api.transactions.get, {...})` and `useMutation(api.
 
 Use Tamagui primitives (`YStack`, `XStack`, `Text`, `Button`, etc.) and design tokens (`$4` for spacing, `gap="$4"`). Never use `StyleSheet.create()` or inline styles. Create reusable components with Tamagui's `styled()` function.
 
+#### Tamagui references (read before styling or theming work)
+
+| Scenario | Reference file |
+|---|---|
+| Creating styled components, variants, extending components | [`.agents/skills/tamagui/references/components.md`](.agents/skills/tamagui/references/components.md) |
+| Design tokens, themes, customizing colors/spacing/sizes | [`.agents/skills/tamagui/references/configuration.md`](.agents/skills/tamagui/references/configuration.md) |
+| Animations with Tamagui and Reanimated | [`.agents/skills/tamagui/references/animations.md`](.agents/skills/tamagui/references/animations.md) |
+| General Tamagui patterns & guidance | [`.agents/skills/tamagui/SKILL.md`](.agents/skills/tamagui/SKILL.md) |
+
 ## React Native best practices
 
 Follow all rules in [`.agents/skills/vercel-react-native-skills/AGENTS.md`](.agents/skills/vercel-react-native-skills/AGENTS.md) when writing or reviewing React Native/Expo code. The rules cover list performance, animations, navigation, state management, UI patterns, and more — each with incorrect/correct code examples.
