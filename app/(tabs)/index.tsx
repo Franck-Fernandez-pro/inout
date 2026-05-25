@@ -1,11 +1,9 @@
 import { TransactionCard } from '@/components';
 import { api } from '@/convex/_generated/api';
-import { useAuth } from '@clerk/clerk-expo';
 import { useQuery } from 'convex/react';
-import { Button, ScrollView, Text, YStack } from 'tamagui';
+import { ScrollView, Text, YStack } from 'tamagui';
 
 export default function Index() {
-  const { signOut } = useAuth();
   const transactionIns = useQuery(api.transactions.get, {
     type: 'IN',
     userId: 'toto',
@@ -22,8 +20,6 @@ export default function Index() {
 
         <TransactionCard transactions={transactionIns ?? []} type="IN" />
         <TransactionCard transactions={transactionOuts ?? []} type="OUT" />
-
-        <Button onPress={() => signOut()}>Se déconnecter</Button>
       </YStack>
     </ScrollView>
   );
