@@ -20,7 +20,8 @@ pnpm test <name>    # Run specific test file or pattern
 - **Framework**: Expo v54 with Expo Router v6 (file-based routing)
 - **UI**: Tamagui 2.0.0-rc (design system — mandatory, see constraints below)
 - **Backend**: Convex (real-time DB + server functions)
-- **Auth**: Clerk (`@clerk/clerk-expo`) with `expo-secure-store` for token caching
+- **Device identity**: UUID v4 generated in pure JS, persisted in `expo-secure-store` (see `hooks/useDeviceId.ts`). Data is scoped per device — there is no user authentication.
+- **Platform targets**: iOS and Android are first-class. `pnpm web` exists for quick previews only — production web is **not** a target, so APIs that no-op or throw on web (e.g. `expo-secure-store`) are acceptable. Don't pick a stack purely to keep web working unless asked.
 - **Language**: TypeScript strict mode, no `any`
 - **Animations**: `react-native-reanimated` v4 only
 
@@ -29,18 +30,14 @@ pnpm test <name>    # Run specific test file or pattern
 ### Provider stack (`app/_layout.tsx`)
 
 ```
-ClerkProvider
-  └── ConvexProviderWithClerk   ← Clerk JWT injected into all Convex calls
-        └── TamaguiProvider
-              └── AuthGuard     ← Redirects based on isSignedIn
+ConvexProvider
+  └── TamaguiProvider
+        └── Slot
 ```
 
 ### Routing groups
 
-- `app/(auth)/` — unauthenticated screens (login)
-- `app/(tabs)/` — protected screens (main app with bottom tabs)
-
-`AuthGuard` watches `isSignedIn` from Clerk and redirects between groups automatically.
+- `app/(tabs)/` — main app with bottom tabs
 
 ### Convex data layer
 
@@ -55,7 +52,6 @@ In components, use `useQuery(api.transactions.get, {...})` and `useMutation(api.
 | Schema changes, field type changes, backfills          | [`.agents/skills/convex-migration-helper/SKILL.md`](.agents/skills/convex-migration-helper/SKILL.md)   |
 | Slow queries, OCC conflicts, high reads                | [`.agents/skills/convex-performance-audit/SKILL.md`](.agents/skills/convex-performance-audit/SKILL.md) |
 | Reusable backend component with isolated tables        | [`.agents/skills/convex-create-component/SKILL.md`](.agents/skills/convex-create-component/SKILL.md)   |
-| Auth setup or changes (Clerk JWT, protected functions) | [`.agents/skills/convex-setup-auth/SKILL.md`](.agents/skills/convex-setup-auth/SKILL.md)               |
 | Unsure which skill applies                             | [`.agents/skills/convex/SKILL.md`](.agents/skills/convex/SKILL.md)                                     |
 
 ### Tamagui styling
@@ -115,13 +111,27 @@ When monitoring OTA (over-the-air) updates published via EAS, read the matching 
 - **No `// eslint-disable`** without an explicit reason comment
 - **No `any` types**
 
+## Installing dependencies
+
+- Use `npx expo install <pkg>` (not `pnpm add`) for any `expo-*` package or library with a native side. It pins the version matched to the current Expo SDK; `pnpm add` will happily install an SDK-incompatible major (e.g. SDK 56 lib on SDK 54).
+- Plain JS/TS libs without native code can use `pnpm add` normally.
+
+## Native modules require a dev client rebuild
+
+Any package that ships a native module (most `expo-*` packages: `expo-crypto`, `expo-secure-store`, `expo-haptics`, `expo-image`, etc.) **cannot be added on the fly** — the running dev client must be rebuilt to embed the native binary, otherwise the JS import throws `Cannot find native module '<ModuleName>'` at runtime.
+
+Before adding such a package, surface the trade-off:
+
+1. Confirm a dev client rebuild is acceptable (`npx expo prebuild` + reinstall on the simulator/device), or
+2. Pick a pure-JS alternative that achieves the same goal.
+
+The current `useDeviceId` uses a pure-JS UUID v4 generator precisely to avoid the rebuild step — keep that approach unless a native dep is strictly required.
+
 ## Environment variables (`.env.local`)
 
 ```
 CONVEX_DEPLOYMENT=dev:tidy-puma-951
 EXPO_PUBLIC_CONVEX_URL=https://tidy-puma-951.convex.cloud
-EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
-CLERK_JWT_ISSUER_DOMAIN=https://actual-whale-48.clerk.accounts.dev
 ```
 
 ## Testing

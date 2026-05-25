@@ -1,8 +1,5 @@
-import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
-import { ConvexReactClient } from 'convex/react';
-import { ConvexProviderWithClerk } from 'convex/react-clerk';
-import { tokenCache } from '@clerk/clerk-expo/token-cache';
-import { AuthGuard } from '@/components/AuthGuard';
+import { ConvexProvider, ConvexReactClient } from 'convex/react';
+import { Slot } from 'expo-router';
 import { TamaguiProvider } from '@/components/Tamagui.provider';
 
 if (!process.env.EXPO_PUBLIC_CONVEX_URL) {
@@ -12,21 +9,11 @@ if (!process.env.EXPO_PUBLIC_CONVEX_URL) {
 const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!);
 
 export default function RootLayout() {
-  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
-
-  if (!publishableKey) {
-    throw new Error(
-      'Missing Publishable Key. Please set EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY in your .env'
-    );
-  }
-
   return (
-    <ClerkProvider tokenCache={tokenCache} publishableKey={publishableKey}>
-      <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
-        <TamaguiProvider>
-          <AuthGuard />
-        </TamaguiProvider>
-      </ConvexProviderWithClerk>
-    </ClerkProvider>
+    <ConvexProvider client={convex}>
+      <TamaguiProvider>
+        <Slot />
+      </TamaguiProvider>
+    </ConvexProvider>
   );
 }

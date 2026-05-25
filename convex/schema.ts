@@ -6,12 +6,12 @@ export const transactions = {
   tags: v.optional(v.string()),
   amount: v.string(),
   type: v.union(v.literal('IN'), v.literal('OUT')),
-  userId: v.string(),
+  deviceId: v.string(),
 };
 
 export default defineSchema({
-  transactions: defineTable(transactions).index('by_user_type', [
-    'userId',
+  transactions: defineTable(transactions).index('by_device_type', [
+    'deviceId',
     'type',
   ]),
 });

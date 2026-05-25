@@ -15,7 +15,7 @@ const makeTransaction = (
     title: 'Transaction',
     amount: '100',
     type: 'IN' as const,
-    userId: 'user1',
+    deviceId: 'device1',
     ...rest,
   };
 };

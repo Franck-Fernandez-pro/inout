@@ -1,1 +1,1 @@
-export * from './useGoogleAuth';
+export * from './useDeviceId';
