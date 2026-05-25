@@ -23,6 +23,7 @@ export default function Index() {
 
         <TransactionCard transactions={transactionIns ?? []} type="IN" />
         <TransactionCard transactions={transactionOuts ?? []} type="OUT" />
+        <Text>{deviceId}</Text>
       </YStack>
     </ScrollView>
   );
