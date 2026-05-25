@@ -18,18 +18,33 @@ export function useDeviceId() {
     let cancelled = false;
 
     async function loadOrCreate() {
-      const existing = await SecureStore.getItemAsync(DEVICE_ID_KEY);
-      if (existing) {
-        if (!cancelled) setDeviceId(existing);
-        return;
-      }
+      try {
+        const existing = await SecureStore.getItemAsync(DEVICE_ID_KEY);
+        if (existing) {
+          if (!cancelled) setDeviceId(existing);
+          return;
+        }
 
-      const fresh = generateUuidV4();
-      await SecureStore.setItemAsync(DEVICE_ID_KEY, fresh);
-      if (!cancelled) setDeviceId(fresh);
+        const fresh = generateUuidV4();
+        try {
+          await SecureStore.setItemAsync(DEVICE_ID_KEY, fresh);
+        } catch (persistError) {
+          console.warn(
+            '[useDeviceId] Failed to persist deviceId, using in-memory value:',
+            persistError,
+          );
+        }
+        if (!cancelled) setDeviceId(fresh);
+      } catch (error) {
+        console.warn(
+          '[useDeviceId] SecureStore unavailable, falling back to in-memory deviceId:',
+          error,
+        );
+        if (!cancelled) setDeviceId(generateUuidV4());
+      }
     }
 
-    loadOrCreate();
+    void loadOrCreate();
 
     return () => {
       cancelled = true;
