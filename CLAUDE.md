@@ -20,7 +20,7 @@ pnpm test <name>    # Run specific test file or pattern
 - **Framework**: Expo v54 with Expo Router v6 (file-based routing)
 - **UI**: Tamagui 2.0.0-rc (design system — mandatory, see constraints below)
 - **Backend**: Convex (real-time DB + server functions)
-- **Auth**: Clerk (`@clerk/clerk-expo`) with `expo-secure-store` for token caching
+- **Device identity**: UUID generated via `expo-crypto`, persisted in `expo-secure-store` (see `hooks/useDeviceId.ts`). Data is scoped per device — there is no user authentication.
 - **Language**: TypeScript strict mode, no `any`
 - **Animations**: `react-native-reanimated` v4 only
 
@@ -29,18 +29,14 @@ pnpm test <name>    # Run specific test file or pattern
 ### Provider stack (`app/_layout.tsx`)
 
 ```
-ClerkProvider
-  └── ConvexProviderWithClerk   ← Clerk JWT injected into all Convex calls
-        └── TamaguiProvider
-              └── AuthGuard     ← Redirects based on isSignedIn
+ConvexProvider
+  └── TamaguiProvider
+        └── Slot
 ```
 
 ### Routing groups
 
-- `app/(auth)/` — unauthenticated screens (login)
-- `app/(tabs)/` — protected screens (main app with bottom tabs)
-
-`AuthGuard` watches `isSignedIn` from Clerk and redirects between groups automatically.
+- `app/(tabs)/` — main app with bottom tabs
 
 ### Convex data layer
 
@@ -55,7 +51,6 @@ In components, use `useQuery(api.transactions.get, {...})` and `useMutation(api.
 | Schema changes, field type changes, backfills          | [`.agents/skills/convex-migration-helper/SKILL.md`](.agents/skills/convex-migration-helper/SKILL.md)   |
 | Slow queries, OCC conflicts, high reads                | [`.agents/skills/convex-performance-audit/SKILL.md`](.agents/skills/convex-performance-audit/SKILL.md) |
 | Reusable backend component with isolated tables        | [`.agents/skills/convex-create-component/SKILL.md`](.agents/skills/convex-create-component/SKILL.md)   |
-| Auth setup or changes (Clerk JWT, protected functions) | [`.agents/skills/convex-setup-auth/SKILL.md`](.agents/skills/convex-setup-auth/SKILL.md)               |
 | Unsure which skill applies                             | [`.agents/skills/convex/SKILL.md`](.agents/skills/convex/SKILL.md)                                     |
 
 ### Tamagui styling
@@ -120,8 +115,6 @@ When monitoring OTA (over-the-air) updates published via EAS, read the matching 
 ```
 CONVEX_DEPLOYMENT=dev:tidy-puma-951
 EXPO_PUBLIC_CONVEX_URL=https://tidy-puma-951.convex.cloud
-EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
-CLERK_JWT_ISSUER_DOMAIN=https://actual-whale-48.clerk.accounts.dev
 ```
 
 ## Testing
